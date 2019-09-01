@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/night_fade_background"
+    android:padding="16dp">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mcv_dateTextAppearance="@style/DayTextAppearance"
+        app:mcv_headerTextAppearance="@style/HeaderTextAppearance"
+        app:mcv_weekDayTextAppearance="@style/WeekDayTextAppearance"
+        app:mcv_leftArrowMask="@drawable/ic_chevron_left"
+        app:mcv_rightArrowMask="@drawable/ic_chevron_right"
+        app:mcv_selectionColor="@color/ultra_violet"
+        app:mcv_showOtherDates="all">
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="56dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

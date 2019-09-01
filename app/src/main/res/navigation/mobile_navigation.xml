@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_workout">
+
+    <fragment
+        android:id="@+id/navigation_workout"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutFragment"
+        android:label="@string/workout"
+        tools:layout="@layout/fragment_workout">
+        <action
+            android:id="@+id/action_to_strength_session"
+            app:destination="@id/navigation_strength_session"/>
+        <action
+            android:id="@+id/action_to_cardio_session"
+            app:destination="@id/navigation_cardio_session"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_stats"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.stats.StatsFragment"
+        android:label="@string/stats"
+        tools:layout="@layout/fragment_stats" />
+
+    <fragment
+        android:id="@+id/navigation_gallery"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.gallery.GalleryFragment"
+        android:label="@string/gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.calendar.CalendarFragment"
+        android:label="@string/calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/navigation_strength_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.StrengthSessionFragment"
+        android:label="@string/strength_session"
+        tools:layout="@layout/fragment_strength_session" />
+
+    <fragment
+        android:id="@+id/navigation_cardio_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.CardioSessionFragment"
+        android:label="@string/cardio_session"
+        tools:layout="@layout/fragment_cardio_session" />
+
+</navigation>

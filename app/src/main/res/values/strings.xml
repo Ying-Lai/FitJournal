@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="app_name">My Fit Journal</string>
+
+    <!-- Main Activity - General -->
+    <string name="workout">Workout</string>
+    <string name="stats">Stats</string>
+    <string name="gallery">Gallery</string>
+    <string name="calendar">Calendar</string>
+
+    <!-- Workout Fragment -->
+
+    <!-- Stats Fragment -->
+    <string name="body_weight">Body Weight</string>
+    <string name="body_fat">Body Fat</string>
+
+    <!-- Gallery Fragment -->
+
+    <!-- Calendar Fragment -->
+
+    <!-- Strength Fragment -->
+    <string name="strength_session">Strength Session</string>
+    <string name="set">Set</string>
+    <string name="rep">Rep(s)</string>
+    <string name="weight">weight</string>
+
+    <!-- Cardio Fragment -->
+    <string name="cardio_session">Cardio Session</string>
+    <string name="duration">Duration</string>
+    <string name="intensity">Intensity</string>
+    <string name="low">low</string>
+    <string name="medium">medium</string>
+    <string name="high">high</string>
+
+</resources>
