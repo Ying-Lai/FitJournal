@@ -20,16 +20,21 @@
 
     <!-- Strength Fragment -->
     <string name="strength_session">Strength Session</string>
+    <string name="new_set">New Set</string>
     <string name="set">Set</string>
     <string name="rep">Rep(s)</string>
-    <string name="weight">weight</string>
+    <string name="weight">Weight (lbs)</string>
 
     <!-- Cardio Fragment -->
     <string name="cardio_session">Cardio Session</string>
-    <string name="duration">Duration</string>
+    <string name="duration">Duration (Minutes)</string>
     <string name="intensity">Intensity</string>
-    <string name="low">low</string>
-    <string name="medium">medium</string>
-    <string name="high">high</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+
+    <!-- Shared Cardio/Strength Fragment -->
+    <string name="exercise_name">Exercise</string>
+    <string name="save">Save</string>
 
 </resources>

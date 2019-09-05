@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <CalendarView
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar_fragment_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,9 +14,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:dateTextAppearance="@style/DayTextAppearance"
-        android:weekDayTextAppearance="@style/WeekDayTextAppearance"
-        />
+        app:mcv_dateTextAppearance="@style/DayTextAppearance"
+        app:mcv_headerTextAppearance="@style/HeaderTextAppearance"
+        app:mcv_weekDayTextAppearance="@style/WeekDayTextAppearance"
+        app:mcv_leftArrowMask="@drawable/ic_chevron_left"
+        app:mcv_rightArrowMask="@drawable/ic_chevron_right"
+        app:mcv_selectionColor="@color/ultra_violet"
+        app:mcv_showOtherDates="all">
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/calendar_fragment_gl"

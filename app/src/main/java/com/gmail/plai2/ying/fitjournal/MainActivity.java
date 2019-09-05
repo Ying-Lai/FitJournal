@@ -1,6 +1,9 @@
 package com.gmail.plai2.ying.fitjournal;
 
 import android.os.Bundle;
+import android.view.KeyboardShortcutGroup;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,10 +18,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton strengthFab;
-    private FloatingActionButton cardioFab;
+    private FloatingActionButton strengthFAB;
+    private FloatingActionButton cardioFAB;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +34,41 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_workout, R.id.navigation_stats, R.id.navigation_gallery, R.id.navigation_calendar)
+                R.id.navigation_to_workout, R.id.navigation_to_stats, R.id.navigation_to_gallery, R.id.navigation_to_calendar)
                 .build();
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
-        strengthFab = findViewById(R.id.strength_fab);
-        cardioFab= findViewById(R.id.cardio_fab);
-        strengthFab.setOnClickListener(new View.OnClickListener() {
+        bottomNav = findViewById(R.id.nav_view);
+        strengthFAB = findViewById(R.id.strength_session_fab);
+        cardioFAB = findViewById(R.id.cardio_session_fab);
+        strengthFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.action_to_strength_session);
+                Bundle bundle = new Bundle();
+                bundle.putString("exercise_type_key", "Strength");
+                navController.navigate(R.id.to_search_exercise, bundle);
             }
         });
-        cardioFab.setOnClickListener(new View.OnClickListener() {
+        cardioFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.action_to_cardio_session);
+                Bundle bundle = new Bundle();
+                bundle.putString("exercise_type_key", "Cardio");
+                navController.navigate(R.id.to_search_exercise, bundle);
             }
         });
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if(destination.getId() == R.id.navigation_workout) {
+                if(destination.getId() == R.id.navigation_to_workout) {
                     showFloatingActionButton();
                 } else {
                     hideFloatingActionButton();
+                }
+                if (destination.getId() != R.id.navigation_to_workout && destination.getId() != R.id.navigation_to_stats && destination.getId() != R.id.navigation_to_gallery && destination.getId() != R.id.navigation_to_calendar) {
+                    hideBottomNavigationView(bottomNav);
+                } else {
+                    showBottomNavigationView(bottomNav);
                 }
             }
         });
@@ -60,16 +76,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showFloatingActionButton() {
-        if (cardioFab != null && strengthFab != null) {
-            cardioFab.show();
-            strengthFab.show();
+        if (cardioFAB != null && strengthFAB != null) {
+            cardioFAB.show();
+            strengthFAB.show();
         }
     }
 
     public void hideFloatingActionButton() {
-        if (cardioFab != null && strengthFab != null) {
-            cardioFab.hide();
-            strengthFab.hide();
+        if (cardioFAB != null && strengthFAB != null) {
+            cardioFAB.hide();
+            strengthFAB.hide();
         }
+    }
+
+    private void hideBottomNavigationView(BottomNavigationView view) {
+        view.clearAnimation();
+        view.animate().translationY(view.getHeight()).setDuration(300);
+    }
+
+    public void showBottomNavigationView(BottomNavigationView view) {
+        view.clearAnimation();
+        view.animate().translationY(0).setDuration(300);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_exercise_menu, menu);
+        return true;
     }
 }

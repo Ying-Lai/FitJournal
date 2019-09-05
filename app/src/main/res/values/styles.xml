@@ -21,4 +21,9 @@
         <item name="android:textColor">@color/dark_gray</item>
         <item name="android:fontFamily">@font/roboto</item>
     </style>
+
+    <style name="CircleShapeAppearance" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
 </resources>

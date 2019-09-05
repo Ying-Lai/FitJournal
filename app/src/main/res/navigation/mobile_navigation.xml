@@ -3,50 +3,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_workout">
+    app:startDestination="@+id/navigation_to_workout">
 
     <fragment
-        android:id="@+id/navigation_workout"
+        android:id="@+id/navigation_to_workout"
         android:name="com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutFragment"
         android:label="@string/workout"
         tools:layout="@layout/fragment_workout">
         <action
-            android:id="@+id/action_to_strength_session"
-            app:destination="@id/navigation_strength_session"/>
+            android:id="@+id/to_search_exercise"
+            app:destination="@id/navigation_search_exercise"/>
         <action
-            android:id="@+id/action_to_cardio_session"
-            app:destination="@id/navigation_cardio_session"/>
+            android:id="@+id/to_strength_session"
+            app:destination="@id/navigation_to_strength_session"/>
+        <action
+            android:id="@+id/to_cardio_session"
+            app:destination="@id/navigation_to_cardio_session"/>
 
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_stats"
+        android:id="@+id/navigation_to_stats"
         android:name="com.gmail.plai2.ying.fitjournal.ui.stats.StatsFragment"
         android:label="@string/stats"
         tools:layout="@layout/fragment_stats" />
 
     <fragment
-        android:id="@+id/navigation_gallery"
+        android:id="@+id/navigation_to_gallery"
         android:name="com.gmail.plai2.ying.fitjournal.ui.gallery.GalleryFragment"
         android:label="@string/gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/navigation_calendar"
+        android:id="@+id/navigation_to_calendar"
         android:name="com.gmail.plai2.ying.fitjournal.ui.calendar.CalendarFragment"
         android:label="@string/calendar"
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
-        android:id="@+id/navigation_strength_session"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.StrengthSessionFragment"
+        android:id="@+id/navigation_search_exercise"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.SearchExerciseFragment"
         android:label="@string/strength_session"
-        tools:layout="@layout/fragment_strength_session" />
+        tools:layout="@layout/fragment_search_exercise">
+        <action
+            android:id="@+id/to_cardio_session"
+            app:destination="@id/navigation_to_cardio_session" />
+        <action
+            android:id="@+id/to_strength_session"
+            app:destination="@id/navigation_to_strength_session" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_cardio_session"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.CardioSessionFragment"
+        android:id="@+id/navigation_to_strength_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.strength_session.StrengthSessionFragment"
+        android:label="@string/strength_session"
+        tools:layout="@layout/fragment_strength_session">
+        <action
+            android:id="@+id/to_workout"
+            app:destination="@id/navigation_to_workout" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_to_cardio_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.cardio_session.CardioSessionFragment"
         android:label="@string/cardio_session"
-        tools:layout="@layout/fragment_cardio_session" />
+        tools:layout="@layout/fragment_cardio_session">
+            <action
+                android:id="@+id/to_workout"
+                app:destination="@id/navigation_to_workout" />
+    </fragment>
 
 </navigation>

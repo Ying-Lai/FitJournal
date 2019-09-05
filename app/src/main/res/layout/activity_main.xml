@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container"
+    android:id="@+id/main_activity_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--android:paddingTop="?attr/actionBarSize"-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/strength_fab"
+        android:id="@+id/strength_session_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/ic_strength_session" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/cardio_fab"
+        android:id="@+id/cardio_session_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -29,7 +29,7 @@
         android:clickable="true"
         android:focusable="true"
         android:theme="@style/Widget.Design.FloatingActionButton"
-        app:layout_constraintBottom_toTopOf="@+id/strength_fab"
+        app:layout_constraintBottom_toTopOf="@+id/strength_session_fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_cardio_session" />
 

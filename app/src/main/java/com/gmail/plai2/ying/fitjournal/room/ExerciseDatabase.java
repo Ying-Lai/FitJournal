@@ -1,4 +1,4 @@
-package com.gmail.plai2.ying.fitjournal;
+package com.gmail.plai2.ying.fitjournal.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,13 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import java.util.Collections;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Database(entities = {Exercise.class}, version = 1, exportSchema = false)
-@TypeConverters({Converters.class})
+@androidx.room.TypeConverters({TypeConverters.class})
 
 public abstract class ExerciseDatabase extends RoomDatabase {
 
@@ -47,6 +48,12 @@ public abstract class ExerciseDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             // Work in progress.
+            List<Set> testSets = new ArrayList<>();
+            testSets.add(new Set(6,20));
+            testSets.add(new Set(7,20));
+            testSets.add(new Set(8,20));
+            exerciseDao.insert(new Exercise(Exercise.ExerciseType.CARDIO, "Jogging", new Date(), 20, Exercise.Intensity.HIGH));
+            exerciseDao.insert(new Exercise(Exercise.ExerciseType.STRENGTH, "Chest Press", new Date(), testSets));
             return null;
         }
     }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,10 +27,7 @@ public class CalendarFragment extends Fragment {
             ViewGroup container, Bundle savedInstanceState) {
         calendarViewModel =
                 ViewModelProviders.of(this).get(CalendarViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_calendar, container, false);
-
-        final MaterialCalendarView calendar = root.findViewById(R.id.calendarView);
-        calendar.setSelectionMode(MaterialCalendarView.SELECTION_MODE_SINGLE);
+        View root = inflater.inflate(R.layout.fragment_calendar, container,false);
         return root;
     }
 }
