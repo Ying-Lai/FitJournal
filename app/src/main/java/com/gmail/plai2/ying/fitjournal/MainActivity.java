@@ -1,7 +1,6 @@
 package com.gmail.plai2.ying.fitjournal;
 
 import android.os.Bundle;
-import android.view.KeyboardShortcutGroup;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,13 +17,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
-    private FloatingActionButton strengthFAB;
-    private FloatingActionButton cardioFAB;
-    private BottomNavigationView bottomNav;
+    private FloatingActionButton mStrengthFAB;
+    private FloatingActionButton mCardioFAB;
+    private BottomNavigationView mBottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
-        bottomNav = findViewById(R.id.nav_view);
-        strengthFAB = findViewById(R.id.strength_session_fab);
-        cardioFAB = findViewById(R.id.cardio_session_fab);
-        strengthFAB.setOnClickListener(new View.OnClickListener() {
+        mBottomNav = findViewById(R.id.nav_view);
+        mStrengthFAB = findViewById(R.id.strength_session_fab);
+        mCardioFAB = findViewById(R.id.cardio_session_fab);
+        mStrengthFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 navController.navigate(R.id.to_search_exercise, bundle);
             }
         });
-        cardioFAB.setOnClickListener(new View.OnClickListener() {
+        mCardioFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -66,37 +63,43 @@ public class MainActivity extends AppCompatActivity {
                     hideFloatingActionButton();
                 }
                 if (destination.getId() != R.id.navigation_to_workout && destination.getId() != R.id.navigation_to_stats && destination.getId() != R.id.navigation_to_gallery && destination.getId() != R.id.navigation_to_calendar) {
-                    hideBottomNavigationView(bottomNav);
+                    hideBottomNavigationView();
                 } else {
-                    showBottomNavigationView(bottomNav);
+                    showBottomNavigationView();
                 }
             }
         });
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        showBottomNavigationView();
+    }
+
     public void showFloatingActionButton() {
-        if (cardioFAB != null && strengthFAB != null) {
-            cardioFAB.show();
-            strengthFAB.show();
+        if (mCardioFAB != null && mStrengthFAB != null) {
+            mCardioFAB.show();
+            mStrengthFAB.show();
         }
     }
 
     public void hideFloatingActionButton() {
-        if (cardioFAB != null && strengthFAB != null) {
-            cardioFAB.hide();
-            strengthFAB.hide();
+        if (mCardioFAB != null && mStrengthFAB != null) {
+            mCardioFAB.hide();
+            mStrengthFAB.hide();
         }
     }
 
-    private void hideBottomNavigationView(BottomNavigationView view) {
-        view.clearAnimation();
-        view.animate().translationY(view.getHeight()).setDuration(300);
+    private void hideBottomNavigationView() {
+        mBottomNav.clearAnimation();
+        mBottomNav.animate().translationY(mBottomNav.getHeight()).setDuration(300);
     }
 
-    public void showBottomNavigationView(BottomNavigationView view) {
-        view.clearAnimation();
-        view.animate().translationY(0).setDuration(300);
+    public void showBottomNavigationView() {
+        mBottomNav.clearAnimation();
+        mBottomNav.animate().translationY(0).setDuration(300);
     }
 
     @Override

@@ -48,36 +48,52 @@ public class TypeConverters {
     }
 
     @TypeConverter
-    public static Exercise.ExerciseType toExerciseType(int exerciseType) {
+    public static CompletedExerciseItem.ExerciseType toCompletedExerciseType(int exerciseType) {
         if (exerciseType == 0) {
-            return Exercise.ExerciseType.CARDIO;
+            return CompletedExerciseItem.ExerciseType.CARDIO;
         } else if (exerciseType == 1) {
-            return Exercise.ExerciseType.STRENGTH;
+            return CompletedExerciseItem.ExerciseType.STRENGTH;
         } else {
             throw new IllegalArgumentException("Could not recognize this intensity level");
         }
     }
 
     @TypeConverter
-    public static int toInt(Exercise.ExerciseType exerciseType) {
+    public static int toInt(CompletedExerciseItem.ExerciseType exerciseType) {
         return exerciseType.getCategory();
     }
 
     @TypeConverter
-    public static Exercise.Intensity toIntensity(int intensity) {
-        if (intensity == 0) {
-            return Exercise.Intensity.LOW;
-        } else if (intensity == 1) {
-            return Exercise.Intensity.MEDIUM;
-        } else if (intensity == 2) {
-            return Exercise.Intensity.HIGH;
+    public static AvailableExerciseItem.ExerciseType toAvailableExerciseType(int exerciseType) {
+        if (exerciseType == 0) {
+            return AvailableExerciseItem.ExerciseType.CARDIO;
+        } else if (exerciseType == 1) {
+            return AvailableExerciseItem.ExerciseType.STRENGTH;
         } else {
             throw new IllegalArgumentException("Could not recognize this intensity level");
         }
     }
 
     @TypeConverter
-    public static int toInt(Exercise.Intensity intensity) {
+    public static int toInt(AvailableExerciseItem.ExerciseType exerciseType) {
+        return exerciseType.getCategory();
+    }
+
+    @TypeConverter
+    public static CompletedExerciseItem.Intensity toIntensity(int intensity) {
+        if (intensity == 0) {
+            return CompletedExerciseItem.Intensity.LOW;
+        } else if (intensity == 1) {
+            return CompletedExerciseItem.Intensity.MEDIUM;
+        } else if (intensity == 2) {
+            return CompletedExerciseItem.Intensity.HIGH;
+        } else {
+            throw new IllegalArgumentException("Could not recognize this intensity level");
+        }
+    }
+
+    @TypeConverter
+    public static int toInt(CompletedExerciseItem.Intensity intensity) {
         return intensity.getIntensityLevel();
     }
 }

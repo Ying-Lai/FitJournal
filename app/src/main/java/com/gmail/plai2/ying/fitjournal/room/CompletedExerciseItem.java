@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-@Entity(tableName = "exercise_table")
-public class Exercise {
+@Entity(tableName = "completed_exercise_table")
+public class CompletedExerciseItem {
 
     @PrimaryKey(autoGenerate = true)
     public int mID; // Look into this later -> Can't find getter for mID
@@ -60,7 +60,7 @@ public class Exercise {
 
     private int mDuration;
 
-    public Exercise() {
+    public CompletedExerciseItem() {
         this.mExerciseType = null;
         this.mExerciseName = "";
         this.mExerciseDate = new Date();
@@ -69,7 +69,7 @@ public class Exercise {
         this.mDuration = 0;
     }
 
-    public Exercise(ExerciseType type, String exerciseName, Date exerciseDate, int duration, Intensity insensityLevel) {
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, int duration, Intensity insensityLevel) {
         this.mExerciseType = type;
         this.mExerciseName = exerciseName;
         this.mExerciseDate= exerciseDate;
@@ -78,7 +78,7 @@ public class Exercise {
         this.mIntensity = insensityLevel;
     }
 
-    public Exercise(ExerciseType type, String exerciseName, Date exerciseDate, List<Set> listOfSets) {
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Set> listOfSets) {
         this.mExerciseType = type;
         this.mExerciseName = exerciseName;
         this.mExerciseDate= exerciseDate;

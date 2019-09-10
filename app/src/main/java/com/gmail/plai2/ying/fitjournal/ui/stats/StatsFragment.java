@@ -12,11 +12,11 @@ import com.gmail.plai2.ying.fitjournal.R;
 
 public class StatsFragment extends Fragment {
 
-    private StatsViewModel statsViewModel;
+    private StatsViewModel mStatsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        statsViewModel =
+        mStatsViewModel =
                 ViewModelProviders.of(this).get(StatsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_stats, container, false);
         return root;

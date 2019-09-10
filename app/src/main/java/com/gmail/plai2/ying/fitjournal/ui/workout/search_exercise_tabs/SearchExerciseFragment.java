@@ -1,9 +1,10 @@
-package com.gmail.plai2.ying.fitjournal.ui.workout;
+package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -16,19 +17,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.viewpager.widget.ViewPager;
 import com.gmail.plai2.ying.fitjournal.R;
-import com.gmail.plai2.ying.fitjournal.ui.workout.browse.BrowseFragment;
-import com.gmail.plai2.ying.fitjournal.ui.workout.custom.CustomFragment;
-import com.gmail.plai2.ying.fitjournal.ui.workout.favorite.FavoriteFragment;
+import com.gmail.plai2.ying.fitjournal.ui.workout.ViewPagerAdapter;
+import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 public class SearchExerciseFragment extends Fragment {
 
     private static final String EXERCISE_TYPE = "exercise_type_key";
-    private WorkoutViewModel viewModel;
-    private String exerciseTypeInput;
-    private FloatingActionButton placeholderFAB;
+    private WorkoutViewModel mViewModel;
+    private String mExerciseTypeInput;
 
     public SearchExerciseFragment() {
         setHasOptionsMenu(true);
@@ -47,24 +45,24 @@ public class SearchExerciseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            this.exerciseTypeInput = getArguments().getString(EXERCISE_TYPE);
+            this.mExerciseTypeInput = getArguments().getString(EXERCISE_TYPE);
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        viewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         View root = inflater.inflate(R.layout.fragment_search_exercise, container, false);
         MaterialToolbar toolbar = root.findViewById(R.id.search_exercise_tb);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(exerciseTypeInput);
+        actionBar.setTitle(mExerciseTypeInput);
         ViewPager viewPager = root.findViewById(R.id.search_exercise_vp);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
-        adapter.addFragment(FavoriteFragment.newInstance(exerciseTypeInput), "Favorite");
-        adapter.addFragment(CustomFragment.newInstance(exerciseTypeInput), "Custom");
-        adapter.addFragment(BrowseFragment.newInstance(exerciseTypeInput), "Browse");
+        adapter.addFragment(FavoriteFragment.newInstance(mExerciseTypeInput), "Favorite");
+        adapter.addFragment(CustomFragment.newInstance(mExerciseTypeInput), "Custom");
+        adapter.addFragment(BrowseFragment.newInstance(mExerciseTypeInput), "Browse");
         viewPager.setAdapter(adapter);
         TabLayout tabs = root.findViewById(R.id.search_exercise_tabs);
         tabs.setupWithViewPager(viewPager);
@@ -77,5 +75,16 @@ public class SearchExerciseFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.search_exercise_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // need to check backstack first
+            case android.R.id.home:
+                Navigation.findNavController(getView()).popBackStack();
+                break;
+        }
+        return true;
     }
 }

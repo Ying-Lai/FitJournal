@@ -19,15 +19,15 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetHolder> {
     private List<Set> sets = new ArrayList<>();
 
     class SetHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView setMTV;
-        private TextInputEditText repTIET;
-        private TextInputEditText weightTIET;
+        private MaterialTextView mSetMTV;
+        private TextInputEditText mRepTIET;
+        private TextInputEditText mWeightTIET;
 
         public SetHolder(View itemView) {
             super(itemView);
-            setMTV = itemView.findViewById(R.id.set_mtv);
-            repTIET = itemView.findViewById(R.id.rep_tiet);
-            weightTIET = itemView.findViewById(R.id.weight_tiet);
+            mSetMTV = itemView.findViewById(R.id.set_mtv);
+            mRepTIET = itemView.findViewById(R.id.rep_tiet);
+            mWeightTIET = itemView.findViewById(R.id.weight_tiet);
         }
     }
 
@@ -35,7 +35,7 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetHolder> {
     @Override
     public SetHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.set_item, parent, false);
+                .inflate(R.layout.item_strength_session_set, parent, false);
         return new SetHolder(itemView);
     }
 
@@ -43,14 +43,14 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetHolder> {
     public void onBindViewHolder(@NonNull SetHolder holder, int position) {
         Set currentSet = sets.get(position);
         String set = "Set " + (position+1);
-        holder.setMTV.setText(set);
+        holder.mSetMTV.setText(set);
         if (currentSet.getReps() != -1) {
             String reps = currentSet.getReps() + "";
-            holder.repTIET.setText(reps);
+            holder.mRepTIET.setText(reps);
         }
         if (currentSet.getWeight() != -1) {
             String weight = currentSet.getWeight()+"";
-            holder.weightTIET.setText(weight);
+            holder.mWeightTIET.setText(weight);
         }
     }
 

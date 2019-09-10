@@ -7,7 +7,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gmail.plai2.ying.fitjournal.room.Exercise;
+import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
+import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.repository.ExerciseRepository;
 
 import java.util.Date;
@@ -15,46 +16,74 @@ import java.util.List;
 
 public class WorkoutViewModel extends AndroidViewModel {
 
-    private ExerciseRepository repository;
-    private MutableLiveData<Exercise> exerciseInput = new MutableLiveData<>();
-    private LiveData<List<Exercise>> allExercisesByDate;
-    private LiveData<List<Exercise>> allExercises;
+    private ExerciseRepository mRepository;
+    private MutableLiveData<CompletedExerciseItem> mExerciseInput = new MutableLiveData<>();
+    private LiveData<List<CompletedExerciseItem>> mAllCompletedExercises;
 
     public WorkoutViewModel(@NonNull Application application) {
         super(application);
-        repository = new ExerciseRepository(application);
-        allExercises = repository.getAllExercises();
+        mRepository = new ExerciseRepository(application);
+        mAllCompletedExercises = mRepository.getmAllCompletedExercises();
     }
 
-    public void setExerciseInput(Exercise exercise) {
-        exerciseInput.setValue(exercise);
+    // Methods for Available Exercises Item
+    public void insert(AvailableExerciseItem availableExerciseItem) {
+        mRepository.insert(availableExerciseItem);
     }
 
-    public LiveData<Exercise> getExerciseInput() {
-        return exerciseInput;
+    public void update(AvailableExerciseItem availableExerciseItem) {
+        mRepository.update(availableExerciseItem);
     }
 
-    public void insert(Exercise exercise) {
-        repository.insert(exercise);
+    public void delete(AvailableExerciseItem availableExerciseItem) {
+        mRepository.delete(availableExerciseItem);
     }
 
-    public void update(Exercise exercise) {
-        repository.update(exercise);
+    public void deleteAllAvailableExercise() { mRepository.deleteAllAvailableExercises();}
+
+    public LiveData<List<AvailableExerciseItem>> getAllCustomAvailableExercise(boolean custom, AvailableExerciseItem.ExerciseType exerciseType) {
+        return mRepository.getAllCustomAvailableExercise(custom, exerciseType);
     }
 
-    public void delete(Exercise exercise) {
-        repository.delete(exercise);
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, AvailableExerciseItem.ExerciseType exerciseType) {
+        return mRepository.getAllAvailableFavoritedExercise(favorited, exerciseType);
     }
 
-    public void deleteAllByDate(Date date) {repository.deleteAllExerciseByDate(date); }
-
-    public void deleteAll() { repository.deleteAllExercises();}
-
-    public LiveData<List<Exercise>> getAllExercisesByDate(Date date) {
-        return repository.getExerciseByDate(date);
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(AvailableExerciseItem.ExerciseType exerciseType) {
+        return mRepository.getAllAvailableExercises(exerciseType);
     }
 
-    public LiveData<List<Exercise>> getAllExercises() {
-        return allExercises;
+    // Methods for Completed Exercises Item
+    public void setExerciseInput(CompletedExerciseItem completedExerciseItem) {
+        mExerciseInput.setValue(completedExerciseItem);
+    }
+
+    public LiveData<CompletedExerciseItem> getExerciseInput() {
+        return mExerciseInput;
+    }
+
+    public void insert(CompletedExerciseItem completedExerciseItem) {
+        mRepository.insert(completedExerciseItem);
+    }
+
+    public void update(CompletedExerciseItem completedExerciseItem) {
+        mRepository.update(completedExerciseItem);
+    }
+
+    public void delete(CompletedExerciseItem completedExerciseItem) {
+        mRepository.delete(completedExerciseItem);
+    }
+
+    public void deleteAllCompletedExerciseByDate(Date date) {
+        mRepository.deleteAllCompletedExerciseByDate(date); }
+
+    public void deleteAllCompletedExercise() { mRepository.deleteAllCompletedExercises();}
+
+    public LiveData<List<CompletedExerciseItem>> getAllCompletedExercisesByDate(Date date) {
+        return mRepository.getAllCompletedExerciseByDate(date);
+    }
+
+    public LiveData<List<CompletedExerciseItem>> getAllCompletedExercises() {
+        return mAllCompletedExercises;
     }
 }
