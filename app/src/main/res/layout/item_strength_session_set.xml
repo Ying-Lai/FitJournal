@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="@string/set"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:gravity="center"/>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -22,7 +22,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium"
+        app:hintTextAppearance="@android:style/TextAppearance.Small"
         android:hint="@string/rep"
         app:hintEnabled="true"
         app:endIconMode="clear_text"
@@ -45,7 +45,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        app:hintTextAppearance="@android:style/TextAppearance.Medium"
+        app:hintTextAppearance="@android:style/TextAppearance.Small"
         android:hint="@string/weight"
         app:hintEnabled="true"
         app:endIconMode="clear_text"

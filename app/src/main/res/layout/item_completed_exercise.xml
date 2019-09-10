@@ -14,7 +14,7 @@
         android:padding="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/exercise_type_icon_civ"
+            android:id="@+id/completed_exercise_type_icon_civ"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/weight_lifting"
@@ -23,21 +23,21 @@
             android:paddingEnd="16dp"/>
 
         <TextView
-            android:id="@+id/exercise_name_tv"
+            android:id="@+id/completed_exercise_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/exercise_type_icon_civ"
+            android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
             android:text="@string/strength_session"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:paddingBottom="6dp"
             />
 
         <TextView
-            android:id="@+id/exercise_description_tv"
+            android:id="@+id/completed_exercise_description_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/exercise_type_icon_civ"
-            android:layout_below="@id/exercise_name_tv"
+            android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
+            android:layout_below="@id/completed_exercise_name_tv"
             android:text="@string/cardio_session"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             />

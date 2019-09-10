@@ -18,6 +18,16 @@
 
     <!-- Calendar Fragment -->
 
+    <!-- Search Fragment -->
+    <string name="placeholder">Placeholder</string>
+
+    <!-- Favorite Fragment -->
+    <string name="favorite_instructions">Favorite an exercise for \nit to appear in this tab.</string>
+
+    <!-- Custom Fragment -->
+    <string name="custom_instruction">Add a custom exercise by \nclicking the button below.</string>
+    <!-- Browse Fragment -->
+
     <!-- Strength Fragment -->
     <string name="strength_session">Strength Session</string>
     <string name="new_set">New Set</string>
@@ -36,5 +46,8 @@
     <!-- Shared Cardio/Strength Fragment -->
     <string name="exercise_name">Exercise</string>
     <string name="save">Save</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/navigation_search_exercise"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.SearchExerciseFragment"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.SearchExerciseFragment"
         android:label="@string/strength_session"
         tools:layout="@layout/fragment_search_exercise">
         <action
@@ -51,6 +51,9 @@
         <action
             android:id="@+id/to_strength_session"
             app:destination="@id/navigation_to_strength_session" />
+        <action
+            android:id="@+id/to_add_custom_session"
+            app:destination="@id/navigation_to_add_custom_session" />
     </fragment>
 
     <fragment
@@ -71,6 +74,15 @@
             <action
                 android:id="@+id/to_workout"
                 app:destination="@id/navigation_to_workout" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_to_add_custom_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.AddCustomFragment"
+        tools:layout="@layout/fragment_add_custom">
+            <action
+                android:id="@+id/to_search_exercise"
+                app:destination="@id/navigation_search_exercise" />
     </fragment>
 
 </navigation>
