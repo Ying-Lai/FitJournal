@@ -18,18 +18,24 @@ import java.util.List;
 
 public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExerciseAdapter.AvailableExerciseHolder> implements Filterable {
 
+    // Adaptor fields
     private List<AvailableExerciseItem> mAvailableExerciseItems = new ArrayList<>();
     private List<AvailableExerciseItem> mAvailableExerciseItemsFull = new ArrayList<>();
     private OnItemClickListener mOnClickListener;
 
+    // Adaptor constructor
     public AvailableExerciseAdapter(List<AvailableExerciseItem> availableExerciseItems, OnItemClickListener listener) {
         this.mAvailableExerciseItems = availableExerciseItems;
         this.mOnClickListener = listener;
     }
+
     class AvailableExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        // View holder fields
         private TextView mAvailableExerciseName;
         private ImageView mAvailableExerciseFavorite;
 
+        // View holder constructor
         public AvailableExerciseHolder(View itemView) {
             super(itemView);
             mAvailableExerciseName = itemView.findViewById(R.id.available_exercise_name_tv);
@@ -68,6 +74,7 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
         return mAvailableExerciseItems.size();
     }
 
+    // Other adapter methods
     public AvailableExerciseItem getExerciseItem(int position) {
         return mAvailableExerciseItems.get(position);
     }
@@ -78,6 +85,7 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
         notifyDataSetChanged();
     }
 
+    // Search filter methods
     @Override
     public Filter getFilter() {
         return availableExerciseFilter;
@@ -111,6 +119,7 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
         }
     };
 
+    // On click interface
     public interface OnItemClickListener {
         public void onClick(View view, int position);
     }

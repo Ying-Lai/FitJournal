@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
+import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +18,36 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExerciseAdapter.CompletedExerciseHolder> {
 
-    private List<CompletedExerciseItem> completedExerciseItems = new ArrayList<>();
+    // Adaptor fields
+    private List<CompletedExerciseItem> mCompletedExerciseItems;
+    private OnItemClickListener mOnClickListener;
 
-    class CompletedExerciseHolder extends RecyclerView.ViewHolder {
+    // Adaptor constructor
+    public CompletedExerciseAdapter(List<CompletedExerciseItem> completedExerciseItems, OnItemClickListener listener) {
+
+        this.mCompletedExerciseItems = completedExerciseItems;
+        this.mOnClickListener = listener;
+    }
+
+    class CompletedExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        // View holder fields
         private CircleImageView mCompletedExerciseTypeIcon;
         private TextView mCompletedExerciseName;
         private TextView mCompletedExerciseDescription;
 
+        // View holder constructor
         public CompletedExerciseHolder(View itemView) {
              super(itemView);
              mCompletedExerciseTypeIcon = itemView.findViewById(R.id.completed_exercise_type_icon_civ);
              mCompletedExerciseName = itemView.findViewById(R.id.completed_exercise_name_tv);
              mCompletedExerciseDescription = itemView.findViewById(R.id.completed_exercise_description_tv);
+             itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mOnClickListener != null) mOnClickListener.onClick(view, getAdapterPosition());
         }
     }
 
@@ -42,9 +61,9 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
 
     @Override
     public void onBindViewHolder(@NonNull CompletedExerciseHolder holder, int position) {
-        CompletedExerciseItem currentCompletedExerciseItem = completedExerciseItems.get(position);
+        CompletedExerciseItem currentCompletedExerciseItem = mCompletedExerciseItems.get(position);
         String description = "";
-        if (currentCompletedExerciseItem.getExerciseType() == CompletedExerciseItem.ExerciseType.CARDIO) {
+        if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CARDIO) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.runner);
             String intensity = "";
             switch(currentCompletedExerciseItem.getIntensity()) {
@@ -59,7 +78,7 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
                     break;
             }
             description = "Duration: " + currentCompletedExerciseItem.getDuration() + " Minutes, Intensity: " + intensity;
-        } else if (currentCompletedExerciseItem.getExerciseType() == CompletedExerciseItem.ExerciseType.STRENGTH) {
+        } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.STRENGTH) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.weight_lifting);
             String reps = "";
             int minRep = currentCompletedExerciseItem.getMinRep(currentCompletedExerciseItem.getListOfSets());
@@ -77,11 +96,21 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
 
     @Override
     public int getItemCount() {
-        return completedExerciseItems.size();
+        return mCompletedExerciseItems.size();
+    }
+
+    // Other adaptor methods
+    public CompletedExerciseItem getExerciseItem(int position) {
+        return mCompletedExerciseItems.get(position);
     }
 
     public void setCompletedExerciseItems(List<CompletedExerciseItem> completedExerciseItems) {
-        this.completedExerciseItems = completedExerciseItems;
+        this.mCompletedExerciseItems = completedExerciseItems;
         notifyDataSetChanged();
+    }
+
+    // On click interface
+    public interface OnItemClickListener {
+        public void onClick(View view, int position);
     }
 }

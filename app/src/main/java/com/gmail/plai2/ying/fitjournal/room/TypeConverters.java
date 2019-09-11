@@ -4,7 +4,9 @@ import androidx.room.TypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -48,52 +50,36 @@ public class TypeConverters {
     }
 
     @TypeConverter
-    public static CompletedExerciseItem.ExerciseType toCompletedExerciseType(int exerciseType) {
+    public static ExerciseType intToExerciseType(int exerciseType) {
         if (exerciseType == 0) {
-            return CompletedExerciseItem.ExerciseType.CARDIO;
+            return ExerciseType.CARDIO;
         } else if (exerciseType == 1) {
-            return CompletedExerciseItem.ExerciseType.STRENGTH;
+            return ExerciseType.STRENGTH;
         } else {
             throw new IllegalArgumentException("Could not recognize this intensity level");
         }
     }
 
     @TypeConverter
-    public static int toInt(CompletedExerciseItem.ExerciseType exerciseType) {
+    public static int exerciseTypetoInt(ExerciseType exerciseType) {
         return exerciseType.getCategory();
     }
 
     @TypeConverter
-    public static AvailableExerciseItem.ExerciseType toAvailableExerciseType(int exerciseType) {
-        if (exerciseType == 0) {
-            return AvailableExerciseItem.ExerciseType.CARDIO;
-        } else if (exerciseType == 1) {
-            return AvailableExerciseItem.ExerciseType.STRENGTH;
-        } else {
-            throw new IllegalArgumentException("Could not recognize this intensity level");
-        }
-    }
-
-    @TypeConverter
-    public static int toInt(AvailableExerciseItem.ExerciseType exerciseType) {
-        return exerciseType.getCategory();
-    }
-
-    @TypeConverter
-    public static CompletedExerciseItem.Intensity toIntensity(int intensity) {
+    public static ExerciseIntensity intToIntensity(int intensity) {
         if (intensity == 0) {
-            return CompletedExerciseItem.Intensity.LOW;
+            return ExerciseIntensity.LOW;
         } else if (intensity == 1) {
-            return CompletedExerciseItem.Intensity.MEDIUM;
+            return ExerciseIntensity.MEDIUM;
         } else if (intensity == 2) {
-            return CompletedExerciseItem.Intensity.HIGH;
+            return ExerciseIntensity.HIGH;
         } else {
             throw new IllegalArgumentException("Could not recognize this intensity level");
         }
     }
 
     @TypeConverter
-    public static int toInt(CompletedExerciseItem.Intensity intensity) {
+    public static int intensityToInt(ExerciseIntensity intensity) {
         return intensity.getIntensityLevel();
     }
 }

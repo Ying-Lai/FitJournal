@@ -19,48 +19,64 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
+import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
+import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class FavoriteFragment extends Fragment {
 
-    private static final String EXERCISE_TYPE = "exercise_type_key";
-    private static final String EXERCISE_NAME = "exercise_name_key";
-    private String mExerciseTypeInput;
+    // Input fields
+    private ArrayList<String> mExerciseInfo = new ArrayList<>();
+    private ExerciseType mExerciseTypeInput;
+
+    // UI fields
     private WorkoutViewModel mViewModel;
+    private AvailableExerciseAdapter mAdapter;
     private TextView mFavoriteInstructionsTV;
     private RecyclerView mAvailableExerciseRV;
-    private AvailableExerciseAdapter mAdapter;
 
+    // Empty Constructor
     public FavoriteFragment() {
+        // To enable menu for this fragment
         setHasOptionsMenu(true);
     }
 
-    public static FavoriteFragment newInstance(String exerciseTypeInput) {
+    // New instance constructor
+    public static FavoriteFragment newInstance(ExerciseType exerciseTypeInput) {
         FavoriteFragment fragment = new FavoriteFragment();
-        Bundle args = new Bundle();
-        args.putString(EXERCISE_TYPE, exerciseTypeInput);
-        fragment.setArguments(args);
+        Bundle bundle = new Bundle();
+        ArrayList<String> exerciseInfo = new ArrayList<>();
+        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(exerciseTypeInput)));
+        bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // To enable menu for this fragment
         setHasOptionsMenu(true);
+        // Parse through bundle
         if (getArguments() != null) {
-            this.mExerciseTypeInput = getArguments().getString(EXERCISE_TYPE);
+            ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
+            mExerciseInfo = exerciseInfo;
+            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        // Initialize fields and variables
         View root = inflater.inflate(R.layout.fragment_favorite, container, false);
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         mAvailableExerciseRV = root.findViewById(R.id.favorite_exercise_list_rv);
         mFavoriteInstructionsTV = root.findViewById(R.id.favorite_instructions_tv);
         return root;
@@ -69,18 +85,18 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // Setup adaptor
         mAvailableExerciseRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mAvailableExerciseRV.setHasFixedSize(true);
-        mViewModel = ViewModelProviders.of(getActivity()).get(WorkoutViewModel.class);
         mAdapter = new AvailableExerciseAdapter(Collections.emptyList(), new AvailableExerciseAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 AvailableExerciseItem currentAvailableExercise = mAdapter.getExerciseItem(position);
                 if (view.getId() == R.id.available_exercise_name_tv) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(EXERCISE_TYPE, mExerciseTypeInput);
-                    bundle.putString(EXERCISE_NAME, currentAvailableExercise.getExerciseName());
-                    Navigation.findNavController(view).navigate((mExerciseTypeInput.equals("Cardio")?R.id.to_cardio_session:R.id.to_strength_session), bundle);
+                    mExerciseInfo.add(currentAvailableExercise.getExerciseName());
+                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, mExerciseInfo);
+                    Navigation.findNavController(view).navigate((mExerciseTypeInput == ExerciseType.CARDIO ? R.id.to_cardio_session:R.id.to_strength_session), bundle);
                 } else if (view.getId() == R.id.available_exercise_favorited_iv) {
                     if (currentAvailableExercise.isFavorited()) {
                         currentAvailableExercise.setFavorited(false);
@@ -93,8 +109,9 @@ public class FavoriteFragment extends Fragment {
             }
         });
         mAvailableExerciseRV.setAdapter(mAdapter);
-        AvailableExerciseItem.ExerciseType type = (mExerciseTypeInput == "Cardio") ? AvailableExerciseItem.ExerciseType.CARDIO : AvailableExerciseItem.ExerciseType.STRENGTH;
-        mViewModel.getAllAvailableFavoritedExercise(true, type).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
+
+        // Observe live data
+        mViewModel.getAllAvailableFavoritedExercise(true, mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
             @Override
             public void onChanged(List<AvailableExerciseItem> availableFavoritedExercises) {
                 mAdapter.setAvailableExerciseItems(availableFavoritedExercises);
@@ -107,6 +124,7 @@ public class FavoriteFragment extends Fragment {
         });
     }
 
+    // Setup menu options
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();

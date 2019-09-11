@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "available_exercise_table")
 public class AvailableExerciseItem {
 
+    // Fields
     @PrimaryKey(autoGenerate = true)
-    public int mID; // Look into this later -> Can't find getter for mID
+    private int mId;
 
     @ColumnInfo(name = "exercise_type")
     private ExerciseType mExerciseType;
@@ -22,28 +23,15 @@ public class AvailableExerciseItem {
     @ColumnInfo(name = "custom")
     private boolean mCustom;
 
-    public enum ExerciseType {
-        CARDIO(0),
-        STRENGTH(1);
-
-        private int mCategory;
-
-        ExerciseType(int category) {
-            this.mCategory = category;
-        }
-
-        public int getCategory() {
-            return mCategory;
-        }
-    }
-
+    // Empty constructor
     public AvailableExerciseItem() {
         this.mExerciseType = null;
-        this.mExerciseName = "";
+        this.mExerciseName = null;
         this.mFavorited = false;
         this.mCustom = false;
     }
 
+    // General constructor for available exercise item
     public AvailableExerciseItem(ExerciseType type, String exerciseName, boolean favorited, boolean custom) {
         this.mExerciseType = type;
         this.mExerciseName = exerciseName;
@@ -51,12 +39,13 @@ public class AvailableExerciseItem {
         this.mCustom = custom;
     }
 
-    public void setId(int id) {
-        this.mID = id;
+    // Getters and setters for fields
+    public void setMId(int id) {
+        this.mId = id;
     }
 
-    public int getId() {
-        return mID;
+    public int getMId() {
+        return mId;
     }
 
     public ExerciseType getExerciseType() {
@@ -90,4 +79,6 @@ public class AvailableExerciseItem {
     public void setCustom(boolean custom) {
         this.mCustom = custom;
     }
+
+    // Other methods
 }

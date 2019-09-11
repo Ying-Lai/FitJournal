@@ -1,5 +1,7 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.strength_session;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +18,17 @@ import java.util.List;
 
 public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetHolder> {
 
-    private List<Set> sets = new ArrayList<>();
+    // Adaptor fields
+    private List<Set> mListOfSets = new ArrayList<>();
 
     class SetHolder extends RecyclerView.ViewHolder {
+
+        // View holder fields
         private MaterialTextView mSetMTV;
         private TextInputEditText mRepTIET;
         private TextInputEditText mWeightTIET;
 
+        // View holder constructor
         public SetHolder(View itemView) {
             super(itemView);
             mSetMTV = itemView.findViewById(R.id.set_mtv);
@@ -41,26 +47,75 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.SetHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull SetHolder holder, int position) {
-        Set currentSet = sets.get(position);
+        Set currentSet = mListOfSets.get(position);
         String set = "Set " + (position+1);
         holder.mSetMTV.setText(set);
-        if (currentSet.getReps() != -1) {
+        if (!currentSet.isEmpty()) {
             String reps = currentSet.getReps() + "";
-            holder.mRepTIET.setText(reps);
-        }
-        if (currentSet.getWeight() != -1) {
             String weight = currentSet.getWeight()+"";
+            holder.mRepTIET.setText(reps);
             holder.mWeightTIET.setText(weight);
         }
+        // Text watchers to programmatically update adapter list of sets
+        holder.mRepTIET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (holder.mRepTIET.getText().length() == 0) {
+                    currentSet.setEmpty(true);
+                } else {
+                    currentSet.setReps(Integer.parseInt(holder.mRepTIET.getText().toString()));
+                }
+            }
+        });
+        holder.mWeightTIET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (holder.mWeightTIET.getText().length() == 0) {
+                    currentSet.setEmpty(true);
+                } else {
+                    currentSet.setReps(Integer.parseInt(holder.mWeightTIET.getText().toString()));
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return sets.size();
+        return mListOfSets.size();
     }
 
-    public void addSet(List<Set> sets) {
-        this.sets = sets;
+    // Other adaptor methods
+    public void addListOfSets(List<Set> sets) {
+        this.mListOfSets = sets;
         notifyDataSetChanged();
+    }
+
+    public void addIndividualSet(Set set) {
+        mListOfSets.add(set);
+        notifyDataSetChanged();
+    }
+
+    public List<Set> getSets() {
+        return mListOfSets;
     }
 }

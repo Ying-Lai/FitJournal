@@ -10,16 +10,19 @@ import androidx.lifecycle.MutableLiveData;
 import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.repository.ExerciseRepository;
+import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 
 import java.util.Date;
 import java.util.List;
 
 public class WorkoutViewModel extends AndroidViewModel {
 
+    // Fields
     private ExerciseRepository mRepository;
     private MutableLiveData<CompletedExerciseItem> mExerciseInput = new MutableLiveData<>();
     private LiveData<List<CompletedExerciseItem>> mAllCompletedExercises;
 
+    // Constructor
     public WorkoutViewModel(@NonNull Application application) {
         super(application);
         mRepository = new ExerciseRepository(application);
@@ -41,15 +44,15 @@ public class WorkoutViewModel extends AndroidViewModel {
 
     public void deleteAllAvailableExercise() { mRepository.deleteAllAvailableExercises();}
 
-    public LiveData<List<AvailableExerciseItem>> getAllCustomAvailableExercise(boolean custom, AvailableExerciseItem.ExerciseType exerciseType) {
+    public LiveData<List<AvailableExerciseItem>> getAllCustomAvailableExercise(boolean custom, ExerciseType exerciseType) {
         return mRepository.getAllCustomAvailableExercise(custom, exerciseType);
     }
 
-    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, AvailableExerciseItem.ExerciseType exerciseType) {
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, ExerciseType exerciseType) {
         return mRepository.getAllAvailableFavoritedExercise(favorited, exerciseType);
     }
 
-    public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(AvailableExerciseItem.ExerciseType exerciseType) {
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(ExerciseType exerciseType) {
         return mRepository.getAllAvailableExercises(exerciseType);
     }
 

@@ -11,8 +11,9 @@ import java.util.List;
 @Entity(tableName = "completed_exercise_table")
 public class CompletedExerciseItem {
 
+    // Fields
     @PrimaryKey(autoGenerate = true)
-    public int mID; // Look into this later -> Can't find getter for mID
+    private int mId; // Look into this later -> Can't find getter for mId
 
     @ColumnInfo(name = "exercise_type")
     private ExerciseType mExerciseType;
@@ -26,50 +27,22 @@ public class CompletedExerciseItem {
     @ColumnInfo(name = "list_of_sets")
     private List<Set> mListOfSets;
 
-    private Intensity mIntensity;
-
-    public enum ExerciseType {
-        CARDIO(0),
-        STRENGTH(1);
-
-        private int mCategory;
-
-        ExerciseType(int category) {
-            this.mCategory = category;
-        }
-
-        public int getCategory() {
-            return mCategory;
-        }
-    }
-    public enum Intensity {
-        LOW(0),
-        MEDIUM(1),
-        HIGH(2);
-
-        private int mIntensityLevel;
-
-        Intensity(int intensityLevel) {
-            this.mIntensityLevel = intensityLevel;
-        }
-
-        public int getIntensityLevel() {
-            return mIntensityLevel;
-        }
-    }
+    private ExerciseIntensity mIntensity;
 
     private int mDuration;
 
+    // Empty constructor
     public CompletedExerciseItem() {
         this.mExerciseType = null;
         this.mExerciseName = "";
         this.mExerciseDate = new Date();
         this.mListOfSets = Collections.emptyList();
-        this.mIntensity = Intensity.LOW;
+        this.mIntensity = ExerciseIntensity.LOW;
         this.mDuration = 0;
     }
 
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, int duration, Intensity insensityLevel) {
+    // Constructor for cardio exercises
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, int duration, ExerciseIntensity insensityLevel) {
         this.mExerciseType = type;
         this.mExerciseName = exerciseName;
         this.mExerciseDate= exerciseDate;
@@ -78,21 +51,23 @@ public class CompletedExerciseItem {
         this.mIntensity = insensityLevel;
     }
 
+    // Constructor for strength exercises
     public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Set> listOfSets) {
         this.mExerciseType = type;
         this.mExerciseName = exerciseName;
         this.mExerciseDate= exerciseDate;
         this.mListOfSets = listOfSets;
         this.mDuration = 0;
-        this.mIntensity = Intensity.LOW;
+        this.mIntensity = ExerciseIntensity.LOW;
     }
 
-    public void setId(int id) {
-        this.mID = id;
+    // Getters and setters for fields
+    public void setMId(int id) {
+        this.mId = id;
     }
 
-    public int getId() {
-        return mID;
+    public int getMId() {
+        return mId;
     }
 
     public ExerciseType getExerciseType() {
@@ -127,11 +102,11 @@ public class CompletedExerciseItem {
         return mListOfSets;
     }
 
-    public Intensity getIntensity() {
+    public ExerciseIntensity getIntensity() {
         return mIntensity;
     }
 
-    public void setIntensity(Intensity intensity) {
+    public void setIntensity(ExerciseIntensity intensity) {
         this.mIntensity = intensity;
     }
 
@@ -143,6 +118,7 @@ public class CompletedExerciseItem {
         return mDuration;
     }
 
+    // Other methods
     public int getMinRep(List<Set> listOfSets) {
         int min = listOfSets.get(0).getReps();
         for (int i=0; i<listOfSets.size(); i++) {

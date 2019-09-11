@@ -10,6 +10,7 @@ import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseDao;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseDatabase;
+import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 
 import java.util.Date;
 import java.util.List;
@@ -44,15 +45,15 @@ public class ExerciseRepository {
         new DeleteAllAvailableExerciseAsyncTask(mAvailableExerciseDao).execute();
     }
 
-    public LiveData<List<AvailableExerciseItem>> getAllCustomAvailableExercise(boolean custom, AvailableExerciseItem.ExerciseType exerciseType) {
+    public LiveData<List<AvailableExerciseItem>> getAllCustomAvailableExercise(boolean custom, ExerciseType exerciseType) {
         return mAvailableExerciseDao.getAllCustomAvailableExercise(custom, exerciseType);
     }
 
-    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, AvailableExerciseItem.ExerciseType exerciseType) {
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, ExerciseType exerciseType) {
         return mAvailableExerciseDao.getAllFavoritedAvailableExercise(favorited, exerciseType);
     }
 
-    public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(AvailableExerciseItem.ExerciseType exerciseType) {
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(ExerciseType exerciseType) {
         return mAvailableExerciseDao.getAllAvailableExercises(exerciseType);
     }
 

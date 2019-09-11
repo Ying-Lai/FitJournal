@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,75 +19,133 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
+import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
+import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class StrengthSessionFragment extends Fragment {
 
-    private static final String EXERCISE_TYPE = "exercise_type_key";
-    private static final String EXERCISE_NAME = "exercise_name_key";
-    private RecyclerView mSetRV;
+    // Input fields
+    private ExerciseType mExerciseTypeInput;
     private String mExerciseNameInput;
-    private String mExerciseTypeInput;
+    private int mExerciseIdInput;
+    private List<Set> mExerciseSetInput;
+    private boolean mShouldUpdate = false;
+
+    // UI fields
     private WorkoutViewModel mViewModel;
+    private RecyclerView mSetRV;
+    private Button mNewSetButton;
     private Button mSaveButton;
+    private MaterialToolbar mToolbar;
 
     public StrengthSessionFragment() {
+        // To enable menu for this fragment
         setHasOptionsMenu(true);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // To enable menu for this fragment
         setHasOptionsMenu(true);
+        // Parse through bundle
         if (getArguments() != null) {
-            mExerciseNameInput = getArguments().getString(EXERCISE_NAME);
-            mExerciseTypeInput = getArguments().getString(EXERCISE_TYPE);
+            List<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
+            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
+            mExerciseNameInput = exerciseInfo.get(1);
+            if (exerciseInfo.size() > 2) {
+                mExerciseIdInput = Integer.parseInt(exerciseInfo.get(2));
+                mExerciseSetInput = TypeConverters.stringToSetList(exerciseInfo.get(3));
+                mShouldUpdate = true;
+            }
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        // Initialize fields and variables
         View root = inflater.inflate(R.layout.fragment_strength_session, container, false);
-        MaterialToolbar toolbar = root.findViewById(R.id.strength_session_tb);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mToolbar = root.findViewById(R.id.strength_session_tb);
+        mNewSetButton = root.findViewById(R.id.new_set_btn);
+        mSaveButton = root.findViewById(R.id.save_strength_exercise_btn);
+        mSetRV = root.findViewById(R.id.sets_rv);
+
+        // Setup app tool bar
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mExerciseNameInput);
-        mSaveButton = root.findViewById(R.id.save_strength_exercise_btn);
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.to_workout);
-            }
-        });
-        mSetRV = root.findViewById(R.id.sets_rv);
+        actionBar.setTitle(mExerciseNameInput);;
         return root;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // Setup adaptor
         mSetRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSetRV.setHasFixedSize(true);
         final SetAdapter adapter = new SetAdapter();
         mSetRV.setAdapter(adapter);
-        List<Set> test = new ArrayList<>();
-        test.add(new Set(10,50));
-        test.add(new Set(8,40));
-        adapter.addSet(test);
+
+        // Update elements if passed from workout fragment
+        if (mShouldUpdate) {
+            adapter.addListOfSets(mExerciseSetInput);
+        } else {
+            List<Set> initialSet = new ArrayList<>();
+            initialSet.add(new Set());
+            adapter.addListOfSets(initialSet);
+        }
+
+        // On click listeners
+        mNewSetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.addIndividualSet(new Set());
+            }
+        });
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Set> newListOfSets = adapter.getSets();
+                Date today = new Date();
+                today.setTime(0);
+                if (mShouldUpdate) {
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets);
+                    updatedItem.setMId(mExerciseIdInput);
+                    mViewModel.update(updatedItem);
+                } else {
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets);
+                    mViewModel.insert(newItem);
+                }
+                Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
+            }
+        });
     }
 
+    // Setup menu options
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.exercise_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Navigation.findNavController(getView()).popBackStack();
+        }
+        return true;
     }
 }
