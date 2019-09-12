@@ -9,6 +9,7 @@
     <string name="calendar">Calendar</string>
 
     <!-- Workout Fragment -->
+    <string name="workout_instruction">Add a calisthenic, cardio, or strength\nexercise for the current day.</string>
 
     <!-- Stats Fragment -->
     <string name="body_weight">Body Weight</string>
@@ -28,24 +29,27 @@
     <string name="custom_instruction">Add a custom exercise by \nclicking the button below.</string>
     <!-- Browse Fragment -->
 
+    <!-- Calistenic Fragment -->
+    <string name="calisthenic_session">Calisthenics</string>
+    <!-- Cardio Fragment -->
+    <string name="cardio_session">Cardio</string>
+    <string name="duration">Duration (min)</string>
+    <string name="intensity">Intensity (%)</string>
+    <string name="new_session">New Session</string>
+
     <!-- Strength Fragment -->
-    <string name="strength_session">Strength Session</string>
+    <string name="strength_session">Strength</string>
     <string name="new_set">New Set</string>
     <string name="set">Set</string>
     <string name="rep">Rep(s)</string>
     <string name="weight">Weight (lbs)</string>
+    <string name="pound">lb</string>
 
-    <!-- Cardio Fragment -->
-    <string name="cardio_session">Cardio Session</string>
-    <string name="duration">Duration (Minutes)</string>
-    <string name="intensity">Intensity</string>
-    <string name="low">Low</string>
-    <string name="medium">Medium</string>
-    <string name="high">High</string>
-
-    <!-- Shared Cardio/Strength Fragment -->
+    <!-- Shared Exercise Type Fragment -->
     <string name="exercise_name">Exercise</string>
     <string name="save">Save</string>
+    <string name="at">"@"</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

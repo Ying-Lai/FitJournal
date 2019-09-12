@@ -14,6 +14,9 @@
             android:id="@+id/to_search_exercise"
             app:destination="@id/navigation_search_exercise"/>
         <action
+            android:id="@+id/to_calisthenics_session"
+            app:destination="@id/navigation_to_calisthenics_session"/>
+        <action
             android:id="@+id/to_strength_session"
             app:destination="@id/navigation_to_strength_session"/>
         <action
@@ -52,6 +55,9 @@
             android:id="@+id/to_strength_session"
             app:destination="@id/navigation_to_strength_session" />
         <action
+            android:id="@+id/to_calisthenics_session"
+            app:destination="@id/navigation_to_calisthenics_session" />
+        <action
             android:id="@+id/to_add_custom_session"
             app:destination="@id/navigation_to_add_custom_session" />
     </fragment>
@@ -74,6 +80,16 @@
             <action
                 android:id="@+id/to_workout"
                 app:destination="@id/navigation_to_workout" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_to_calisthenics_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.calisthenics_session.CalisthenicsSessionFragment"
+        android:label="@string/calisthenic_session"
+        tools:layout="@layout/fragment_calisthenics_session">
+        <action
+            android:id="@+id/to_workout"
+            app:destination="@id/navigation_to_workout" />
     </fragment>
 
     <fragment

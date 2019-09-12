@@ -17,14 +17,14 @@
             android:orientation="vertical">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/strength_session_ab"
+                android:id="@+id/calisthenics_session_ab"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:fitsSystemWindows="true">
 
                 <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/strength_session_tb"
+                    android:id="@+id/calisthenics_session_tb"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -32,7 +32,7 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/strength_sets_rv"
+                android:id="@+id/calisthenics_sets_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="true"
@@ -52,7 +52,7 @@
         android:gravity="center|bottom">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/new_strength_set_btn"
+            android:id="@+id/new_calisthenics_set_btn"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:layout_marginEnd="5dp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_strength_exercise_btn"
+            android:id="@+id/save_calisthenics_exercise_btn"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

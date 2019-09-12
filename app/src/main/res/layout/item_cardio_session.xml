@@ -7,38 +7,37 @@
     android:orientation="vertical">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/strength_set_mtv"
+        android:id="@+id/cardio_session_mtv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingTop="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="@string/placeholder"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <View style="@style/Divider"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:weightSum="10">
+        android:weightSum="20">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="7"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             app:hintTextAppearance="@android:style/TextAppearance.Small"
-            android:hint="@string/rep"
+            android:hint="@string/duration"
             app:hintEnabled="true"
-            app:endIconMode="clear_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/strength_rep_tiet"
+                android:id="@+id/cardio_duration_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -55,23 +54,23 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="7"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             app:hintTextAppearance="@android:style/TextAppearance.Small"
-            android:hint="@string/weight"
+            android:hint="@string/intensity"
             app:hintEnabled="true"
             app:endIconMode="clear_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/strength_weight_tiet"
+                android:id="@+id/cardio_intensity_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:imeOptions="actionDone"
-                android:inputType="number" />
+                android:inputType="number"
+                android:imeOptions="actionDone"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

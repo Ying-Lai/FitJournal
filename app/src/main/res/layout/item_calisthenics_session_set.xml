@@ -7,21 +7,21 @@
     android:orientation="vertical">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/strength_set_mtv"
+        android:id="@+id/calisthenics_set_mtv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingTop="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="@string/placeholder"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <View style="@style/Divider"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center"
         android:weightSum="10">
 
@@ -34,11 +34,10 @@
             app:hintTextAppearance="@android:style/TextAppearance.Small"
             android:hint="@string/rep"
             app:hintEnabled="true"
-            app:endIconMode="clear_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/strength_rep_tiet"
+                android:id="@+id/calisthenics_rep_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="number"
@@ -49,31 +48,17 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
+            android:paddingStart="12dp"
             android:paddingEnd="4dp"
             android:text="@string/at"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_weight="3"
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            app:hintTextAppearance="@android:style/TextAppearance.Small"
-            android:hint="@string/weight"
-            app:hintEnabled="true"
-            app:endIconMode="clear_text"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/strength_weight_tiet"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:imeOptions="actionDone"
-                android:inputType="number" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="3"
+            android:text="@string/body_weight"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
 
