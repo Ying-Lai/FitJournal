@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
@@ -26,7 +27,12 @@ public class MainActivity extends AppCompatActivity {
     // Static fields
     public static final String EXERCISE_INFO = "exercise_info_key";
 
+    // Fab state fields
+    private boolean mFabExpanded;
+
     // UI fields
+    private FloatingActionButton mAddFAB;
+    private FloatingActionButton mCalisthenicFAB;
     private FloatingActionButton mStrengthFAB;
     private FloatingActionButton mCardioFAB;
     private BottomNavigationView mBottomNav;
@@ -37,8 +43,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // Initialize fields and variables
         mBottomNav = findViewById(R.id.nav_view);
+        mAddFAB = findViewById(R.id.workout_add_fab);
+        mCalisthenicFAB = findViewById(R.id.calisthenics_session_fab);
         mStrengthFAB = findViewById(R.id.strength_session_fab);
         mCardioFAB = findViewById(R.id.cardio_session_fab);
+
+        // Close fab submenus initially
+        closeSubMenusFab();
 
         // Setup bottom navigation
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -63,6 +74,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // On click listeners
+        mAddFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mFabExpanded) {
+                    closeSubMenusFab();
+                } else {
+                    openSubMenusFab();
+                }
+            }
+        });
         mStrengthFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> exerciseInfo = new ArrayList<>();
                 exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.STRENGTH)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
-                navController.navigate(R.id.to_search_exercise, bundle);
+                if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                    navController.navigate(R.id.to_search_exercise, bundle);
+                }
             }
         });
         mCardioFAB.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +103,21 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> exerciseInfo = new ArrayList<>();
                 exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
-                navController.navigate(R.id.to_search_exercise, bundle);
+                if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                    navController.navigate(R.id.to_search_exercise, bundle);
+                }
+            }
+        });
+        mCalisthenicFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                ArrayList<String> exerciseInfo = new ArrayList<>();
+                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CALISTHENICS)));
+                bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
+                if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                    navController.navigate(R.id.to_search_exercise, bundle);
+                }
             }
         });
     }
@@ -95,16 +132,16 @@ public class MainActivity extends AppCompatActivity {
 
     // Other main activity methods
     public void showFloatingActionButton() {
-        if (mCardioFAB != null && mStrengthFAB != null) {
-            mCardioFAB.show();
-            mStrengthFAB.show();
+        if (mAddFAB != null) {
+            closeSubMenusFab();
+            mAddFAB.show();
         }
     }
 
     public void hideFloatingActionButton() {
-        if (mCardioFAB != null && mStrengthFAB != null) {
-            mCardioFAB.hide();
-            mStrengthFAB.hide();
+        if (mAddFAB != null) {
+            closeSubMenusFab();
+            mAddFAB.hide();
         }
     }
 
@@ -116,5 +153,23 @@ public class MainActivity extends AppCompatActivity {
     public void showBottomNavigationView() {
         mBottomNav.clearAnimation();
         mBottomNav.animate().translationY(0).setDuration(300);
+    }
+
+    //closes FAB submenus
+    private void closeSubMenusFab(){
+        mCalisthenicFAB.setVisibility(View.INVISIBLE);
+        mCardioFAB.setVisibility(View.INVISIBLE);
+        mStrengthFAB.setVisibility(View.INVISIBLE);
+        mAddFAB.setImageResource(R.drawable.ic_add);
+        mFabExpanded = false;
+    }
+
+    //Opens FAB submenus
+    private void openSubMenusFab(){
+        mCalisthenicFAB.setVisibility(View.VISIBLE);
+        mCardioFAB.setVisibility(View.VISIBLE);
+        mStrengthFAB.setVisibility(View.VISIBLE);
+        mAddFAB.setImageResource(R.drawable.ic_close);
+        mFabExpanded = true;
     }
 }

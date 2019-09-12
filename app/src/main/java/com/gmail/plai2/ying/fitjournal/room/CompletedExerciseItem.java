@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,43 +26,36 @@ public class CompletedExerciseItem {
     @ColumnInfo(name = "list_of_sets")
     private List<Set> mListOfSets;
 
-    private ExerciseIntensity mIntensity;
+    @ColumnInfo(name = "list_of_cardio_sessions")
+    private List<CardioSession> mListOfCardioSessions;
 
-    private int mDuration;
+    private String mNote;
 
     // Empty constructor
     public CompletedExerciseItem() {
-        this.mExerciseType = null;
-        this.mExerciseName = "";
-        this.mExerciseDate = new Date();
-        this.mListOfSets = Collections.emptyList();
-        this.mIntensity = ExerciseIntensity.LOW;
-        this.mDuration = 0;
     }
 
     // Constructor for cardio exercises
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, int duration, ExerciseIntensity insensityLevel) {
-        this.mExerciseType = type;
-        this.mExerciseName = exerciseName;
-        this.mExerciseDate= exerciseDate;
-        this.mListOfSets = Collections.emptyList();
-        this.mDuration = duration;
-        this.mIntensity = insensityLevel;
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, String note, List<CardioSession> listOfCardioSessions) {
+        mExerciseType = type;
+        mExerciseName = exerciseName;
+        mExerciseDate= exerciseDate;
+        mListOfCardioSessions = listOfCardioSessions;
+        mNote = note;
     }
 
     // Constructor for strength exercises
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Set> listOfSets) {
-        this.mExerciseType = type;
-        this.mExerciseName = exerciseName;
-        this.mExerciseDate= exerciseDate;
-        this.mListOfSets = listOfSets;
-        this.mDuration = 0;
-        this.mIntensity = ExerciseIntensity.LOW;
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Set> listOfSets, String note) {
+        mExerciseType = type;
+        mExerciseName = exerciseName;
+        mExerciseDate= exerciseDate;
+        mListOfSets = listOfSets;
+        mNote = note;
     }
 
     // Getters and setters for fields
     public void setMId(int id) {
-        this.mId = id;
+        mId = id;
     }
 
     public int getMId() {
@@ -75,11 +67,11 @@ public class CompletedExerciseItem {
     }
 
     public void setExerciseType(ExerciseType exerciseType) {
-        this.mExerciseType = exerciseType;
+        mExerciseType = exerciseType;
     }
 
     public void setExerciseName(String exerciseName) {
-        this.mExerciseName = exerciseName;
+        mExerciseName = exerciseName;
     }
 
     public String getExerciseName() {
@@ -91,32 +83,30 @@ public class CompletedExerciseItem {
     }
 
     public void setExerciseDate(Date exerciseDate) {
-        this.mExerciseDate = exerciseDate;
+        mExerciseDate = exerciseDate;
     }
 
     public void setListOfSets(List<Set> listOfSets) {
-        this.mListOfSets = listOfSets;
+        mListOfSets = listOfSets;
     }
 
     public List<Set> getListOfSets() {
         return mListOfSets;
     }
 
-    public ExerciseIntensity getIntensity() {
-        return mIntensity;
+    public void setListOfCardioSessions(List<CardioSession> listOfCardioSessions) {
+        mListOfCardioSessions = listOfCardioSessions;
     }
 
-    public void setIntensity(ExerciseIntensity intensity) {
-        this.mIntensity = intensity;
+    public List<CardioSession> getListOfCardioSessions() {
+        return mListOfCardioSessions;
     }
 
-    public void setDuration(int duration) {
-        this.mDuration = duration;
+    public void setNote(String note) {
+        mNote = note;
     }
 
-    public int getDuration() {
-        return mDuration;
-    }
+    public String getNote() { return mNote; }
 
     // Other methods
     public int getMinRep(List<Set> listOfSets) {

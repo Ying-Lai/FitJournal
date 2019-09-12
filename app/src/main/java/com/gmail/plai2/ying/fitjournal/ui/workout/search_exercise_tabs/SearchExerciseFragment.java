@@ -30,7 +30,6 @@ import java.util.ArrayList;
 public class SearchExerciseFragment extends Fragment {
 
     // Input fields
-    private ArrayList<String> mExerciseInfo;
     private ExerciseType mExerciseTypeInput;
 
 
@@ -65,7 +64,6 @@ public class SearchExerciseFragment extends Fragment {
         // Parse through bundle
         if (getArguments() != null) {
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseInfo = exerciseInfo;
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }

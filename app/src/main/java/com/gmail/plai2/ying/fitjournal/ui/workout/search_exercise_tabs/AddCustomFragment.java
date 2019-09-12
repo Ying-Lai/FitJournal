@@ -30,7 +30,6 @@ import java.util.ArrayList;
 public class AddCustomFragment extends Fragment {
 
     // Input fields
-    private ArrayList<String> mExerciseInfo = new ArrayList<>();
     private ExerciseType mExerciseTypeInput;
 
     // UI fields
@@ -64,7 +63,6 @@ public class AddCustomFragment extends Fragment {
         // Parse through bundle
         if (getArguments() != null) {
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseInfo = exerciseInfo;
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }

@@ -2,7 +2,9 @@ package com.gmail.plai2.ying.fitjournal.room;
 
 public enum ExerciseType {
     CARDIO(0),
-    STRENGTH(1);
+    STRENGTH(1),
+    CALISTHENICS(2);
+
 
     // Fields
     private int mCategory;
@@ -27,6 +29,8 @@ public enum ExerciseType {
             case 1:
                 name = "Strength";
                 break;
+            case 2:
+                name = "Calisthenics";
         }
         return name;
     }

@@ -19,16 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
-import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
-import com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.AvailableExerciseAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textview.MaterialTextView;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -36,14 +33,12 @@ import java.util.List;
 
 public class WorkoutFragment extends Fragment {
 
-    // Input fields
-    private ArrayList<String> mExerciseInfo = new ArrayList<>();
-
     // UI fields
     private WorkoutViewModel mViewModel;
     private RecyclerView mCompletedExerciseRV;
     private MaterialToolbar mToolbar;
     private CompletedExerciseAdapter mAdapter;
+    private MaterialTextView mWorkoutInstructionTV;
 
     public WorkoutFragment() {
         // To enable menu for this fragment
@@ -63,6 +58,7 @@ public class WorkoutFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_workout, container, false);
         mCompletedExerciseRV = root.findViewById(R.id.completed_exercise_rv);
         mToolbar = root.findViewById(R.id.workout_tb);
+        mWorkoutInstructionTV = root.findViewById(R.id.workout_instruction_tv);
         // Setup app tool bar
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
@@ -80,23 +76,37 @@ public class WorkoutFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 CompletedExerciseItem currentCompletedExercise = mAdapter.getExerciseItem(position);
+                ArrayList<String> exerciseInfo = new ArrayList<>();
                 if (currentCompletedExercise.getExerciseType() == ExerciseType.CARDIO) {
                     Bundle bundle = new Bundle();
-                    mExerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
-                    mExerciseInfo.add(currentCompletedExercise.getExerciseName());
-                    mExerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
-                    mExerciseInfo.add(Integer.toString(currentCompletedExercise.getDuration()));
-                    mExerciseInfo.add(Integer.toString(TypeConverters.intensityToInt(currentCompletedExercise.getIntensity())));
-                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, mExerciseInfo);
-                    Navigation.findNavController(view).navigate(R.id.to_cardio_session, bundle);
-                } else {
+                    exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
+                    exerciseInfo.add(currentCompletedExercise.getExerciseName());
+                    exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
+                    exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getListOfCardioSessions()));
+                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
+                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                        Navigation.findNavController(view).navigate(R.id.to_cardio_session, bundle);
+                    }
+                } else if (currentCompletedExercise.getExerciseType() == ExerciseType.STRENGTH){
                     Bundle bundle = new Bundle();
-                    mExerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
-                    mExerciseInfo.add(currentCompletedExercise.getExerciseName());
-                    mExerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
-                    mExerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
-                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, mExerciseInfo);
-                    Navigation.findNavController(view).navigate(R.id.to_strength_session, bundle);
+                    exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.STRENGTH)));
+                    exerciseInfo.add(currentCompletedExercise.getExerciseName());
+                    exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
+                    exerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
+                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
+                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                        Navigation.findNavController(view).navigate(R.id.to_strength_session, bundle);
+                    }
+                } else if (currentCompletedExercise.getExerciseType() == ExerciseType.CALISTHENICS) {
+                    Bundle bundle = new Bundle();
+                    exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CALISTHENICS)));
+                    exerciseInfo.add(currentCompletedExercise.getExerciseName());
+                    exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
+                    exerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
+                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
+                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                        Navigation.findNavController(view).navigate(R.id.to_calisthenics_session, bundle);
+                    }
                 }
             }
         });
@@ -109,6 +119,11 @@ public class WorkoutFragment extends Fragment {
         mViewModel.getAllCompletedExercisesByDate(today).observe(getViewLifecycleOwner(), new Observer<List<CompletedExerciseItem>>() {
             @Override
             public void onChanged(List<CompletedExerciseItem> completedExerciseItems) {
+                if (completedExerciseItems.size() != 0) {
+                    mWorkoutInstructionTV.setVisibility(View.INVISIBLE);
+                } else {
+                    mWorkoutInstructionTV.setVisibility(View.VISIBLE);
+                }
                 mAdapter.setCompletedExerciseItems(completedExerciseItems);
             }
         });

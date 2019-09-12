@@ -1,5 +1,6 @@
 package com.gmail.plai2.ying.fitjournal.room;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,12 +9,11 @@ import androidx.room.PrimaryKey;
 public class AvailableExerciseItem {
 
     // Fields
-    @PrimaryKey(autoGenerate = true)
-    private int mId;
-
     @ColumnInfo(name = "exercise_type")
     private ExerciseType mExerciseType;
 
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "exercise_name")
     private String mExerciseName;
 
@@ -25,29 +25,17 @@ public class AvailableExerciseItem {
 
     // Empty constructor
     public AvailableExerciseItem() {
-        this.mExerciseType = null;
-        this.mExerciseName = null;
-        this.mFavorited = false;
-        this.mCustom = false;
     }
 
     // General constructor for available exercise item
     public AvailableExerciseItem(ExerciseType type, String exerciseName, boolean favorited, boolean custom) {
-        this.mExerciseType = type;
-        this.mExerciseName = exerciseName;
-        this.mFavorited = favorited;
-        this.mCustom = custom;
+        mExerciseType = type;
+        mExerciseName = exerciseName;
+        mFavorited = favorited;
+        mCustom = custom;
     }
 
     // Getters and setters for fields
-    public void setMId(int id) {
-        this.mId = id;
-    }
-
-    public int getMId() {
-        return mId;
-    }
-
     public ExerciseType getExerciseType() {
         return mExerciseType;
     }

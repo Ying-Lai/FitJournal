@@ -33,7 +33,6 @@ import java.util.List;
 public class FavoriteFragment extends Fragment {
 
     // Input fields
-    private ArrayList<String> mExerciseInfo = new ArrayList<>();
     private ExerciseType mExerciseTypeInput;
 
     // UI fields
@@ -67,7 +66,6 @@ public class FavoriteFragment extends Fragment {
         // Parse through bundle
         if (getArguments() != null) {
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseInfo = exerciseInfo;
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
@@ -94,9 +92,23 @@ public class FavoriteFragment extends Fragment {
                 AvailableExerciseItem currentAvailableExercise = mAdapter.getExerciseItem(position);
                 if (view.getId() == R.id.available_exercise_name_tv) {
                     Bundle bundle = new Bundle();
-                    mExerciseInfo.add(currentAvailableExercise.getExerciseName());
-                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, mExerciseInfo);
-                    Navigation.findNavController(view).navigate((mExerciseTypeInput == ExerciseType.CARDIO ? R.id.to_cardio_session:R.id.to_strength_session), bundle);
+                    ArrayList<String> exerciseInfo = new ArrayList<>();
+                    exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(mExerciseTypeInput)));
+                    exerciseInfo.add(currentAvailableExercise.getExerciseName());
+                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
+                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_search_exercise) {
+                        switch (mExerciseTypeInput) {
+                            case CARDIO:
+                                Navigation.findNavController(view).navigate(R.id.to_cardio_session, bundle);
+                                break;
+                            case STRENGTH:
+                                Navigation.findNavController(view).navigate(R.id.to_strength_session, bundle);
+                                break;
+                            case CALISTHENICS:
+                                Navigation.findNavController(view).navigate(R.id.to_calisthenics_session, bundle);
+                                break;
+                        }
+                    }
                 } else if (view.getId() == R.id.available_exercise_favorited_iv) {
                     if (currentAvailableExercise.isFavorited()) {
                         currentAvailableExercise.setFavorited(false);

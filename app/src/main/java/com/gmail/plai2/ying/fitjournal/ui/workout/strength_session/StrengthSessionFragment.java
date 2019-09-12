@@ -77,15 +77,15 @@ public class StrengthSessionFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_strength_session, container, false);
         mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         mToolbar = root.findViewById(R.id.strength_session_tb);
-        mNewSetButton = root.findViewById(R.id.new_set_btn);
+        mNewSetButton = root.findViewById(R.id.new_strength_set_btn);
         mSaveButton = root.findViewById(R.id.save_strength_exercise_btn);
-        mSetRV = root.findViewById(R.id.sets_rv);
+        mSetRV = root.findViewById(R.id.strength_sets_rv);
 
         // Setup app tool bar
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mExerciseNameInput);;
+        actionBar.setTitle(mExerciseNameInput);
         return root;
     }
 
@@ -95,7 +95,7 @@ public class StrengthSessionFragment extends Fragment {
         // Setup adaptor
         mSetRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSetRV.setHasFixedSize(true);
-        final SetAdapter adapter = new SetAdapter();
+        final StrengthSetAdapter adapter = new StrengthSetAdapter();
         mSetRV.setAdapter(adapter);
 
         // Update elements if passed from workout fragment
@@ -103,7 +103,7 @@ public class StrengthSessionFragment extends Fragment {
             adapter.addListOfSets(mExerciseSetInput);
         } else {
             List<Set> initialSet = new ArrayList<>();
-            initialSet.add(new Set());
+            initialSet.add(new Set(ExerciseType.STRENGTH));
             adapter.addListOfSets(initialSet);
         }
 
@@ -111,7 +111,7 @@ public class StrengthSessionFragment extends Fragment {
         mNewSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.addIndividualSet(new Set());
+                adapter.addIndividualSet(new Set(ExerciseType.STRENGTH));
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -121,11 +121,13 @@ public class StrengthSessionFragment extends Fragment {
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets);
+                    // Change note here
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, "");
                     updatedItem.setMId(mExerciseIdInput);
                     mViewModel.update(updatedItem);
                 } else {
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets);
+                    // Change note here
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, "");
                     mViewModel.insert(newItem);
                 }
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);

@@ -32,6 +32,24 @@ public class TypeConverters {
     }
 
     @TypeConverter
+    public static List<CardioSession> stringToSessionList(String data) {
+        if (data == null) {
+            return Collections.emptyList();
+        }
+
+        Type listType = new TypeToken<List<CardioSession>>(){}.getType();
+
+        return new Gson().fromJson(data, listType);
+    }
+
+    @TypeConverter
+    public static String sessionListToString(List<CardioSession> listOfCardioSessions) {
+        Gson gson = new Gson();
+        String json = gson.toJson(listOfCardioSessions);
+        return json;
+    }
+
+    @TypeConverter
     public static Date stringToDate(String data) {
         if (data == null) {
             return null;
@@ -55,7 +73,9 @@ public class TypeConverters {
             return ExerciseType.CARDIO;
         } else if (exerciseType == 1) {
             return ExerciseType.STRENGTH;
-        } else {
+        } else if (exerciseType == 2) {
+            return ExerciseType.CALISTHENICS;
+        }else {
             throw new IllegalArgumentException("Could not recognize this intensity level");
         }
     }
@@ -63,23 +83,5 @@ public class TypeConverters {
     @TypeConverter
     public static int exerciseTypetoInt(ExerciseType exerciseType) {
         return exerciseType.getCategory();
-    }
-
-    @TypeConverter
-    public static ExerciseIntensity intToIntensity(int intensity) {
-        if (intensity == 0) {
-            return ExerciseIntensity.LOW;
-        } else if (intensity == 1) {
-            return ExerciseIntensity.MEDIUM;
-        } else if (intensity == 2) {
-            return ExerciseIntensity.HIGH;
-        } else {
-            throw new IllegalArgumentException("Could not recognize this intensity level");
-        }
-    }
-
-    @TypeConverter
-    public static int intensityToInt(ExerciseIntensity intensity) {
-        return intensity.getIntensityLevel();
     }
 }

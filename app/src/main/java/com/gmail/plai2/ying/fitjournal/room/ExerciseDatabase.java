@@ -53,18 +53,25 @@ public abstract class ExerciseDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             String cardio[] = {"Walking", "Jogging", "Cycling", "Swimming", "Rowing", "Dancing", "Tennis", "Kickboxing", "Stair Climbing", "Jump Rope", "Skating", "Basketball", "Football", "Soccer", "Rugby",
-                    "Squash", "Hockey", "Treadmill", "Jumping Jacks", "Burpees", "Mountain Climbers", "Bear Crawls", "Ping Pong", "Racketball", "Frisbee", "Golf", "Mini-golf"};
-            String strength[] = {"Bench Press", "Squat", "Leg Press", "Lunge", "Deadlift", "Leg Extension", "Leg Curl", "Standing Calf Raises", "Seat Calf Raises", "Chest Fly", "Push-up", "Pull-down", "Pull-up",
-                    "Bent-over Row", "Upright Row", "Shoulder Press", "Shoulder fly", "Lateral Raise", "Shoulder Shrug", "Pushdown", "Triceps Extension", "Biceps Curl", "Crunch", "Russian Twist", "Leg Raise", "Back Extension"};
+                    "Squash", "Hockey", "Treadmill", "Jumping Jacks", "Ping Pong", "Racketball", "Frisbee", "Golf", "Mini-golf"};
+            String strength[] = {"Bench Press", "Weighted Squats", "Leg Press", "Deadlift", "Leg Extension", "Leg Curl", "Standing Calf Raises", "Seat Calf Raises", "Chest Fly", "Bent-over Row", "Upright Row",
+                    "Shoulder Press", "Shoulder fly", "Lateral Raise", "Shoulder Shrug", "Triceps Extension", "Biceps Curl", "Weighted Crunch", "Weighted Leg Raise", "Back Extension"};
+            String calisthenics[] = {"Muscle-ups", "Squat Jumps", "Front Lever", "Push-ups", "Pull-ups", "Chin-ups", "Squats", "Back Lever", "Handstand", "Dips", "Hyper-extensions", "Leg Raises", "Planks",
+                    "Burpees", "L-sits", "Lunge", "Crunch", "Russian Twist", "Mountain Climbers", "Bear Crawls"};
             List<String> listOfCardio = Arrays.asList(cardio);
             List<String> listOfStrength = Arrays.asList(strength);
+            List<String> listOfCalisthenics = Arrays.asList(calisthenics);
             Set<String> setOfCardio = new TreeSet<String>(listOfCardio);
             Set<String> setOfStrength = new TreeSet<String>(listOfStrength);
+            Set<String> setOfCalisthenics = new TreeSet<String>(listOfCalisthenics);
             for (String exerciseName: setOfCardio) {
                 mAvailableExerciseDao.insert(new AvailableExerciseItem(ExerciseType.CARDIO, exerciseName, false, false));
             }
             for (String exerciseName: setOfStrength) {
                 mAvailableExerciseDao.insert(new AvailableExerciseItem(ExerciseType.STRENGTH, exerciseName, false, false));
+            }
+            for (String exerciseName: setOfCalisthenics) {
+                mAvailableExerciseDao.insert(new AvailableExerciseItem(ExerciseType.CALISTHENICS, exerciseName, false, false));
             }
             return null;
         }

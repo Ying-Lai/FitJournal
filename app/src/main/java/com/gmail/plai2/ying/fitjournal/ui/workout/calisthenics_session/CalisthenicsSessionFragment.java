@@ -1,4 +1,4 @@
-package com.gmail.plai2.ying.fitjournal.ui.workout.cardio_session;
+package com.gmail.plai2.ying.fitjournal.ui.workout.calisthenics_session;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
-import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.Set;
@@ -34,23 +33,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CardioSessionFragment extends Fragment {
+public class CalisthenicsSessionFragment extends Fragment {
 
     // Input fields
     private ExerciseType mExerciseTypeInput;
     private String mExerciseNameInput;
     private int mExerciseIdInput;
-    private List<CardioSession> mExerciseSessionInput;
+    private List<Set> mExerciseSetInput;
     private boolean mShouldUpdate = false;
 
     // UI fields
     private WorkoutViewModel mViewModel;
-    private RecyclerView mSessionRV;
-    private Button mNewSessionButton;
+    private RecyclerView mSetRV;
+    private Button mNewSetButton;
     private Button mSaveButton;
     private MaterialToolbar mToolbar;
 
-    public CardioSessionFragment() {
+    public CalisthenicsSessionFragment() {
         // To enable menu for this fragment
         setHasOptionsMenu(true);
     }
@@ -67,7 +66,7 @@ public class CardioSessionFragment extends Fragment {
             mExerciseNameInput = exerciseInfo.get(1);
             if (exerciseInfo.size() > 2) {
                 mExerciseIdInput = Integer.parseInt(exerciseInfo.get(2));
-                mExerciseSessionInput = TypeConverters.stringToSessionList(exerciseInfo.get(3));
+                mExerciseSetInput = TypeConverters.stringToSetList(exerciseInfo.get(3));
                 mShouldUpdate = true;
             }
         }
@@ -76,12 +75,12 @@ public class CardioSessionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Initialize fields and variables
-        View root = inflater.inflate(R.layout.fragment_cardio_session, container, false);
+        View root = inflater.inflate(R.layout.fragment_calisthenics_session, container, false);
         mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
-        mToolbar = root.findViewById(R.id.cardio_session_tb);
-        mNewSessionButton = root.findViewById(R.id.new_cardio_session_btn);
-        mSaveButton = root.findViewById(R.id.save_cardio_exercise_btn);
-        mSessionRV = root.findViewById(R.id.cardio_session_rv);
+        mToolbar = root.findViewById(R.id.calisthenics_session_tb);
+        mNewSetButton = root.findViewById(R.id.new_calisthenics_set_btn);
+        mSaveButton = root.findViewById(R.id.save_calisthenics_exercise_btn);
+        mSetRV = root.findViewById(R.id.calisthenics_sets_rv);
 
         // Setup app tool bar
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
@@ -95,41 +94,41 @@ public class CardioSessionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Setup adaptor
-        mSessionRV.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSessionRV.setHasFixedSize(true);
-        final CardioSessionAdapter adapter = new CardioSessionAdapter();
-        mSessionRV.setAdapter(adapter);
+        mSetRV.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSetRV.setHasFixedSize(true);
+        final CalisthenicsSetAdapter adapter = new CalisthenicsSetAdapter();
+        mSetRV.setAdapter(adapter);
 
         // Update elements if passed from workout fragment
         if (mShouldUpdate) {
-            adapter.addListOfSessions(mExerciseSessionInput);
+            adapter.addListOfSets(mExerciseSetInput);
         } else {
-            List<CardioSession> initialSession = new ArrayList<>();
-            initialSession.add(new CardioSession());
-            adapter.addListOfSessions(initialSession);
+            List<Set> initialSet = new ArrayList<>();
+            initialSet.add(new Set(ExerciseType.CALISTHENICS));
+            adapter.addListOfSets(initialSet);
         }
 
         // On click listeners
-        mNewSessionButton.setOnClickListener(new View.OnClickListener() {
+        mNewSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.addIndividualSession(new CardioSession());
+                adapter.addIndividualSet(new Set(ExerciseType.CALISTHENICS));
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<CardioSession> newListOfSessions = adapter.getSessions();
+                List<Set> newListOfSets = adapter.getSets();
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
                     // Change note here
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, "", newListOfSessions);
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, "");
                     updatedItem.setMId(mExerciseIdInput);
                     mViewModel.update(updatedItem);
                 } else {
                     // Change note here
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, "", newListOfSessions);
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, "");
                     mViewModel.insert(newItem);
                 }
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);

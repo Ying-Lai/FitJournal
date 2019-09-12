@@ -3,13 +3,16 @@ package com.gmail.plai2.ying.fitjournal.ui.workout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
+import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
+import com.gmail.plai2.ying.fitjournal.room.Set;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
     class CompletedExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // View holder fields
-        private CircleImageView mCompletedExerciseTypeIcon;
+        private ImageView mCompletedExerciseTypeIcon;
         private TextView mCompletedExerciseName;
         private TextView mCompletedExerciseDescription;
 
@@ -64,31 +67,35 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
         CompletedExerciseItem currentCompletedExerciseItem = mCompletedExerciseItems.get(position);
         String description = "";
         if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CARDIO) {
-            holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.runner);
-            String intensity = "";
-            switch(currentCompletedExerciseItem.getIntensity()) {
-                case LOW:
-                    intensity = "Low";
-                    break;
-                case MEDIUM:
-                    intensity = "Medium";
-                    break;
-                case HIGH:
-                    intensity = "High";
-                    break;
+            holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_cardio_session);
+            List<CardioSession> listOfCardioSessions = currentCompletedExerciseItem.getListOfCardioSessions();
+            for (int i=0; i<listOfCardioSessions.size(); i++) {
+                if (i == listOfCardioSessions.size() -1) {
+                    description += listOfCardioSessions.get(i).getDuration() + " min @ " + listOfCardioSessions.get(i).getIntensity()+"%";
+                } else {
+                    description += listOfCardioSessions.get(i).getDuration() + " min @ " + listOfCardioSessions.get(i).getIntensity() + "%, ";
+                }
             }
-            description = "Duration: " + currentCompletedExerciseItem.getDuration() + " Minutes, Intensity: " + intensity;
         } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.STRENGTH) {
-            holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.weight_lifting);
-            String reps = "";
-            int minRep = currentCompletedExerciseItem.getMinRep(currentCompletedExerciseItem.getListOfSets());
-            int maxRep = currentCompletedExerciseItem.getMaxRep(currentCompletedExerciseItem.getListOfSets());
-            if (minRep != maxRep) {
-                reps = minRep + " - " + maxRep;
-            } else {
-                reps = minRep + "";
+            holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_strength_session);
+            List<Set> listOfSet = currentCompletedExerciseItem.getListOfSets();
+            for (int i=0; i<listOfSet.size(); i++) {
+                if (i == listOfSet.size() -1) {
+                    description += listOfSet.get(i).getReps() + " reps @ " + listOfSet.get(i).getWeight()+"lbs.";
+                } else {
+                    description += listOfSet.get(i).getReps() + " reps @ " + listOfSet.get(i).getWeight() + "lbs, ";
+                }
             }
-            description = currentCompletedExerciseItem.getListOfSets().size() + " Sets of " + reps + " Reps";
+        } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CALISTHENICS) {
+            holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_calistenics_session);
+            List<Set> listOfSet = currentCompletedExerciseItem.getListOfSets();
+            for (int i=0; i<listOfSet.size(); i++) {
+                if (i == listOfSet.size() -1) {
+                    description += listOfSet.get(i).getReps() + " reps";
+                } else {
+                    description += listOfSet.get(i).getReps() + " reps, ";
+                }
+            }
         }
         holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getExerciseName());
         holder.mCompletedExerciseDescription.setText(description);
