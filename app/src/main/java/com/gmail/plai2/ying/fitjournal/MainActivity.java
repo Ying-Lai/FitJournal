@@ -1,9 +1,12 @@
 package com.gmail.plai2.ying.fitjournal;
 
+import android.content.Context;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         mBottomNav.animate().translationY(0).setDuration(300);
     }
 
-    //closes FAB submenus
+    // Closes FAB submenus
     private void closeSubMenusFab(){
         mCalisthenicFAB.setVisibility(View.INVISIBLE);
         mCardioFAB.setVisibility(View.INVISIBLE);
@@ -164,12 +167,21 @@ public class MainActivity extends AppCompatActivity {
         mFabExpanded = false;
     }
 
-    //Opens FAB submenus
+    // Opens FAB submenus
     private void openSubMenusFab(){
         mCalisthenicFAB.setVisibility(View.VISIBLE);
         mCardioFAB.setVisibility(View.VISIBLE);
         mStrengthFAB.setVisibility(View.VISIBLE);
         mAddFAB.setImageResource(R.drawable.ic_close);
         mFabExpanded = true;
+    }
+
+    // Close soft keyboard
+    public void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

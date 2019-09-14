@@ -58,7 +58,7 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
         holder.mWeightEditTextListener.updatePosition(holder.getAdapterPosition());
         // Set values for view
         Set currentSet = mListOfSets.get(holder.getAdapterPosition());
-        String set = "Set " + (holder.getAdapterPosition()+1);
+        String set = "" + (holder.getAdapterPosition()+1);
         holder.mSetMTV.setText(set);
         if (!currentSet.isEmpty()) {
             String reps = currentSet.getReps() + "";

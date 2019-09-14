@@ -85,11 +85,8 @@ public class CustomFragment extends Fragment {
         mAddCustomFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                ArrayList<String> exerciseInfo = new ArrayList<>();
-                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(mExerciseTypeInput)));
-                bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                Navigation.findNavController(view).navigate(R.id.to_add_custom_session, bundle);
+                AddCustomDialogFragment addCustomFragment = AddCustomDialogFragment.newInstance(mExerciseTypeInput);
+                addCustomFragment.show(getFragmentManager(), "add_custom");
             }
         });
         return root;

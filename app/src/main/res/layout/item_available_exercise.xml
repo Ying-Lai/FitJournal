@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    >
+    style="@style/journal_card_view"
+    app:strokeColor="@color/reply_orange"
+    app:strokeWidth="2dp"
+    android:layout_margin="@dimen/card_view_margin">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -20,7 +20,8 @@
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/available_exercise_favorited_iv"
             android:text="@string/placeholder"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/open_sans_body1"
             android:paddingBottom="6dp"
             />
 

@@ -57,9 +57,6 @@
         <action
             android:id="@+id/to_calisthenics_session"
             app:destination="@id/navigation_to_calisthenics_session" />
-        <action
-            android:id="@+id/to_add_custom_session"
-            app:destination="@id/navigation_to_add_custom_session" />
     </fragment>
 
     <fragment
@@ -90,15 +87,6 @@
         <action
             android:id="@+id/to_workout"
             app:destination="@id/navigation_to_workout" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_to_add_custom_session"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.AddCustomFragment"
-        tools:layout="@layout/fragment_add_custom">
-            <action
-                android:id="@+id/to_search_exercise"
-                app:destination="@id/navigation_search_exercise" />
     </fragment>
 
 </navigation>

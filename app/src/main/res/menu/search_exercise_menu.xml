@@ -5,19 +5,9 @@
     <item android:id="@+id/search_button"
         android:icon="@drawable/ic_search"
         android:title="Search"
+        android:iconTintMode="multiply"
+        android:iconTint="@color/reply_orange"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
-
-    <item android:id="@+id/placeholder1"
-        android:title="PlaceHolder 1"
-        app:showAsAction="never" />
-
-    <item android:id="@+id/placeholder2"
-        android:title="PlaceHolder 2"
-        app:showAsAction="never" />
-
-    <item android:id="@+id/placeholder3"
-        android:title="PlaceHolder 3"
-        app:showAsAction="never" />
 
 </menu>

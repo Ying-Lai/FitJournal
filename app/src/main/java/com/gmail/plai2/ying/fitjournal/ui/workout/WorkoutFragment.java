@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,9 +61,6 @@ public class WorkoutFragment extends Fragment {
         mToolbar = root.findViewById(R.id.workout_tb);
         mWorkoutInstructionTV = root.findViewById(R.id.workout_instruction_tv);
         // Setup app tool bar
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        actionBar.setTitle("Workout");
         return root;
     }
 
@@ -83,6 +81,7 @@ public class WorkoutFragment extends Fragment {
                     exerciseInfo.add(currentCompletedExercise.getExerciseName());
                     exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
                     exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getListOfCardioSessions()));
+                    exerciseInfo.add(currentCompletedExercise.getNote());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
                     if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
                         Navigation.findNavController(view).navigate(R.id.to_cardio_session, bundle);
@@ -93,6 +92,7 @@ public class WorkoutFragment extends Fragment {
                     exerciseInfo.add(currentCompletedExercise.getExerciseName());
                     exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
                     exerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
+                    exerciseInfo.add(currentCompletedExercise.getNote());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
                     if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
                         Navigation.findNavController(view).navigate(R.id.to_strength_session, bundle);
@@ -103,6 +103,7 @@ public class WorkoutFragment extends Fragment {
                     exerciseInfo.add(currentCompletedExercise.getExerciseName());
                     exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
                     exerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
+                    exerciseInfo.add(currentCompletedExercise.getNote());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
                     if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
                         Navigation.findNavController(view).navigate(R.id.to_calisthenics_session, bundle);
@@ -133,7 +134,7 @@ public class WorkoutFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.exercise_menu, menu);
+        inflater.inflate(R.menu.workout_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

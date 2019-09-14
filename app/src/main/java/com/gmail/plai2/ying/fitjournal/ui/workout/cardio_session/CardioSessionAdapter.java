@@ -59,7 +59,7 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
         holder.mIntensityEditTextListener.updatePosition(holder.getAdapterPosition());
         // Set values for view
         CardioSession currentSession = mListOfCardioSession.get(holder.getAdapterPosition());
-        String session = "Session " + (holder.getAdapterPosition()+1);
+        String session = "" + (holder.getAdapterPosition()+1);
         holder.mSessionMTV.setText(session);
         if (!currentSession.isEmpty()) {
             String duration = currentSession.getDuration() + "";

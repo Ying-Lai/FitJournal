@@ -25,7 +25,9 @@ import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.Set;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
+import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
+import com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.AddCustomDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.strength_session.StrengthSetAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -33,13 +35,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CalisthenicsSessionFragment extends Fragment {
+public class CalisthenicsSessionFragment extends Fragment implements NoteDialogFragment.NoteListener {
 
     // Input fields
     private ExerciseType mExerciseTypeInput;
     private String mExerciseNameInput;
     private int mExerciseIdInput;
     private List<Set> mExerciseSetInput;
+    private String mExerciseNoteInput;
     private boolean mShouldUpdate = false;
 
     // UI fields
@@ -64,9 +67,11 @@ public class CalisthenicsSessionFragment extends Fragment {
             List<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
             mExerciseNameInput = exerciseInfo.get(1);
+            mExerciseNoteInput = ""; // Rethink this part
             if (exerciseInfo.size() > 2) {
                 mExerciseIdInput = Integer.parseInt(exerciseInfo.get(2));
                 mExerciseSetInput = TypeConverters.stringToSetList(exerciseInfo.get(3));
+                mExerciseNoteInput = exerciseInfo.get(4);
                 mShouldUpdate = true;
             }
         }
@@ -113,6 +118,7 @@ public class CalisthenicsSessionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 adapter.addIndividualSet(new Set(ExerciseType.CALISTHENICS));
+                ((MainActivity)getActivity()).closeKeyboard();
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -122,15 +128,14 @@ public class CalisthenicsSessionFragment extends Fragment {
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
-                    // Change note here
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, "");
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, mExerciseNoteInput);
                     updatedItem.setMId(mExerciseIdInput);
                     mViewModel.update(updatedItem);
                 } else {
-                    // Change note here
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, "");
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, mExerciseNoteInput);
                     mViewModel.insert(newItem);
                 }
+                ((MainActivity)getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
             }
         });
@@ -149,6 +154,17 @@ public class CalisthenicsSessionFragment extends Fragment {
         if (item.getItemId() == android.R.id.home) {
             Navigation.findNavController(getView()).popBackStack();
         }
+        if (item.getItemId() == R.id.note_menu_button) {
+            NoteDialogFragment noteDialogFragment = NoteDialogFragment.newInstance(mExerciseNoteInput);
+            noteDialogFragment.setTargetFragment(this, 1);
+            noteDialogFragment.show(getFragmentManager(), "note");
+        }
         return true;
+    }
+
+    // Note listener
+    @Override
+    public void sendNote(String note) {
+        mExerciseNoteInput = note;
     }
 }

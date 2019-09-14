@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">My Fit Journal</string>
+    <string name="app_name">Fit Journal</string>
 
     <!-- Main Activity - General -->
     <string name="workout">Workout</string>
@@ -19,18 +19,20 @@
 
     <!-- Calendar Fragment -->
 
-    <!-- Search Fragment -->
-    <string name="placeholder">Placeholder</string>
+    <!-- Search Fragments -->
 
     <!-- Favorite Fragment -->
     <string name="favorite_instructions">Favorite an exercise for \nit to appear in this tab.</string>
 
     <!-- Custom Fragment -->
     <string name="custom_instruction">Add a custom exercise by \nclicking the button below.</string>
+    <string name="add_exercise">Add an exercise: </string>
+
     <!-- Browse Fragment -->
 
     <!-- Calistenic Fragment -->
     <string name="calisthenic_session">Calisthenics</string>
+
     <!-- Cardio Fragment -->
     <string name="cardio_session">Cardio</string>
     <string name="duration">Duration (min)</string>
@@ -45,13 +47,16 @@
     <string name="weight">Weight (lbs)</string>
     <string name="pound">lb</string>
 
-    <!-- Shared Exercise Type Fragment -->
-    <string name="exercise_name">Exercise</string>
-    <string name="save">Save</string>
+    <!-- Note Dialog Fragment -->
+    <string name="add_note">Add a note: </string>
+    <string name="note">Note</string>
+
+    <!-- Miscellaneous -->
+    <string name="placeholder">Placeholder</string>
     <string name="at">"@"</string>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="number">1</string>
+    <string name="exercise_name">Exercise</string>
 
 </resources>

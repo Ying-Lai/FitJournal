@@ -2,6 +2,41 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/evening_blue</item>
+        <item name="colorPrimaryVariant">@color/evening_blue</item>
+        <item name="colorSecondary">@color/reply_orange</item>
+        <item name="colorSecondaryVariant">@color/aspen_gold</item>
+        <item name="android:colorBackground">@color/coconut_milk</item>
+        <item name="colorOnPrimary">@color/reply_orange</item>
+    </style>
+
+    <!-- Font style -->
+    <style name="open_sans_title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="fontFamily">@font/open_sans_semibold</item>
+    </style>
+
+    <style name="open_sans_body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="open_sans_body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <!-- Card view style -->
+    <style name="journal_card_view" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.FitJournal.MaterialCardView</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.FitJournal.MaterialCardView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
     </style>
 
     <!-- Calendar Theme-->
@@ -20,11 +55,6 @@
     <style name="DayTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
         <item name="android:textColor">@color/dark_gray</item>
         <item name="android:fontFamily">@font/roboto</item>
-    </style>
-
-    <style name="CircleShapeAppearance" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">24dp</item>
     </style>
 
     <!-- Divider -->

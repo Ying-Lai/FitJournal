@@ -26,6 +26,7 @@ import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.Set;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
+import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.gmail.plai2.ying.fitjournal.ui.workout.strength_session.StrengthSetAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -34,13 +35,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CardioSessionFragment extends Fragment {
+public class CardioSessionFragment extends Fragment implements NoteDialogFragment.NoteListener {
 
     // Input fields
     private ExerciseType mExerciseTypeInput;
     private String mExerciseNameInput;
     private int mExerciseIdInput;
     private List<CardioSession> mExerciseSessionInput;
+    private String mExerciseNoteInput;
     private boolean mShouldUpdate = false;
 
     // UI fields
@@ -65,9 +67,11 @@ public class CardioSessionFragment extends Fragment {
             List<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
             mExerciseNameInput = exerciseInfo.get(1);
+            mExerciseNoteInput = "";
             if (exerciseInfo.size() > 2) {
                 mExerciseIdInput = Integer.parseInt(exerciseInfo.get(2));
                 mExerciseSessionInput = TypeConverters.stringToSessionList(exerciseInfo.get(3));
+                mExerciseNoteInput = exerciseInfo.get(4);
                 mShouldUpdate = true;
             }
         }
@@ -114,6 +118,7 @@ public class CardioSessionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 adapter.addIndividualSession(new CardioSession());
+                ((MainActivity)getActivity()).closeKeyboard();
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +137,7 @@ public class CardioSessionFragment extends Fragment {
                     CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, "", newListOfSessions);
                     mViewModel.insert(newItem);
                 }
+                ((MainActivity)getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
             }
         });
@@ -150,6 +156,17 @@ public class CardioSessionFragment extends Fragment {
         if (item.getItemId() == android.R.id.home) {
             Navigation.findNavController(getView()).popBackStack();
         }
+        if (item.getItemId() == R.id.note_menu_button) {
+            NoteDialogFragment noteDialogFragment = NoteDialogFragment.newInstance(mExerciseNoteInput);
+            noteDialogFragment.setTargetFragment(this, 1);
+            noteDialogFragment.show(getFragmentManager(), "note");
+        }
         return true;
+    }
+
+    // Note listener
+    @Override
+    public void sendNote(String note) {
+        mExerciseNoteInput = note;
     }
 }

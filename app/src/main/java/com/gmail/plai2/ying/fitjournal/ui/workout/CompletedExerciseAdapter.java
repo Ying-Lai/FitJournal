@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
@@ -13,6 +14,7 @@ import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,9 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
 
         // View holder fields
         private ImageView mCompletedExerciseTypeIcon;
-        private TextView mCompletedExerciseName;
-        private TextView mCompletedExerciseDescription;
+        private MaterialTextView mCompletedExerciseName;
+        private MaterialTextView mCompletedExerciseDescription;
+        private ImageView mCompletedExerciseHasNote;
 
         // View holder constructor
         public CompletedExerciseHolder(View itemView) {
@@ -45,6 +48,7 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
              mCompletedExerciseTypeIcon = itemView.findViewById(R.id.completed_exercise_type_icon_civ);
              mCompletedExerciseName = itemView.findViewById(R.id.completed_exercise_name_tv);
              mCompletedExerciseDescription = itemView.findViewById(R.id.completed_exercise_description_tv);
+             mCompletedExerciseHasNote = itemView.findViewById(R.id.has_note_iv);
              itemView.setOnClickListener(this);
         }
 
@@ -96,6 +100,11 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
                     description += listOfSet.get(i).getReps() + " reps, ";
                 }
             }
+        }
+        if (currentCompletedExerciseItem.getNote() != null && !currentCompletedExerciseItem.getNote().equals("")) {
+            holder.mCompletedExerciseHasNote.setVisibility(View.VISIBLE);
+        } else {
+            holder.mCompletedExerciseHasNote.setVisibility((View.INVISIBLE));
         }
         holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getExerciseName());
         holder.mCompletedExerciseDescription.setText(description);

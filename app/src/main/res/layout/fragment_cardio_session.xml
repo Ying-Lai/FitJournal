@@ -28,7 +28,7 @@
                     android:id="@+id/cardio_session_tb"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                    app:titleTextColor="@color/reply_orange" />
 
             </com.google.android.material.appbar.AppBarLayout>
 

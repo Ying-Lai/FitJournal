@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,32 +9,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/add_custom_ab"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/add_custom_tb"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium"
-            android:hint="@string/exercise_name"
-            app:hintAnimationEnabled="true"
-            app:hintEnabled="true"
-            app:endIconMode="clear_text"
+            app:hintTextAppearance="@style/open_sans_body2"
+            app:hintAnimationEnabled="false"
+            app:hintEnabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -48,21 +32,31 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dip"
+            android:layout_height="match_parent"
             android:padding="16dp"
-            android:layout_weight="1"
             android:gravity="center|bottom"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_custom_btn"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_custom_btn"
                 style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center"
-                android:text="@string/save" />
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:layout_marginStart="5dp"/>
+
         </LinearLayout>
 
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

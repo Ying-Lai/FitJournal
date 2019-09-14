@@ -1,5 +1,6 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -82,6 +83,7 @@ public class SearchExerciseFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(mExerciseTypeInput.getCategoryName());
+        mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.reply_orange, null), PorterDuff.Mode.SRC_ATOP);
 
         // Setup viewpager
         ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());

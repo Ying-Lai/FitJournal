@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="navy_peony">#223A5E</color>
+    <color name="sailor_blue">#2E4A62</color>
+    <color name="aspen_gold">#FFD662</color>
+    <color name="evening_blue">#2A293E</color>
+    <color name="reply_orange">#F9AA33</color>
+    <color name="coconut_milk">#F0EDE5</color>
+
+
+
+
+
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
