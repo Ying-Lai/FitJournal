@@ -132,7 +132,7 @@ public class BrowseFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.search_exercise_menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.search_button);
+        MenuItem searchItem = menu.findItem(R.id.search_menu_item);
         androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -104,6 +104,8 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
         mSessionRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSessionRV.setHasFixedSize(true);
         mAdapter = new CardioSessionAdapter(new CardioSessionAdapter.OnItemLongClickListener() {
+
+            // Checkable cards ui
             @Override
             public boolean onSetLongClick(View view, int position) {
                 if (mActionMode == null) {
@@ -133,6 +135,8 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
             List<CardioSession> initialSession = new ArrayList<>();
             initialSession.add(new CardioSession());
             mAdapter.submitList(initialSession);
+            // Always show keyboard when opening an exercise
+            ((MainActivity) getActivity()).showKeyboard();
         }
 
         // On click listeners
@@ -142,7 +146,8 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
                 List<CardioSession> newList = new ArrayList<>(mAdapter.getCurrentList());
                 newList.add(new CardioSession());
                 mAdapter.submitList(newList);
-                ((MainActivity) getActivity()).closeKeyboard();
+                // Open keyboard and focus on new session
+                ((MainActivity) getActivity()).showKeyboard();
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -152,15 +157,14 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
-                    // Change note here
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, "", newListOfSessions);
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, mExerciseNoteInput, newListOfSessions);
                     updatedItem.setMId(mExerciseIdInput);
                     mViewModel.update(updatedItem);
                 } else {
-                    // Change note here
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, "", newListOfSessions);
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, mExerciseNoteInput, newListOfSessions);
                     mViewModel.insert(newItem);
                 }
+                // Close keyboard when leaving fragment
                 ((MainActivity) getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
             }
@@ -172,7 +176,7 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.delete_menu, menu);
-            mode.setTitle("Delete Selected Sessions");
+            mode.setTitle(getResources().getString(R.string.delete));
             return true;
         }
 
@@ -183,12 +187,15 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.session_set_delete) {
+            if (item.getItemId() == R.id.delete_menu_item) {
                 List<CardioSession> newList = new ArrayList<>();
                 for (int i=0; i<mAdapter.getCurrentList().size(); i++) {
                     if (!mAdapter.getCurrentList().get(i).isChecked()) {
                         newList.add(mAdapter.getCurrentList().get(i));
                     }
+                }
+                if (newList.size() == 0) {
+                    newList.add(new CardioSession());
                 }
                 mAdapter.submitList(newList);
                 mode.finish();
@@ -201,6 +208,7 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
         public void onDestroyActionMode(ActionMode mode) {
             mAdapter.notifyDataSetChanged();
             mActionMode = null;
+            // Hide other buttons in delete action mode
             mNewSessionButton.setVisibility(View.VISIBLE);
             mSaveButton.setVisibility(View.VISIBLE);
         }
@@ -217,9 +225,11 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            // Close keyboard when leaving fragment
+            ((MainActivity) getActivity()).closeKeyboard();
             Navigation.findNavController(getView()).popBackStack();
         }
-        if (item.getItemId() == R.id.note_menu_button) {
+        if (item.getItemId() == R.id.note_menu_item) {
             NoteDialogFragment noteDialogFragment = NoteDialogFragment.newInstance(mExerciseNoteInput);
             noteDialogFragment.setTargetFragment(this, 1);
             noteDialogFragment.show(getFragmentManager(), "note");

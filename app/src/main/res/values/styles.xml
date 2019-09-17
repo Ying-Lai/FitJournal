@@ -9,9 +9,15 @@
         <item name="android:colorBackground">@color/coconut_milk</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!-- Font style -->
+    <style name="decorative_title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:fontFamily">@font/jacques_francois</item>
+        <item name="fontFamily">@font/jacques_francois</item>
+    </style>
+
     <style name="open_sans_title" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:fontFamily">@font/open_sans_semibold</item>
         <item name="fontFamily">@font/open_sans_semibold</item>

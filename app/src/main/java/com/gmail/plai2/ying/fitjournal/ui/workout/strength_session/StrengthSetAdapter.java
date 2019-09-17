@@ -97,6 +97,7 @@ public class StrengthSetAdapter extends ListAdapter<Set, StrengthSetAdapter.Stre
             holder.mRepTIET.getText().clear();
             holder.mWeightTIET.getText().clear();
         }
+        // Request focus on initial exercise creation or new set
         if (holder.getAdapterPosition() == getCurrentList().size()-1) {
             holder.mRepTIET.requestFocus();
         }

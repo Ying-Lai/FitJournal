@@ -113,9 +113,9 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
             List<CardioSession> listOfCardioSessions = currentCompletedExerciseItem.getListOfCardioSessions();
             for (int i=0; i<listOfCardioSessions.size(); i++) {
                 if (i == listOfCardioSessions.size() -1) {
-                    description += listOfCardioSessions.get(i).getDuration() + " min @ " + listOfCardioSessions.get(i).getIntensity()+"%";
+                    description += listOfCardioSessions.get(i).getDuration() + " min x " + listOfCardioSessions.get(i).getIntensity()+"%";
                 } else {
-                    description += listOfCardioSessions.get(i).getDuration() + " min @ " + listOfCardioSessions.get(i).getIntensity() + "%, ";
+                    description += listOfCardioSessions.get(i).getDuration() + " min x " + listOfCardioSessions.get(i).getIntensity() + "%, ";
                 }
             }
         } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.STRENGTH) {
@@ -123,9 +123,9 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
             List<Set> listOfSet = currentCompletedExerciseItem.getListOfSets();
             for (int i=0; i<listOfSet.size(); i++) {
                 if (i == listOfSet.size() -1) {
-                    description += listOfSet.get(i).getReps() + " reps @ " + listOfSet.get(i).getWeight()+"lbs.";
+                    description += listOfSet.get(i).getReps() + " reps x " + listOfSet.get(i).getWeight()+" lbs.";
                 } else {
-                    description += listOfSet.get(i).getReps() + " reps @ " + listOfSet.get(i).getWeight() + "lbs, ";
+                    description += listOfSet.get(i).getReps() + " reps x " + listOfSet.get(i).getWeight() + " lbs, ";
                 }
             }
         } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CALISTHENICS) {

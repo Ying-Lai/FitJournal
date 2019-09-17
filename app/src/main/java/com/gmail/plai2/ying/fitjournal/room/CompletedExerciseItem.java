@@ -157,10 +157,10 @@ public class CompletedExerciseItem {
     }
 
     public boolean compareSession(List<CardioSession> anotherSession) {
-        if (mListOfSets.size() != anotherSession.size()) {
+        if (mListOfCardioSessions.size() != anotherSession.size()) {
             return false;
         }
-        for (int i=0; i<mListOfSets.size(); i++) {
+        for (int i=0; i<mListOfCardioSessions.size(); i++) {
             if (mListOfCardioSessions.get(i).getIntensity() != anotherSession.get(i).getIntensity()
                     && mListOfCardioSessions.get(i).getDuration() != anotherSession.get(i).getDuration()) {
                 return false;

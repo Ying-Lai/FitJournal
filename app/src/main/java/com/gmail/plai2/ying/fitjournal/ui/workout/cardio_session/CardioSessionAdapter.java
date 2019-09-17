@@ -101,6 +101,7 @@ public class CardioSessionAdapter extends ListAdapter<CardioSession, CardioSessi
             holder.mDurationTIET.getText().clear();
             holder.mIntensityTIET.getText().clear();
         }
+        // Request focus on initial exercise creation or new set
         if (holder.getAdapterPosition() == getCurrentList().size()-1) {
             holder.mDurationTIET.requestFocus();
         }

@@ -8,15 +8,17 @@ public class Set {
     private ExerciseType mType;
     private int mReps;
     private int mWeight;
+    private int mPosition;
     private boolean mIsEmpty;
     private boolean mChecked;
     private int mId;
     static private int sId = 0;
 
     // Empty set constructor
-    public Set(ExerciseType exerciseType) {
+    public Set(ExerciseType exerciseType, int position) {
         mType = exerciseType;
         mReps = EMPTY;
+        mPosition = position;
         mIsEmpty = true;
         mChecked = false;
         switch(mType) {
@@ -31,20 +33,22 @@ public class Set {
     }
 
     // Strength set constructor
-    public Set(int reps, int weight) {
+    public Set(int reps, int weight, int position) {
         mType = ExerciseType.STRENGTH;
         mReps = reps;
         mWeight = weight;
+        mPosition = position;
         mIsEmpty = false;
         mChecked = false;
         mId = sId++;
     }
 
     // Calisthenics set constructor
-    public Set(int reps) {
+    public Set(int reps, int position) {
         mType = ExerciseType.CALISTHENICS;
         mReps = reps;
         mWeight = BODY_WEIGHT;
+        mPosition = position;
         mIsEmpty = false;
         mChecked = false;
         mId = sId++;
@@ -65,6 +69,14 @@ public class Set {
 
     public int getWeight() {
         return mWeight;
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
     }
 
     public boolean isEmpty() {
@@ -93,3 +105,4 @@ public class Set {
         return mChecked;
     }
 }
+

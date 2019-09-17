@@ -1,11 +1,14 @@
 package com.gmail.plai2.ying.fitjournal;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
@@ -31,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXERCISE_INFO = "exercise_info_key";
 
     // Fab state fields
+    private boolean mFabVisible;
     private boolean mFabExpanded;
+    private Animation fab_open, fab_close, fab_clock, fab_anticlock;
 
     // UI fields
     private FloatingActionButton mAddFAB;
@@ -51,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
         mStrengthFAB = findViewById(R.id.strength_session_fab);
         mCardioFAB = findViewById(R.id.cardio_session_fab);
 
+        // Animations
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_clock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_clockwise);
+        fab_anticlock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_anticlockwise);
+
         // Close fab submenus initially
         closeSubMenusFab();
 
@@ -66,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 if(destination.getId() == R.id.navigation_to_workout) {
                     showFloatingActionButton();
                 } else {
-                    hideFloatingActionButton();
+                    if (mFabVisible) hideFloatingActionButton();
                 }
                 if (destination.getId() != R.id.navigation_to_workout && destination.getId() != R.id.navigation_to_stats && destination.getId() != R.id.navigation_to_gallery && destination.getId() != R.id.navigation_to_calendar) {
                     hideBottomNavigationView();
@@ -81,8 +92,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mFabExpanded) {
+                    mAddFAB.startAnimation(fab_anticlock);
                     closeSubMenusFab();
                 } else {
+                    mAddFAB.startAnimation(fab_clock);
                     openSubMenusFab();
                 }
             }
@@ -136,15 +149,18 @@ public class MainActivity extends AppCompatActivity {
     // Other main activity methods
     public void showFloatingActionButton() {
         if (mAddFAB != null) {
-            closeSubMenusFab();
+            mAddFAB.startAnimation(fab_anticlock);
             mAddFAB.show();
+            mFabVisible = true;
         }
     }
 
     public void hideFloatingActionButton() {
         if (mAddFAB != null) {
-            closeSubMenusFab();
+            mAddFAB.startAnimation(fab_clock);
+            if (mFabExpanded) closeSubMenusFab();
             mAddFAB.hide();
+            mFabVisible = false;
         }
     }
 
@@ -160,10 +176,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Closes FAB submenus
     private void closeSubMenusFab(){
-        mCalisthenicFAB.setVisibility(View.INVISIBLE);
-        mCardioFAB.setVisibility(View.INVISIBLE);
-        mStrengthFAB.setVisibility(View.INVISIBLE);
-        mAddFAB.setImageResource(R.drawable.ic_add);
+        mCalisthenicFAB.setVisibility(View.GONE);
+        mCardioFAB.setVisibility(View.GONE);
+        mStrengthFAB.setVisibility(View.GONE);
+        mCalisthenicFAB.startAnimation(fab_close);
+        mCardioFAB.startAnimation(fab_close);
+        mStrengthFAB.startAnimation(fab_close);
         mFabExpanded = false;
     }
 
@@ -172,7 +190,9 @@ public class MainActivity extends AppCompatActivity {
         mCalisthenicFAB.setVisibility(View.VISIBLE);
         mCardioFAB.setVisibility(View.VISIBLE);
         mStrengthFAB.setVisibility(View.VISIBLE);
-        mAddFAB.setImageResource(R.drawable.ic_close);
+        mCalisthenicFAB.startAnimation(fab_open);
+        mCardioFAB.startAnimation(fab_open);
+        mStrengthFAB.startAnimation(fab_open);
         mFabExpanded = true;
     }
 
@@ -182,6 +202,22 @@ public class MainActivity extends AppCompatActivity {
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            view.clearFocus();
         }
+    }
+
+    public void showKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+            toggleKeyboard();
+        }
+    }
+
+    public void toggleKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 }

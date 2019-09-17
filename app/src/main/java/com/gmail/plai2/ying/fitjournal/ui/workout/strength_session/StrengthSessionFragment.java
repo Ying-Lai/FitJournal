@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -105,6 +104,8 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
         mSetRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSetRV.setHasFixedSize(true);
         mAdapter = new StrengthSetAdapter(new StrengthSetAdapter.OnItemLongClickListener() {
+
+            // Checkable cards ui
             @Override
             public boolean onLongClick(View view, int position) {
                 if (mActionMode == null) {
@@ -132,8 +133,10 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
             mAdapter.submitList(mExerciseSetInput);
         } else {
             List<Set> initialSet = new ArrayList<>();
-            initialSet.add(new Set(ExerciseType.STRENGTH));
+            initialSet.add(new Set(ExerciseType.STRENGTH, 0));
             mAdapter.submitList(initialSet);
+            // Always show keyboard when opening an exercise
+            ((MainActivity) getActivity()).showKeyboard();
         }
 
         // On click listeners
@@ -141,9 +144,11 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
             @Override
             public void onClick(View view) {
                 List<Set> newList = new ArrayList<>(mAdapter.getCurrentList());
-                newList.add(new Set(ExerciseType.STRENGTH));
+                int position = newList.size();
+                newList.add(new Set(ExerciseType.STRENGTH, position));
                 mAdapter.submitList(newList);
-                ((MainActivity) getActivity()).closeKeyboard();
+                // Open keyboard and focus on new set
+                ((MainActivity) getActivity()).showKeyboard();
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -162,6 +167,7 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
                     CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, mExerciseNoteInput);
                     mViewModel.insert(newItem);
                 }
+                // Close keyboard when leaving fragment
                 ((MainActivity) getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
             }
@@ -174,7 +180,7 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.delete_menu, menu);
-            mode.setTitle("Delete Selected Sets");
+            mode.setTitle(getResources().getString(R.string.delete));
             return true;
         }
 
@@ -185,12 +191,15 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.session_set_delete) {
+            if (item.getItemId() == R.id.delete_menu_item) {
                 List<Set> newList = new ArrayList<>();
                 for (int i=0; i<mAdapter.getCurrentList().size(); i++) {
                     if (!mAdapter.getCurrentList().get(i).isChecked()) {
                         newList.add(mAdapter.getCurrentList().get(i));
                     }
+                }
+                if (newList.size() == 0) {
+                    newList.add(new Set(ExerciseType.CALISTHENICS, 0));
                 }
                 mAdapter.submitList(newList);
                 mode.finish();
@@ -203,6 +212,7 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
         public void onDestroyActionMode(ActionMode mode) {
             mAdapter.notifyDataSetChanged();
             mActionMode = null;
+            // Hide other buttons in delete action mode
             mNewSetButton.setVisibility(View.VISIBLE);
             mSaveButton.setVisibility(View.VISIBLE);
         }
@@ -219,9 +229,11 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            // Close keyboard when leaving fragment
+            ((MainActivity) getActivity()).closeKeyboard();
             Navigation.findNavController(getView()).popBackStack();
         }
-        if (item.getItemId() == R.id.note_menu_button) {
+        if (item.getItemId() == R.id.note_menu_item) {
             NoteDialogFragment noteDialogFragment = NoteDialogFragment.newInstance(mExerciseNoteInput);
             noteDialogFragment.setTargetFragment(this, 1);
             noteDialogFragment.show(getFragmentManager(), "note");

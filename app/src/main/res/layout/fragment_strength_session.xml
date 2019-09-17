@@ -26,8 +26,7 @@
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/strength_session_tb"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:titleTextColor="@color/reply_orange"/>
+                    android:layout_height="?attr/actionBarSize" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -36,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="true"
-                android:paddingBottom="56dp"
+                android:paddingBottom="62dp"
                 tools:listitem="@layout/item_strength_session_set" />
 
         </LinearLayout>

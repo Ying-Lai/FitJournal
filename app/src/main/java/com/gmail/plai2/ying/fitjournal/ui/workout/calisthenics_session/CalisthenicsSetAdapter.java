@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.Set;
@@ -36,6 +38,7 @@ public class CalisthenicsSetAdapter extends ListAdapter<Set, CalisthenicsSetAdap
     }
 
     private static final DiffUtil.ItemCallback<Set> DIFF_CALLBACK = new DiffUtil.ItemCallback<Set>() {
+
         @Override
         public boolean areItemsTheSame(@NonNull Set oldItem, @NonNull Set newItem) {
             return oldItem.getId() == newItem.getId();
@@ -43,7 +46,7 @@ public class CalisthenicsSetAdapter extends ListAdapter<Set, CalisthenicsSetAdap
 
         @Override
         public boolean areContentsTheSame(@NonNull Set oldItem, @NonNull Set newItem) {
-            return oldItem.getWeight() == newItem.getWeight() && oldItem.getReps() == newItem.getReps();
+            return oldItem.getWeight() == newItem.getWeight() && oldItem.getReps() == newItem.getReps() && oldItem.getPosition() == newItem.getPosition();
         }
     };
 
@@ -97,6 +100,7 @@ public class CalisthenicsSetAdapter extends ListAdapter<Set, CalisthenicsSetAdap
         } else {
             holder.mRepTIET.getText().clear();
         }
+        // Request focus on initial exercise creation or new set
         if (holder.getAdapterPosition() == getCurrentList().size()-1) {
             holder.mRepTIET.requestFocus();
         }

@@ -23,20 +23,21 @@
     <!-- Search Fragments -->
 
     <!-- Favorite Fragment -->
-    <string name="favorite_instructions">Favorite an exercise for \nit to appear in this tab.</string>
+    <string name="favorite_instructions">Favorite an exercise to access \nit quickly in this tab.</string>
 
     <!-- Custom Fragment -->
-    <string name="custom_instruction">Add a custom exercise by \nclicking the button below.</string>
+    <string name="custom_instruction">Access any custom exercise you create \nin this tab.</string>
     <string name="add_exercise">Add an exercise: </string>
 
     <!-- Browse Fragment -->
 
     <!-- Calistenic Fragment -->
     <string name="calisthenic_session">Calisthenics</string>
+    <string name="calisthenic_instruction"></string>
 
     <!-- Cardio Fragment -->
     <string name="cardio_session">Cardio</string>
-    <string name="duration">Duration (min)</string>
+    <string name="duration">Duration (m)</string>
     <string name="intensity">Intensity (%)</string>
     <string name="new_session">New Session</string>
 

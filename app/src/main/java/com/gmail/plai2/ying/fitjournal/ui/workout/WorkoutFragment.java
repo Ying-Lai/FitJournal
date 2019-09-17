@@ -1,8 +1,6 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -170,7 +168,7 @@ public class WorkoutFragment extends Fragment {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.delete_menu, menu);
-            mode.setTitle("Delete Selected Sets");
+            mode.setTitle("Delete");
             return true;
         }
 
@@ -181,7 +179,7 @@ public class WorkoutFragment extends Fragment {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.session_set_delete) {
+            if (item.getItemId() == R.id.delete_menu_item) {
                 List<CompletedExerciseItem> newList = new ArrayList<>();
                 for (int i=0; i<mAdapter.getCurrentList().size(); i++) {
                     if (!mAdapter.getCurrentList().get(i).isChecked()) {

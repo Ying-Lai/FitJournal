@@ -27,14 +27,14 @@
                     android:id="@+id/testtesttest"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_agenda" />
+                    android:src="@drawable/ic_fitjournal_outline" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/app_name_abr"
-                    android:textAppearance="@style/open_sans_title" />
+                    android:textAppearance="@style/decorative_title" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
