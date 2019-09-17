@@ -6,11 +6,6 @@
     <color name="evening_blue">#2A293E</color>
     <color name="reply_orange">#F9AA33</color>
     <color name="coconut_milk">#F0EDE5</color>
-
-
-
-
-
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
@@ -21,4 +16,6 @@
     <color name="pink_lavender">#DBB1CD</color>
     <color name="dark_gray">#121212</color>
     <color name="chili_pepper">#9B1B30</color>
+    <color name="white">#FFFFFF</color>
 </resources>
+

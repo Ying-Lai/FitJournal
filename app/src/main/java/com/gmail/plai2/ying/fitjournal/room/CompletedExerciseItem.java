@@ -29,7 +29,11 @@ public class CompletedExerciseItem {
     @ColumnInfo(name = "list_of_cardio_sessions")
     private List<CardioSession> mListOfCardioSessions;
 
+    @ColumnInfo(name = "note")
     private String mNote;
+
+    @ColumnInfo(name = "checked")
+    private boolean mChecked;
 
     // Empty constructor
     public CompletedExerciseItem() {
@@ -42,6 +46,7 @@ public class CompletedExerciseItem {
         mExerciseDate= exerciseDate;
         mListOfCardioSessions = listOfCardioSessions;
         mNote = note;
+        mChecked = false;
     }
 
     // Constructor for strength exercises
@@ -51,6 +56,7 @@ public class CompletedExerciseItem {
         mExerciseDate= exerciseDate;
         mListOfSets = listOfSets;
         mNote = note;
+        mChecked = false;
     }
 
     // Getters and setters for fields
@@ -108,6 +114,14 @@ public class CompletedExerciseItem {
 
     public String getNote() { return mNote; }
 
+    public void setChecked(boolean checked) {
+        mChecked = checked;
+    }
+
+    public boolean isChecked() {
+        return mChecked;
+    }
+
     // Other methods
     public int getMinRep(List<Set> listOfSets) {
         int min = listOfSets.get(0).getReps();
@@ -129,4 +143,29 @@ public class CompletedExerciseItem {
         return max;
     }
 
+    public boolean compareSet(List<Set> anotherSet) {
+        if (mListOfSets.size() != anotherSet.size()) {
+            return false;
+        }
+        for (int i=0; i<mListOfSets.size(); i++) {
+            if (mListOfSets.get(i).getReps() != anotherSet.get(i).getReps()
+                    && mListOfSets.get(i).getWeight() != anotherSet.get(i).getWeight()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean compareSession(List<CardioSession> anotherSession) {
+        if (mListOfSets.size() != anotherSession.size()) {
+            return false;
+        }
+        for (int i=0; i<mListOfSets.size(); i++) {
+            if (mListOfCardioSessions.get(i).getIntensity() != anotherSession.get(i).getIntensity()
+                    && mListOfCardioSessions.get(i).getDuration() != anotherSession.get(i).getDuration()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

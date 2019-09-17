@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -24,12 +25,11 @@ import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
-import com.gmail.plai2.ying.fitjournal.room.Set;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
-import com.gmail.plai2.ying.fitjournal.ui.workout.strength_session.StrengthSetAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +51,8 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
     private Button mNewSessionButton;
     private Button mSaveButton;
     private MaterialToolbar mToolbar;
+    private ActionMode mActionMode;
+    private CardioSessionAdapter mAdapter;
 
     public CardioSessionFragment() {
         // To enable menu for this fragment
@@ -101,30 +103,52 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
         // Setup adaptor
         mSessionRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSessionRV.setHasFixedSize(true);
-        final CardioSessionAdapter adapter = new CardioSessionAdapter();
-        mSessionRV.setAdapter(adapter);
+        mAdapter = new CardioSessionAdapter(new CardioSessionAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onSetLongClick(View view, int position) {
+                if (mActionMode == null) {
+                    mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
+                    mNewSessionButton.setVisibility(View.GONE);
+                    mSaveButton.setVisibility(View.GONE);
+                }
+                CardioSession currentSession = mAdapter.getCardioSessionItem(position);
+                List<CardioSession> newList = new ArrayList<>(mAdapter.getCurrentList());
+                if (!currentSession.isChecked()) {
+                    newList.get(position).setChecked(true);
+                    ((MaterialCardView)view).setChecked(true);
+                } else {
+                    newList.get(position).setChecked(false);
+                    ((MaterialCardView)view).setChecked(false);
+                }
+                mAdapter.submitList(newList);
+                return true;
+            }
+        });
+        mSessionRV.setAdapter(mAdapter);
 
         // Update elements if passed from workout fragment
         if (mShouldUpdate) {
-            adapter.addListOfSessions(mExerciseSessionInput);
+            mAdapter.submitList(mExerciseSessionInput);
         } else {
             List<CardioSession> initialSession = new ArrayList<>();
             initialSession.add(new CardioSession());
-            adapter.addListOfSessions(initialSession);
+            mAdapter.submitList(initialSession);
         }
 
         // On click listeners
         mNewSessionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.addIndividualSession(new CardioSession());
-                ((MainActivity)getActivity()).closeKeyboard();
+                List<CardioSession> newList = new ArrayList<>(mAdapter.getCurrentList());
+                newList.add(new CardioSession());
+                mAdapter.submitList(newList);
+                ((MainActivity) getActivity()).closeKeyboard();
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<CardioSession> newListOfSessions = adapter.getSessions();
+                List<CardioSession> newListOfSessions = mAdapter.getCurrentList();
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
@@ -137,17 +161,56 @@ public class CardioSessionFragment extends Fragment implements NoteDialogFragmen
                     CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, "", newListOfSessions);
                     mViewModel.insert(newItem);
                 }
-                ((MainActivity)getActivity()).closeKeyboard();
+                ((MainActivity) getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
             }
         });
     }
 
+    // Setup action mode
+    private ActionMode.Callback mActionModeCallBack = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.delete_menu, menu);
+            mode.setTitle("Delete Selected Sessions");
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.session_set_delete) {
+                List<CardioSession> newList = new ArrayList<>();
+                for (int i=0; i<mAdapter.getCurrentList().size(); i++) {
+                    if (!mAdapter.getCurrentList().get(i).isChecked()) {
+                        newList.add(mAdapter.getCurrentList().get(i));
+                    }
+                }
+                mAdapter.submitList(newList);
+                mode.finish();
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.notifyDataSetChanged();
+            mActionMode = null;
+            mNewSessionButton.setVisibility(View.VISIBLE);
+            mSaveButton.setVisibility(View.VISIBLE);
+        }
+    };
+
     // Setup menu options
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.exercise_menu, menu);
+        inflater.inflate(R.menu.session_set_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

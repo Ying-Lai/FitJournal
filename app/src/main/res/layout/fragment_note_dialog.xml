@@ -19,7 +19,6 @@
             app:hintTextAppearance="@android:style/TextAppearance.Medium"
             app:hintAnimationEnabled="false"
             app:hintEnabled="false"
-            app:endIconMode="clear_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

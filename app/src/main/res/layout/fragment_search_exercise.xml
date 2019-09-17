@@ -18,8 +18,7 @@
             android:id="@+id/search_exercise_tb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/open_sans_title"
-            app:titleTextColor="@color/reply_orange"/>
+            style="@style/open_sans_title" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/search_exercise_tabs"

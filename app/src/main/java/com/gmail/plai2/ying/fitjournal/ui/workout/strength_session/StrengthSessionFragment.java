@@ -7,12 +7,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -28,6 +30,7 @@ import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +52,8 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
     private Button mNewSetButton;
     private Button mSaveButton;
     private MaterialToolbar mToolbar;
+    private StrengthSetAdapter mAdapter;
+    private ActionMode mActionMode;
 
     public StrengthSessionFragment() {
         // To enable menu for this fragment
@@ -99,30 +104,52 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
         // Setup adaptor
         mSetRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSetRV.setHasFixedSize(true);
-        final StrengthSetAdapter adapter = new StrengthSetAdapter();
-        mSetRV.setAdapter(adapter);
+        mAdapter = new StrengthSetAdapter(new StrengthSetAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onLongClick(View view, int position) {
+                if (mActionMode == null) {
+                    mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
+                    mNewSetButton.setVisibility(View.GONE);
+                    mSaveButton.setVisibility(View.GONE);
+                }
+                Set currentSet = mAdapter.getSetItem(position);
+                List<Set> newList = new ArrayList<>(mAdapter.getCurrentList());
+                if (!currentSet.isChecked()) {
+                    newList.get(position).setChecked(true);
+                    ((MaterialCardView)view).setChecked(true);
+                } else {
+                    newList.get(position).setChecked(false);
+                    ((MaterialCardView)view).setChecked(false);
+                }
+                mAdapter.submitList(newList);
+                return true;
+            }
+        });
+        mSetRV.setAdapter(mAdapter);
 
         // Update elements if passed from workout fragment
         if (mShouldUpdate) {
-            adapter.addListOfSets(mExerciseSetInput);
+            mAdapter.submitList(mExerciseSetInput);
         } else {
             List<Set> initialSet = new ArrayList<>();
             initialSet.add(new Set(ExerciseType.STRENGTH));
-            adapter.addListOfSets(initialSet);
+            mAdapter.submitList(initialSet);
         }
 
         // On click listeners
         mNewSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.addIndividualSet(new Set(ExerciseType.STRENGTH));
-                ((MainActivity)getActivity()).closeKeyboard();
+                List<Set> newList = new ArrayList<>(mAdapter.getCurrentList());
+                newList.add(new Set(ExerciseType.STRENGTH));
+                mAdapter.submitList(newList);
+                ((MainActivity) getActivity()).closeKeyboard();
             }
         });
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Set> newListOfSets = adapter.getSets();
+                List<Set> newListOfSets = mAdapter.getCurrentList();
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
@@ -135,17 +162,57 @@ public class StrengthSessionFragment extends Fragment implements NoteDialogFragm
                     CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSets, mExerciseNoteInput);
                     mViewModel.insert(newItem);
                 }
-                ((MainActivity)getActivity()).closeKeyboard();
+                ((MainActivity) getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
             }
         });
     }
 
+    // Setup action mode
+
+    private ActionMode.Callback mActionModeCallBack = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.delete_menu, menu);
+            mode.setTitle("Delete Selected Sets");
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.session_set_delete) {
+                List<Set> newList = new ArrayList<>();
+                for (int i=0; i<mAdapter.getCurrentList().size(); i++) {
+                    if (!mAdapter.getCurrentList().get(i).isChecked()) {
+                        newList.add(mAdapter.getCurrentList().get(i));
+                    }
+                }
+                mAdapter.submitList(newList);
+                mode.finish();
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mAdapter.notifyDataSetChanged();
+            mActionMode = null;
+            mNewSetButton.setVisibility(View.VISIBLE);
+            mSaveButton.setVisibility(View.VISIBLE);
+        }
+    };
+
     // Setup menu options
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
-        inflater.inflate(R.menu.exercise_menu, menu);
+        inflater.inflate(R.menu.session_set_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

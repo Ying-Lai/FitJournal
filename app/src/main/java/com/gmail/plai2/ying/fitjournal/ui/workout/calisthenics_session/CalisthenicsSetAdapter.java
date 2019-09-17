@@ -6,28 +6,54 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
+import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalisthenicsSetAdapter extends RecyclerView.Adapter<CalisthenicsSetAdapter.CalisthenicsSetHolder> {
+public class CalisthenicsSetAdapter extends ListAdapter<Set, CalisthenicsSetAdapter.CalisthenicsSetHolder> {
 
-    // Adaptor fields
-    private List<Set> mListOfSets = new ArrayList<>();
+    // Adapter Fields
+    private OnItemLongClickListener mListener;
 
-    class CalisthenicsSetHolder extends RecyclerView.ViewHolder {
+    // Adapter constructor
+    public CalisthenicsSetAdapter(OnItemLongClickListener listener) {
+        super(DIFF_CALLBACK);
+        mListener = listener;
+
+    }
+
+    private static final DiffUtil.ItemCallback<Set> DIFF_CALLBACK = new DiffUtil.ItemCallback<Set>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Set oldItem, @NonNull Set newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Set oldItem, @NonNull Set newItem) {
+            return oldItem.getWeight() == newItem.getWeight() && oldItem.getReps() == newItem.getReps();
+        }
+    };
+
+    class CalisthenicsSetHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
 
         // View holder fields
         private MaterialTextView mSetMTV;
         private TextInputEditText mRepTIET;
         private RepEditTextListener mRepEditTextListener;
+        private MaterialCardView mCardView;
 
         // View holder constructor
         public CalisthenicsSetHolder(View itemView, RepEditTextListener repEditTextListener) {
@@ -36,6 +62,16 @@ public class CalisthenicsSetAdapter extends RecyclerView.Adapter<CalisthenicsSet
             mRepTIET = itemView.findViewById(R.id.calisthenics_rep_tiet);
             mRepEditTextListener = repEditTextListener;
             mRepTIET.addTextChangedListener(mRepEditTextListener);
+            mCardView = itemView.findViewById(R.id.calisthenics_cv);
+            mCardView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mListener != null) {
+                return mListener.onSetLongClick(view, getAdapterPosition());
+            }
+            return false;
         }
     }
 
@@ -52,7 +88,7 @@ public class CalisthenicsSetAdapter extends RecyclerView.Adapter<CalisthenicsSet
         // Update position for text listener
         holder.mRepEditTextListener.updatePosition(holder.getAdapterPosition());
         // Set values for view
-        Set currentSet = mListOfSets.get(holder.getAdapterPosition());
+        Set currentSet = getItem(holder.getAdapterPosition());
         String set = "" + (holder.getAdapterPosition()+1);
         holder.mSetMTV.setText(set);
         if (!currentSet.isEmpty()) {
@@ -61,11 +97,15 @@ public class CalisthenicsSetAdapter extends RecyclerView.Adapter<CalisthenicsSet
         } else {
             holder.mRepTIET.getText().clear();
         }
+        if (holder.getAdapterPosition() == getCurrentList().size()-1) {
+            holder.mRepTIET.requestFocus();
+        }
+        holder.mCardView.setChecked(false);
     }
 
     @Override
     public int getItemCount() {
-        return mListOfSets.size();
+        return getCurrentList().size();
     }
 
     // Text listener classes for reps and weight
@@ -85,10 +125,10 @@ public class CalisthenicsSetAdapter extends RecyclerView.Adapter<CalisthenicsSet
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             if (charSequence.length() == 0) {
-                mListOfSets.get(mPosition).setEmpty(true);
+                getItem(mPosition).setEmpty(true);
             } else {
-                mListOfSets.get(mPosition).setReps(Integer.parseInt(charSequence.toString()));
-                mListOfSets.get(mPosition).setEmpty(false);
+                getItem(mPosition).setReps(Integer.parseInt(charSequence.toString()));
+                getItem(mPosition).setEmpty(false);
             }
         }
 
@@ -99,17 +139,12 @@ public class CalisthenicsSetAdapter extends RecyclerView.Adapter<CalisthenicsSet
     }
 
     // Other adaptor methods
-    public void addListOfSets(List<Set> sets) {
-        this.mListOfSets = sets;
-        notifyDataSetChanged();
+    public Set getSetItem(int position) {
+        return getItem(position);
     }
 
-    public void addIndividualSet(Set set) {
-        mListOfSets.add(set);
-        notifyDataSetChanged();
-    }
-
-    public List<Set> getSets() {
-        return mListOfSets;
+    // On click interface
+    public interface OnItemLongClickListener {
+        public boolean onSetLongClick(View view, int position);
     }
 }

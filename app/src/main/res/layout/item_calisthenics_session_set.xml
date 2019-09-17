@@ -3,11 +3,12 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/calisthenics_cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:checkable="true"
+    android:clickable="true"
     style="@style/journal_card_view"
-    app:strokeColor="@color/reply_orange"
-    app:strokeWidth="2dp"
     android:layout_margin="@dimen/card_view_margin">
 
     <LinearLayout
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="12dp"
                 android:paddingEnd="4dp"
-                android:text="@string/at"
+                android:text="@string/x"
                 android:textAppearance="@style/open_sans_body2" />
 
             <com.google.android.material.textview.MaterialTextView

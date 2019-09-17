@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">Fit Journal</string>
+    <string name="app_name_abr">FJ</string>
 
     <!-- Main Activity - General -->
     <string name="workout">Workout</string>
@@ -53,10 +54,13 @@
 
     <!-- Miscellaneous -->
     <string name="placeholder">Placeholder</string>
-    <string name="at">"@"</string>
+    <string name="x">"x"</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="number">1</string>
     <string name="exercise_name">Exercise</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="search">Search</string>
 
 </resources>

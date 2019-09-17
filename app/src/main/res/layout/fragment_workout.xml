@@ -24,17 +24,17 @@
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/testtesttest"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_fjournal" />
+                    android:src="@drawable/ic_agenda" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/app_name"
-                    android:textAppearance="@style/open_sans_title"
-                    android:textColor="@color/reply_orange" />
+                    android:text="@string/app_name_abr"
+                    android:textAppearance="@style/open_sans_title" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -43,7 +43,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/completed_exercise_rv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipToPadding="true"
             android:paddingBottom="56dp"
             tools:listitem="@layout/item_completed_exercise" />

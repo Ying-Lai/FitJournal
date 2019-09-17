@@ -9,12 +9,16 @@ public class Set {
     private int mReps;
     private int mWeight;
     private boolean mIsEmpty;
+    private boolean mChecked;
+    private int mId;
+    static private int sId = 0;
 
     // Empty set constructor
     public Set(ExerciseType exerciseType) {
         mType = exerciseType;
         mReps = EMPTY;
         mIsEmpty = true;
+        mChecked = false;
         switch(mType) {
             case STRENGTH:
                 mWeight = EMPTY;
@@ -23,6 +27,7 @@ public class Set {
                 mWeight = BODY_WEIGHT;
                 break;
         }
+        mId = sId++;
     }
 
     // Strength set constructor
@@ -31,6 +36,8 @@ public class Set {
         mReps = reps;
         mWeight = weight;
         mIsEmpty = false;
+        mChecked = false;
+        mId = sId++;
     }
 
     // Calisthenics set constructor
@@ -39,6 +46,8 @@ public class Set {
         mReps = reps;
         mWeight = BODY_WEIGHT;
         mIsEmpty = false;
+        mChecked = false;
+        mId = sId++;
     }
 
     // Setters and Getters
@@ -70,5 +79,17 @@ public class Set {
             }
         }
         mIsEmpty = empty;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setChecked(boolean checked) {
+        mChecked = checked;
+    }
+
+    public boolean isChecked() {
+        return mChecked;
     }
 }

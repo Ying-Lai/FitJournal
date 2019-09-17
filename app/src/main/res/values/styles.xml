@@ -7,7 +7,8 @@
         <item name="colorSecondary">@color/reply_orange</item>
         <item name="colorSecondaryVariant">@color/aspen_gold</item>
         <item name="android:colorBackground">@color/coconut_milk</item>
-        <item name="colorOnPrimary">@color/reply_orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <!-- Font style -->
@@ -35,8 +36,8 @@
     </style>
 
     <style name="ShapeAppearanceOverlay.FitJournal.MaterialCardView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10dp</item>
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">0dp</item>
     </style>
 
     <!-- Calendar Theme-->

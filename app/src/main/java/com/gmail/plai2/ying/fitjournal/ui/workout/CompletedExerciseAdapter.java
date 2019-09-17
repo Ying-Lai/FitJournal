@@ -1,12 +1,16 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
@@ -14,33 +18,56 @@ import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExerciseAdapter.CompletedExerciseHolder> {
+public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem, CompletedExerciseAdapter.CompletedExerciseHolder> {
 
     // Adaptor fields
-    private List<CompletedExerciseItem> mCompletedExerciseItems;
     private OnItemClickListener mOnClickListener;
 
-    // Adaptor constructor
-    public CompletedExerciseAdapter(List<CompletedExerciseItem> completedExerciseItems, OnItemClickListener listener) {
 
-        this.mCompletedExerciseItems = completedExerciseItems;
-        this.mOnClickListener = listener;
+    // Adaptor constructor
+    public CompletedExerciseAdapter(OnItemClickListener listener) {
+        super(DIFF_CALLBACK);
+        mOnClickListener = listener;
     }
 
-    class CompletedExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static final DiffUtil.ItemCallback<CompletedExerciseItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<CompletedExerciseItem>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull CompletedExerciseItem oldItem, @NonNull CompletedExerciseItem newItem) {
+            return oldItem.getMId() == newItem.getMId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull CompletedExerciseItem oldItem, @NonNull CompletedExerciseItem newItem) {
+            if (oldItem.getExerciseType().getCategoryName().equals(newItem.getExerciseType().getCategoryName())) {
+                switch(oldItem.getExerciseType()) {
+                    case CARDIO:
+                        return oldItem.compareSession(newItem.getListOfCardioSessions());
+                    case STRENGTH:
+                    case CALISTHENICS:
+                        return oldItem.compareSet(newItem.getListOfSets());
+                }
+            }
+            return false;
+        }
+    };
+
+
+
+    class CompletedExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         // View holder fields
         private ImageView mCompletedExerciseTypeIcon;
         private MaterialTextView mCompletedExerciseName;
         private MaterialTextView mCompletedExerciseDescription;
-        private ImageView mCompletedExerciseHasNote;
+        private MaterialTextView mCompletedExerciseHasNote;
+        private MaterialCardView mCardView;
+        private View mDivider;
 
         // View holder constructor
         public CompletedExerciseHolder(View itemView) {
@@ -48,13 +75,24 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
              mCompletedExerciseTypeIcon = itemView.findViewById(R.id.completed_exercise_type_icon_civ);
              mCompletedExerciseName = itemView.findViewById(R.id.completed_exercise_name_tv);
              mCompletedExerciseDescription = itemView.findViewById(R.id.completed_exercise_description_tv);
-             mCompletedExerciseHasNote = itemView.findViewById(R.id.has_note_iv);
+             mCompletedExerciseHasNote = itemView.findViewById(R.id.has_note_tv);
+             mDivider = itemView.findViewById(R.id.divider);
+             mCardView = itemView.findViewById(R.id.completed_exercise_cv);
+             mCardView.setOnLongClickListener(this);
              itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mOnClickListener != null) mOnClickListener.onClick(view, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mOnClickListener != null) {
+                return mOnClickListener.onLongClick(view, getAdapterPosition());
+            }
+            return false;
         }
     }
 
@@ -68,7 +106,7 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
 
     @Override
     public void onBindViewHolder(@NonNull CompletedExerciseHolder holder, int position) {
-        CompletedExerciseItem currentCompletedExerciseItem = mCompletedExerciseItems.get(position);
+        CompletedExerciseItem currentCompletedExerciseItem = getItem(position);
         String description = "";
         if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CARDIO) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_cardio_session);
@@ -102,31 +140,35 @@ public class CompletedExerciseAdapter extends RecyclerView.Adapter<CompletedExer
             }
         }
         if (currentCompletedExerciseItem.getNote() != null && !currentCompletedExerciseItem.getNote().equals("")) {
+            holder.mDivider.setVisibility(View.VISIBLE);
             holder.mCompletedExerciseHasNote.setVisibility(View.VISIBLE);
         } else {
-            holder.mCompletedExerciseHasNote.setVisibility((View.INVISIBLE));
+            holder.mDivider.setVisibility(View.GONE);
+            holder.mCompletedExerciseHasNote.setVisibility((View.GONE));
         }
+        CharSequence note = "Note: " + currentCompletedExerciseItem.getNote();
+        SpannableStringBuilder formattedNote = new SpannableStringBuilder(note);
+        formattedNote.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        holder.mCompletedExerciseHasNote.setText(formattedNote);
         holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getExerciseName());
         holder.mCompletedExerciseDescription.setText(description);
+        currentCompletedExerciseItem.setChecked(false);
+        holder.mCardView.setChecked(false);
     }
 
     @Override
     public int getItemCount() {
-        return mCompletedExerciseItems.size();
+        return getCurrentList().size();
     }
 
     // Other adaptor methods
     public CompletedExerciseItem getExerciseItem(int position) {
-        return mCompletedExerciseItems.get(position);
-    }
-
-    public void setCompletedExerciseItems(List<CompletedExerciseItem> completedExerciseItems) {
-        this.mCompletedExerciseItems = completedExerciseItems;
-        notifyDataSetChanged();
+        return getItem(position);
     }
 
     // On click interface
     public interface OnItemClickListener {
         public void onClick(View view, int position);
+        public boolean onLongClick(View view, int position);
     }
 }

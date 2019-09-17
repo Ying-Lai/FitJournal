@@ -2,11 +2,13 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/journal_card_view"
+    android:id="@+id/strength_cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:strokeColor="@color/reply_orange"
-    app:strokeWidth="2dp"
+    android:checkable="true"
+    android:clickable="true"
+    android:longClickable="true"
+    style="@style/journal_card_view"
     android:layout_margin="@dimen/card_view_margin">
 
     <LinearLayout
@@ -40,7 +42,6 @@
                 app:hintTextAppearance="@style/open_sans_body2"
                 android:hint="@string/rep"
                 app:hintEnabled="true"
-                app:endIconMode="clear_text"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
-                android:text="@string/at"
+                android:text="@string/x"
                 android:textAppearance="@style/open_sans_body2" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -70,7 +71,6 @@
                 app:hintTextAppearance="@style/open_sans_body2"
                 android:hint="@string/weight"
                 app:hintEnabled="true"
-                app:endIconMode="clear_text"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText

@@ -2,4 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/session_set_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete"
+        app:showAsAction="ifRoom" />
+
 </menu>

@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void hideBottomNavigationView() {
+    public void hideBottomNavigationView() {
         mBottomNav.clearAnimation();
         mBottomNav.animate().translationY(mBottomNav.getHeight()).setDuration(300);
     }

@@ -6,23 +6,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdapter.CardioSessionHolder> {
+public class CardioSessionAdapter extends ListAdapter<CardioSession, CardioSessionAdapter.CardioSessionHolder> {
 
-    // Adaptor fields
-    private List<CardioSession> mListOfCardioSession = new ArrayList<>();
+    // Adapter fields
+    private OnItemLongClickListener mListener;
 
-    class CardioSessionHolder extends RecyclerView.ViewHolder {
+    public CardioSessionAdapter(OnItemLongClickListener listener) {
+        super(DIFF_CALLBACK);
+        mListener = listener;
+    }
+
+    private static final DiffUtil.ItemCallback<CardioSession> DIFF_CALLBACK = new DiffUtil.ItemCallback<CardioSession>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull CardioSession oldItem, @NonNull CardioSession newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull CardioSession oldItem, @NonNull CardioSession newItem) {
+            return oldItem.getIntensity() == newItem.getIntensity() && oldItem.getDuration() == newItem.getDuration();
+        }
+    };
+
+    class CardioSessionHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         // View holder fields
         private MaterialTextView mSessionMTV;
@@ -30,6 +50,7 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
         private TextInputEditText mIntensityTIET;
         private DurationEditTextListener mDurationEditTextListener;
         private IntensityEditTextListener mIntensityEditTextListener;
+        private MaterialCardView mCardView;
 
         // View holder constructor
         public CardioSessionHolder(View itemView, DurationEditTextListener durationEditTextListener, IntensityEditTextListener intensityEditTextListener) {
@@ -41,6 +62,16 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
             mIntensityEditTextListener = intensityEditTextListener;
             mDurationTIET.addTextChangedListener(mDurationEditTextListener);
             mIntensityTIET.addTextChangedListener(mIntensityEditTextListener);
+            mCardView = itemView.findViewById(R.id.cardio_cv);
+            mCardView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mListener != null) {
+                return mListener.onSetLongClick(view, getAdapterPosition());
+            }
+            return false;
         }
     }
 
@@ -58,7 +89,7 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
         holder.mDurationEditTextListener.updatePosition(holder.getAdapterPosition());
         holder.mIntensityEditTextListener.updatePosition(holder.getAdapterPosition());
         // Set values for view
-        CardioSession currentSession = mListOfCardioSession.get(holder.getAdapterPosition());
+        CardioSession currentSession = getItem(holder.getAdapterPosition());
         String session = "" + (holder.getAdapterPosition()+1);
         holder.mSessionMTV.setText(session);
         if (!currentSession.isEmpty()) {
@@ -70,11 +101,15 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
             holder.mDurationTIET.getText().clear();
             holder.mIntensityTIET.getText().clear();
         }
+        if (holder.getAdapterPosition() == getCurrentList().size()-1) {
+            holder.mDurationTIET.requestFocus();
+        }
+        holder.mCardView.setChecked(false);
     }
 
     @Override
     public int getItemCount() {
-        return mListOfCardioSession.size();
+        return getCurrentList().size();
     }
 
     // Text listener classes for reps and weight
@@ -94,10 +129,10 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             if (charSequence.length() == 0) {
-                mListOfCardioSession.get(mPosition).setEmpty(true);
+                getItem(mPosition).setEmpty(true);
             } else {
-                mListOfCardioSession.get(mPosition).setDuration(Integer.parseInt(charSequence.toString()));
-                mListOfCardioSession.get(mPosition).setEmpty(false);
+                getItem(mPosition).setDuration(Integer.parseInt(charSequence.toString()));
+                getItem(mPosition).setEmpty(false);
             }
         }
 
@@ -122,10 +157,10 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             if (charSequence.length() == 0) {
-                mListOfCardioSession.get(mPosition).setEmpty(true);
+                getItem(mPosition).setEmpty(true);
             } else {
-                mListOfCardioSession.get(mPosition).setIntensity(Integer.parseInt(charSequence.toString()));
-                mListOfCardioSession.get(mPosition).setEmpty(false);
+                getItem(mPosition).setIntensity(Integer.parseInt(charSequence.toString()));
+                getItem(mPosition).setEmpty(false);
             }
         }
 
@@ -135,17 +170,12 @@ public class CardioSessionAdapter extends RecyclerView.Adapter<CardioSessionAdap
     }
 
     // Other adaptor methods
-    public void addListOfSessions(List<CardioSession> sessions) {
-        this.mListOfCardioSession = sessions;
-        notifyDataSetChanged();
+    public CardioSession getCardioSessionItem(int position) {
+        return getItem(position);
     }
 
-    public void addIndividualSession(CardioSession session) {
-        mListOfCardioSession.add(session);
-        notifyDataSetChanged();
-    }
-
-    public List<CardioSession> getSessions() {
-        return mListOfCardioSession;
+    // On click interface
+    public interface OnItemLongClickListener {
+        public boolean onSetLongClick(View view, int position);
     }
 }

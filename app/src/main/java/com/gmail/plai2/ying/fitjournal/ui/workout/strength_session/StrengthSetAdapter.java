@@ -6,22 +6,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.util.ArrayList;
-import java.util.List;
+public class StrengthSetAdapter extends ListAdapter<Set, StrengthSetAdapter.StrengthSetHolder> {
 
-public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.StrengthSetHolder> {
+    // Adapter field
+    private OnItemLongClickListener mListener;
 
-    // Adaptor fields
-    private List<Set> mListOfSets = new ArrayList<>();
+    public StrengthSetAdapter(OnItemLongClickListener listener) {
+        super(DIFF_CALLBACK);
+        mListener = listener;
+    }
 
-    class StrengthSetHolder extends RecyclerView.ViewHolder {
+    private static final DiffUtil.ItemCallback<Set> DIFF_CALLBACK = new DiffUtil.ItemCallback<Set>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Set oldItem, @NonNull Set newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Set oldItem, @NonNull Set newItem) {
+            return oldItem.getWeight() == newItem.getWeight() && oldItem.getReps() == newItem.getReps();
+        }
+    };
+
+    class StrengthSetHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         // View holder fields
         private MaterialTextView mSetMTV;
@@ -29,6 +46,7 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
         private TextInputEditText mWeightTIET;
         private RepEditTextListener mRepEditTextListener;
         private WeightEditTextListener mWeightEditTextListener;
+        private MaterialCardView mCardView;
 
         // View holder constructor
         public StrengthSetHolder(View itemView, RepEditTextListener repEditTextListener, WeightEditTextListener weightEditTextListener) {
@@ -38,8 +56,18 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
             mWeightTIET = itemView.findViewById(R.id.strength_weight_tiet);
             mRepEditTextListener = repEditTextListener;
             mWeightEditTextListener = weightEditTextListener;
+            mCardView = itemView.findViewById(R.id.strength_cv);
             mRepTIET.addTextChangedListener(mRepEditTextListener);
             mWeightTIET.addTextChangedListener(mWeightEditTextListener);
+            mCardView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mListener != null) {
+                return mListener.onLongClick(view, getAdapterPosition());
+            }
+            return false;
         }
     }
 
@@ -57,7 +85,7 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
         holder.mRepEditTextListener.updatePosition(holder.getAdapterPosition());
         holder.mWeightEditTextListener.updatePosition(holder.getAdapterPosition());
         // Set values for view
-        Set currentSet = mListOfSets.get(holder.getAdapterPosition());
+        Set currentSet = getItem(holder.getAdapterPosition());
         String set = "" + (holder.getAdapterPosition()+1);
         holder.mSetMTV.setText(set);
         if (!currentSet.isEmpty()) {
@@ -69,11 +97,16 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
             holder.mRepTIET.getText().clear();
             holder.mWeightTIET.getText().clear();
         }
+        if (holder.getAdapterPosition() == getCurrentList().size()-1) {
+            holder.mRepTIET.requestFocus();
+        }
+        currentSet.setChecked(false);
+        holder.mCardView.setChecked(false);
     }
 
     @Override
     public int getItemCount() {
-        return mListOfSets.size();
+        return getCurrentList().size();
     }
 
     // Text listener classes for reps and weight
@@ -93,10 +126,10 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             if (charSequence.length() == 0) {
-                mListOfSets.get(mPosition).setEmpty(true);
+                getItem(mPosition).setEmpty(true);
             } else {
-                mListOfSets.get(mPosition).setReps(Integer.parseInt(charSequence.toString()));
-                mListOfSets.get(mPosition).setEmpty(false);
+                getItem(mPosition).setReps(Integer.parseInt(charSequence.toString()));
+                getItem(mPosition).setEmpty(false);
             }
         }
 
@@ -121,10 +154,10 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             if (charSequence.length() == 0) {
-                mListOfSets.get(mPosition).setEmpty(true);
+                getItem(mPosition).setEmpty(true);
             } else {
-                mListOfSets.get(mPosition).setWeight(Integer.parseInt(charSequence.toString()));
-                mListOfSets.get(mPosition).setEmpty(false);
+                getItem(mPosition).setWeight(Integer.parseInt(charSequence.toString()));
+                getItem(mPosition).setEmpty(false);
             }
         }
 
@@ -134,17 +167,12 @@ public class StrengthSetAdapter extends RecyclerView.Adapter<StrengthSetAdapter.
     }
 
     // Other adaptor methods
-    public void addListOfSets(List<Set> sets) {
-        this.mListOfSets = sets;
-        notifyDataSetChanged();
+    public Set getSetItem(int position) {
+        return getItem(position);
     }
 
-    public void addIndividualSet(Set set) {
-        mListOfSets.add(set);
-        notifyDataSetChanged();
-    }
-
-    public List<Set> getSets() {
-        return mListOfSets;
+    // On click interface
+    public interface OnItemLongClickListener {
+        public boolean onLongClick(View view, int position);
     }
 }
