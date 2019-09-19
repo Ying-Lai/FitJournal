@@ -18,22 +18,8 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
         <action
-            android:id="@+id/to_calisthenics_session"
-            app:destination="@id/navigation_to_calisthenics_session"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-        <action
-            android:id="@+id/to_strength_session"
-            app:destination="@id/navigation_to_strength_session"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-        <action
-            android:id="@+id/to_cardio_session"
-            app:destination="@id/navigation_to_cardio_session"
+            android:id="@+id/to_session"
+            app:destination="@id/navigation_to_session"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -65,60 +51,19 @@
         android:label="@string/strength_session"
         tools:layout="@layout/fragment_search_exercise">
         <action
-            android:id="@+id/to_cardio_session"
-            app:destination="@id/navigation_to_cardio_session"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-        <action
-            android:id="@+id/to_strength_session"
-            app:destination="@id/navigation_to_strength_session"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-        <action
-            android:id="@+id/to_calisthenics_session"
-            app:destination="@id/navigation_to_calisthenics_session"
+            android:id="@+id/to_session"
+            app:destination="@id/navigation_to_session"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_to_strength_session"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.strength_session.StrengthSessionFragment"
-        android:label="@string/strength_session"
-        tools:layout="@layout/fragment_strength_session">
-        <action
-            android:id="@+id/to_workout"
-            app:destination="@id/navigation_to_workout"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-    </fragment>
 
     <fragment
-        android:id="@+id/navigation_to_cardio_session"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.cardio_session.CardioSessionFragment"
-        android:label="@string/cardio_session"
-        tools:layout="@layout/fragment_cardio_session">
-            <action
-                android:id="@+id/to_workout"
-                app:destination="@id/navigation_to_workout"
-                app:enterAnim="@anim/nav_default_enter_anim"
-                app:exitAnim="@anim/nav_default_exit_anim"
-                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-                app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_to_calisthenics_session"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.calisthenics_session.CalisthenicsSessionFragment"
-        android:label="@string/calisthenic_session"
+        android:id="@+id/navigation_to_session"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.session.SessionFragment"
+        android:label="@string/session"
         tools:layout="@layout/fragment_calisthenics_session">
         <action
             android:id="@+id/to_workout"

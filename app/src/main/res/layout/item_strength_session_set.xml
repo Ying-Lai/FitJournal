@@ -16,20 +16,12 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/strength_set_mtv"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:gravity="top|center"
-        android:text="@string/number"
-        android:textAppearance="@style/open_sans_body2"/>
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:paddingStart="0dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
             android:gravity="center"
             android:weightSum="20">
 
@@ -41,6 +33,7 @@
                 android:layout_marginBottom="8dp"
                 app:hintTextAppearance="@style/open_sans_body2"
                 android:hint="@string/rep"
+                app:errorEnabled="true"
                 app:hintEnabled="true"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -70,6 +63,7 @@
                 android:layout_marginBottom="8dp"
                 app:hintTextAppearance="@style/open_sans_body2"
                 android:hint="@string/weight"
+                app:errorEnabled="true"
                 app:hintEnabled="true"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

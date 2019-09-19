@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -14,10 +13,9 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
-import com.gmail.plai2.ying.fitjournal.room.CardioSession;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
-import com.gmail.plai2.ying.fitjournal.room.Set;
+import com.gmail.plai2.ying.fitjournal.room.Session;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -44,16 +42,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
 
         @Override
         public boolean areContentsTheSame(@NonNull CompletedExerciseItem oldItem, @NonNull CompletedExerciseItem newItem) {
-            if (oldItem.getExerciseType().getCategoryName().equals(newItem.getExerciseType().getCategoryName())) {
-                switch(oldItem.getExerciseType()) {
-                    case CARDIO:
-                        return oldItem.compareSession(newItem.getListOfCardioSessions());
-                    case STRENGTH:
-                    case CALISTHENICS:
-                        return oldItem.compareSet(newItem.getListOfSets());
-                }
-            }
-            return false;
+            return oldItem.compareListOfSessions(newItem.getListOfSessions());
         }
     };
 
@@ -108,34 +97,32 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
     public void onBindViewHolder(@NonNull CompletedExerciseHolder holder, int position) {
         CompletedExerciseItem currentCompletedExerciseItem = getItem(position);
         String description = "";
+        List<Session> listOfSessions = currentCompletedExerciseItem.getListOfSessions();
         if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CARDIO) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_cardio_session);
-            List<CardioSession> listOfCardioSessions = currentCompletedExerciseItem.getListOfCardioSessions();
-            for (int i=0; i<listOfCardioSessions.size(); i++) {
-                if (i == listOfCardioSessions.size() -1) {
-                    description += listOfCardioSessions.get(i).getDuration() + " min x " + listOfCardioSessions.get(i).getIntensity()+"%";
+            for (int i=0; i<listOfSessions.size(); i++) {
+                if (i == listOfSessions.size() -1) {
+                    description += listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity()+"%";
                 } else {
-                    description += listOfCardioSessions.get(i).getDuration() + " min x " + listOfCardioSessions.get(i).getIntensity() + "%, ";
+                    description += listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity() + "%, ";
                 }
             }
         } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.STRENGTH) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_strength_session);
-            List<Set> listOfSet = currentCompletedExerciseItem.getListOfSets();
-            for (int i=0; i<listOfSet.size(); i++) {
-                if (i == listOfSet.size() -1) {
-                    description += listOfSet.get(i).getReps() + " reps x " + listOfSet.get(i).getWeight()+" lbs.";
+            for (int i=0; i<listOfSessions.size(); i++) {
+                if (i == listOfSessions.size() -1) {
+                    description += listOfSessions.get(i).getReps() + " reps x " + listOfSessions.get(i).getWeight()+" lbs.";
                 } else {
-                    description += listOfSet.get(i).getReps() + " reps x " + listOfSet.get(i).getWeight() + " lbs, ";
+                    description += listOfSessions.get(i).getReps() + " reps x " + listOfSessions.get(i).getWeight() + " lbs, ";
                 }
             }
         } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CALISTHENICS) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_calistenics_session);
-            List<Set> listOfSet = currentCompletedExerciseItem.getListOfSets();
-            for (int i=0; i<listOfSet.size(); i++) {
-                if (i == listOfSet.size() -1) {
-                    description += listOfSet.get(i).getReps() + " reps";
+            for (int i=0; i<listOfSessions.size(); i++) {
+                if (i == listOfSessions.size() -1) {
+                    description += listOfSessions.get(i).getReps() + " reps";
                 } else {
-                    description += listOfSet.get(i).getReps() + " reps, ";
+                    description += listOfSessions.get(i).getReps() + " reps, ";
                 }
             }
         }

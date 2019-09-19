@@ -33,7 +33,6 @@
 
     <!-- Calistenic Fragment -->
     <string name="calisthenic_session">Calisthenics</string>
-    <string name="calisthenic_instruction"></string>
 
     <!-- Cardio Fragment -->
     <string name="cardio_session">Cardio</string>
@@ -49,6 +48,9 @@
     <string name="weight">Weight (lbs)</string>
     <string name="pound">lb</string>
 
+    <!-- Session Fragment -->
+    <string name="session">Session</string>
+
     <!-- Note Dialog Fragment -->
     <string name="add_note">Add a note: </string>
     <string name="note">Note</string>
@@ -63,5 +65,6 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
+    <string name="snackbar_message">Fields cannot be empty</string>
 
 </resources>

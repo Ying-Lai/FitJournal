@@ -23,11 +23,8 @@ public class CompletedExerciseItem {
     @ColumnInfo(name = "exercise_date")
     private Date mExerciseDate;
 
-    @ColumnInfo(name = "list_of_sets")
-    private List<Set> mListOfSets;
-
-    @ColumnInfo(name = "list_of_cardio_sessions")
-    private List<CardioSession> mListOfCardioSessions;
+    @ColumnInfo(name = "list_of_session")
+    private List<Session> mListOfSessions;
 
     @ColumnInfo(name = "note")
     private String mNote;
@@ -39,22 +36,12 @@ public class CompletedExerciseItem {
     public CompletedExerciseItem() {
     }
 
-    // Constructor for cardio exercises
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, String note, List<CardioSession> listOfCardioSessions) {
+    // Constructor for completed exercises
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Session> listOfSessions, String note) {
         mExerciseType = type;
         mExerciseName = exerciseName;
         mExerciseDate= exerciseDate;
-        mListOfCardioSessions = listOfCardioSessions;
-        mNote = note;
-        mChecked = false;
-    }
-
-    // Constructor for strength exercises
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Set> listOfSets, String note) {
-        mExerciseType = type;
-        mExerciseName = exerciseName;
-        mExerciseDate= exerciseDate;
-        mListOfSets = listOfSets;
+        mListOfSessions = listOfSessions;
         mNote = note;
         mChecked = false;
     }
@@ -92,20 +79,12 @@ public class CompletedExerciseItem {
         mExerciseDate = exerciseDate;
     }
 
-    public void setListOfSets(List<Set> listOfSets) {
-        mListOfSets = listOfSets;
+    public void setListOfSessions(List<Session> listOfSession) {
+        mListOfSessions = listOfSession;
     }
 
-    public List<Set> getListOfSets() {
-        return mListOfSets;
-    }
-
-    public void setListOfCardioSessions(List<CardioSession> listOfCardioSessions) {
-        mListOfCardioSessions = listOfCardioSessions;
-    }
-
-    public List<CardioSession> getListOfCardioSessions() {
-        return mListOfCardioSessions;
+    public List<Session> getListOfSessions() {
+        return mListOfSessions;
     }
 
     public void setNote(String note) {
@@ -123,47 +102,30 @@ public class CompletedExerciseItem {
     }
 
     // Other methods
-    public int getMinRep(List<Set> listOfSets) {
-        int min = listOfSets.get(0).getReps();
-        for (int i=0; i<listOfSets.size(); i++) {
-            if (listOfSets.get(i).getReps() < min) {
-                min = listOfSets.get(i).getReps();
-            }
-        }
-        return min;
-    }
-
-    public int getMaxRep(List<Set> listOfSets) {
-        int max = listOfSets.get(0).getReps();
-        for (int i=0; i<listOfSets.size(); i++) {
-            if (listOfSets.get(i).getReps() > max) {
-                max = listOfSets.get(i).getReps();
-            }
-        }
-        return max;
-    }
-
-    public boolean compareSet(List<Set> anotherSet) {
-        if (mListOfSets.size() != anotherSet.size()) {
+    public boolean compareListOfSessions(List<Session> anotherListOfSessions) {
+        if (mListOfSessions.size() != anotherListOfSessions.size()) {
             return false;
         }
-        for (int i=0; i<mListOfSets.size(); i++) {
-            if (mListOfSets.get(i).getReps() != anotherSet.get(i).getReps()
-                    && mListOfSets.get(i).getWeight() != anotherSet.get(i).getWeight()) {
+        for (int i = 0; i< mListOfSessions.size(); i++) {
+            Session thisSession = mListOfSessions.get(i);
+            Session thatSession = anotherListOfSessions.get(i);
+            if (thisSession.getType() != thatSession.getType()) {
+                // Throw exception --- to do.
                 return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean compareSession(List<CardioSession> anotherSession) {
-        if (mListOfCardioSessions.size() != anotherSession.size()) {
-            return false;
-        }
-        for (int i=0; i<mListOfCardioSessions.size(); i++) {
-            if (mListOfCardioSessions.get(i).getIntensity() != anotherSession.get(i).getIntensity()
-                    && mListOfCardioSessions.get(i).getDuration() != anotherSession.get(i).getDuration()) {
-                return false;
+            } else {
+                switch (thisSession.getType()) {
+                    case CALISTHENICS:
+                    case STRENGTH:
+                        if (thisSession.getReps() != thatSession.getReps() && thisSession.getWeight() != thatSession.getWeight()) {
+                            return false;
+                        }
+                        break;
+                    case CARDIO:
+                        if (thisSession.getDuration() != thatSession.getDuration() && thisSession.getIntensity() != thatSession.getIntensity()) {
+                            return false;
+                        }
+                        break;
+                }
             }
         }
         return true;

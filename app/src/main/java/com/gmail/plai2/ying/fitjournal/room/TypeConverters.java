@@ -14,38 +14,20 @@ import java.util.List;
 public class TypeConverters {
 
     @TypeConverter
-    public static List<Set> stringToSetList(String data) {
+    public static List<Session> stringToSessionList(String data) {
         if (data == null) {
             return Collections.emptyList();
         }
 
-        Type listType = new TypeToken<List<Set>>(){}.getType();
+        Type listType = new TypeToken<List<Session>>(){}.getType();
 
         return new Gson().fromJson(data, listType);
     }
 
     @TypeConverter
-    public static String setListToString(List<Set> listOfSets) {
+    public static String sessionListToString(List<Session> listOfSessions) {
         Gson gson = new Gson();
-        String json = gson.toJson(listOfSets);
-        return json;
-    }
-
-    @TypeConverter
-    public static List<CardioSession> stringToSessionList(String data) {
-        if (data == null) {
-            return Collections.emptyList();
-        }
-
-        Type listType = new TypeToken<List<CardioSession>>(){}.getType();
-
-        return new Gson().fromJson(data, listType);
-    }
-
-    @TypeConverter
-    public static String sessionListToString(List<CardioSession> listOfCardioSessions) {
-        Gson gson = new Gson();
-        String json = gson.toJson(listOfCardioSessions);
+        String json = gson.toJson(listOfSessions);
         return json;
     }
 

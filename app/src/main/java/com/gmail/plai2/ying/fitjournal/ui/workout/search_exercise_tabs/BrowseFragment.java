@@ -93,17 +93,7 @@ public class BrowseFragment extends Fragment {
                     exerciseInfo.add(currentAvailableExercise.getExerciseName());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
                     if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_search_exercise) {
-                        switch (mExerciseTypeInput) {
-                            case CARDIO:
-                                Navigation.findNavController(view).navigate(R.id.to_cardio_session, bundle);
-                                break;
-                            case STRENGTH:
-                                Navigation.findNavController(view).navigate(R.id.to_strength_session, bundle);
-                                break;
-                            case CALISTHENICS:
-                                Navigation.findNavController(view).navigate(R.id.to_calisthenics_session, bundle);
-                                break;
-                        }
+                        Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                     }
                 } else if (view.getId() == R.id.available_exercise_favorited_iv) {
                     if (currentAvailableExercise.isFavorited()) {

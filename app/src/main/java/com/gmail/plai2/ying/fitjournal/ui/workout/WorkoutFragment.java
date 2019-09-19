@@ -86,39 +86,25 @@ public class WorkoutFragment extends Fragment {
                 if (mActionMode == null) {
                     CompletedExerciseItem currentCompletedExercise = mAdapter.getExerciseItem(position);
                     ArrayList<String> exerciseInfo = new ArrayList<>();
-                    if (currentCompletedExercise.getExerciseType() == ExerciseType.CARDIO) {
-                        Bundle bundle = new Bundle();
-                        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
-                        exerciseInfo.add(currentCompletedExercise.getExerciseName());
-                        exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
-                        exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getListOfCardioSessions()));
-                        exerciseInfo.add(currentCompletedExercise.getNote());
-                        bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                        if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
-                            Navigation.findNavController(view).navigate(R.id.to_cardio_session, bundle);
-                        }
-                    } else if (currentCompletedExercise.getExerciseType() == ExerciseType.STRENGTH){
-                        Bundle bundle = new Bundle();
-                        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.STRENGTH)));
-                        exerciseInfo.add(currentCompletedExercise.getExerciseName());
-                        exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
-                        exerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
-                        exerciseInfo.add(currentCompletedExercise.getNote());
-                        bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                        if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
-                            Navigation.findNavController(view).navigate(R.id.to_strength_session, bundle);
-                        }
-                    } else if (currentCompletedExercise.getExerciseType() == ExerciseType.CALISTHENICS) {
-                        Bundle bundle = new Bundle();
-                        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CALISTHENICS)));
-                        exerciseInfo.add(currentCompletedExercise.getExerciseName());
-                        exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
-                        exerciseInfo.add(TypeConverters.setListToString(currentCompletedExercise.getListOfSets()));
-                        exerciseInfo.add(currentCompletedExercise.getNote());
-                        bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                        if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
-                            Navigation.findNavController(view).navigate(R.id.to_calisthenics_session, bundle);
-                        }
+                    Bundle bundle = new Bundle();
+                    switch (currentCompletedExercise.getExerciseType()) {
+                        case CALISTHENICS:
+                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CALISTHENICS)));
+                            break;
+                        case CARDIO:
+                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
+                            break;
+                        case STRENGTH:
+                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.STRENGTH)));
+                            break;
+                    }
+                    exerciseInfo.add(currentCompletedExercise.getExerciseName());
+                    exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
+                    exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getListOfSessions()));
+                    exerciseInfo.add(currentCompletedExercise.getNote());
+                    bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
+                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
+                        Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                     }
                 }
             }
