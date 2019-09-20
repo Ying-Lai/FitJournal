@@ -28,7 +28,6 @@ import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
@@ -43,7 +42,11 @@ public class WorkoutFragment extends Fragment {
     private MaterialToolbar mToolbar;
     private ImageView test;
     private CompletedExerciseAdapter mAdapter;
-    private MaterialTextView mWorkoutInstructionTV;
+    private ImageView mWorkoutInstructionsIV;
+    private MaterialTextView mWorkoutInstructionsTV;
+
+    // Action mode fields
+    private boolean mDeleteUsed;
     private ActionMode mActionMode;
 
     public WorkoutFragment() {
@@ -65,7 +68,8 @@ public class WorkoutFragment extends Fragment {
         mCompletedExerciseRV = root.findViewById(R.id.completed_exercise_rv);
         mToolbar = root.findViewById(R.id.workout_tb);
         test = root.findViewById(R.id.testtesttest);
-        mWorkoutInstructionTV = root.findViewById(R.id.workout_instruction_tv);
+        mWorkoutInstructionsIV = root.findViewById(R.id.workout_instruction_iv);
+        mWorkoutInstructionsTV = root.findViewById(R.id.workout_instruction_tv);
         // Setup app tool bar
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
@@ -113,17 +117,19 @@ public class WorkoutFragment extends Fragment {
             public boolean onLongClick(View view, int position) {
                 if (mActionMode == null) {
                     mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
+                    mDeleteUsed = false;
                     ((MainActivity)getActivity()).hideFloatingActionButton();
                     ((MainActivity)getActivity()).hideBottomNavigationView();
                 }
                 CompletedExerciseItem currentExercise = mAdapter.getExerciseItem(position);
-                List<CompletedExerciseItem> newList = new ArrayList<>(mAdapter.getCurrentList());
-                if (!currentExercise.isChecked()) {
-                    newList.get(position).setChecked(true);
-                    ((MaterialCardView)view).setChecked(true);
-                } else {
+                List<CompletedExerciseItem> newList = new ArrayList<>();
+                for (CompletedExerciseItem completedItem : mAdapter.getCurrentList()) {
+                    newList.add(new CompletedExerciseItem(completedItem));
+                }
+                if (currentExercise.isChecked()) {
                     newList.get(position).setChecked(false);
-                    ((MaterialCardView)view).setChecked(false);
+                } else {
+                    newList.get(position).setChecked(true);
                 }
                 mAdapter.submitList(newList);
                 return true;
@@ -139,9 +145,11 @@ public class WorkoutFragment extends Fragment {
             @Override
             public void onChanged(List<CompletedExerciseItem> completedExerciseItems) {
                 if (completedExerciseItems.size() != 0) {
-                    mWorkoutInstructionTV.setVisibility(View.INVISIBLE);
+                    mWorkoutInstructionsIV.setVisibility(View.GONE);
+                    mWorkoutInstructionsTV.setVisibility(View.GONE);
                 } else {
-                    mWorkoutInstructionTV.setVisibility(View.VISIBLE);
+                    mWorkoutInstructionsIV.setVisibility(View.VISIBLE);
+                    mWorkoutInstructionsTV.setVisibility(View.VISIBLE);
                 }
                 mAdapter.submitList(completedExerciseItems);
             }
@@ -166,15 +174,12 @@ public class WorkoutFragment extends Fragment {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.delete_menu_item) {
-                List<CompletedExerciseItem> newList = new ArrayList<>();
                 for (int i=0; i<mAdapter.getCurrentList().size(); i++) {
-                    if (!mAdapter.getCurrentList().get(i).isChecked()) {
-                        newList.add(mAdapter.getCurrentList().get(i));
-                    } else {
+                    if (mAdapter.getCurrentList().get(i).isChecked()) {
                         mViewModel.delete(mAdapter.getCurrentList().get(i));
                     }
                 }
-                mAdapter.submitList(newList);
+                mDeleteUsed = true;
                 mode.finish();
                 return true;
             }
@@ -183,8 +188,19 @@ public class WorkoutFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            mAdapter.notifyDataSetChanged();
             mActionMode = null;
+            if (!mDeleteUsed) {
+                List<CompletedExerciseItem> newList = new ArrayList<>();
+                for (CompletedExerciseItem completedItem : mAdapter.getCurrentList()) {
+                    newList.add(new CompletedExerciseItem(completedItem));
+                }
+                for (int i=0; i<newList.size(); i++) {
+                    if (newList.get(i).isChecked()) {
+                        newList.get(i).setChecked(false);
+                    }
+                }
+                mAdapter.submitList(newList);
+            }
             ((MainActivity)getActivity()).showFloatingActionButton();
             ((MainActivity)getActivity()).showBottomNavigationView();
         }

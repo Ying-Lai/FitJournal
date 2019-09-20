@@ -60,6 +60,7 @@ public class NoteDialogFragment extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
         // Initialize fields and variables
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -114,6 +115,7 @@ public class NoteDialogFragment extends AppCompatDialogFragment {
         mListener = null;
     }
 
+    // Note listener interface
     public interface NoteListener {
         void sendNote(String note);
     }

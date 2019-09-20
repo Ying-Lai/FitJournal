@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/strength_cv"
+    style="@style/journal_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_view_margin"
     android:checkable="true"
     android:clickable="true"
-    android:longClickable="true"
-    style="@style/journal_card_view"
-    android:layout_margin="@dimen/card_view_margin">
+    android:longClickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,33 +17,34 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
             android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:weightSum="20">
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
-                app:hintTextAppearance="@style/open_sans_body2"
+                android:layout_weight="7"
                 android:hint="@string/rep"
                 app:errorEnabled="true"
                 app:hintEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:hintTextAppearance="@style/open_sans_body2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/strength_rep_tiet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/open_sans_body2"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
-                    android:imeOptions="actionDone"/>
+                    android:maxLength="3"
+                    android:textAppearance="@style/open_sans_body2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,24 +57,25 @@
                 android:textAppearance="@style/open_sans_body2" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="7"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
-                app:hintTextAppearance="@style/open_sans_body2"
+                android:layout_weight="7"
                 android:hint="@string/weight"
                 app:errorEnabled="true"
                 app:hintEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:hintTextAppearance="@style/open_sans_body2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/strength_weight_tiet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/open_sans_body2"
                     android:imeOptions="actionDone"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textAppearance="@style/open_sans_body2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

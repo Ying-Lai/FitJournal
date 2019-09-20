@@ -82,7 +82,7 @@ public class BrowseFragment extends Fragment {
         // Setup adaptor
         mAvailableExerciseRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mAvailableExerciseRV.setHasFixedSize(true);
-        mAdapter = new AvailableExerciseAdapter(Collections.emptyList(), new AvailableExerciseAdapter.OnItemClickListener() {
+        mAdapter = new AvailableExerciseAdapter(new AvailableExerciseAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 AvailableExerciseItem currentAvailableExercise = mAdapter.getExerciseItem(position);
@@ -105,6 +105,11 @@ public class BrowseFragment extends Fragment {
                     mAdapter.notifyDataSetChanged();
                 }
             }
+
+            @Override
+            public boolean onLongClick(View view, int position) {
+                return false;
+            }
         });
         mAvailableExerciseRV.setAdapter(mAdapter);
 
@@ -112,7 +117,7 @@ public class BrowseFragment extends Fragment {
         mViewModel.getAllAvailableExercises(mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
             @Override
             public void onChanged(List<AvailableExerciseItem> availableExerciseItems) {
-                mAdapter.setAvailableExerciseItems(availableExerciseItems);
+                mAdapter.submitList(availableExerciseItems);
             }
         });
     }

@@ -26,7 +26,7 @@ public class WorkoutViewModel extends AndroidViewModel {
     public WorkoutViewModel(@NonNull Application application) {
         super(application);
         mRepository = new ExerciseRepository(application);
-        mAllCompletedExercises = mRepository.getmAllCompletedExercises();
+        mAllCompletedExercises = mRepository.getAllCompletedExercises();
     }
 
     // Methods for Available Exercises Item

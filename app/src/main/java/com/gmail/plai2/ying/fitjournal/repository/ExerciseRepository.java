@@ -16,10 +16,13 @@ import java.util.Date;
 import java.util.List;
 
 public class ExerciseRepository {
+
+    // Fields
     private AvailableExerciseDao mAvailableExerciseDao;
     private CompletedExerciseDao mCompletedExerciseDao;
     private LiveData<List<CompletedExerciseItem>> mAllCompletedExercises;
 
+    // Constructor
     public ExerciseRepository(Application application) {
         ExerciseDatabase database = ExerciseDatabase.getInstance(application);
         mAvailableExerciseDao = database.availableExerciseDao();
@@ -28,7 +31,6 @@ public class ExerciseRepository {
     }
 
     // Methods for AvailableExerciseDao
-
     public void insert(AvailableExerciseItem availableExerciseItem) {
         new InsertAvailableExerciseAsyncTask(mAvailableExerciseDao).execute(availableExerciseItem);
     }
@@ -58,7 +60,6 @@ public class ExerciseRepository {
     }
 
     // AsyncTasks for AvailableExerciseItem
-
     private static class InsertAvailableExerciseAsyncTask extends AsyncTask<AvailableExerciseItem, Void, Void> {
 
         private AvailableExerciseDao availableExerciseDao;
@@ -120,7 +121,6 @@ public class ExerciseRepository {
     }
 
     // Methods for CompletedExerciseDao
-
     public void insert(CompletedExerciseItem completedExerciseItem) {
         new InsertCompletedExerciseAsyncTask(mCompletedExerciseDao).execute(completedExerciseItem);
     }
@@ -143,12 +143,11 @@ public class ExerciseRepository {
 
     public LiveData<List<CompletedExerciseItem>> getAllCompletedExerciseByDate(Date date) { return mCompletedExerciseDao.getCompletedExerciseByDate(date); }
 
-    public LiveData<List<CompletedExerciseItem>> getmAllCompletedExercises() {
+    public LiveData<List<CompletedExerciseItem>> getAllCompletedExercises() {
         return mAllCompletedExercises;
     }
 
     // AsyncTasks for Completed Exercise Item
-
     private static class InsertCompletedExerciseAsyncTask extends AsyncTask<CompletedExerciseItem, Void, Void> {
 
         private CompletedExerciseDao completedExerciseDao;

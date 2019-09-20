@@ -1,4 +1,4 @@
-package com.gmail.plai2.ying.fitjournal.ui.workout;
+package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
 import android.content.Context;
 

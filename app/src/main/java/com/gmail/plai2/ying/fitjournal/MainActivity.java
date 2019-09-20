@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         // Initialize fields and variables
         mBottomNav = findViewById(R.id.nav_view);
         mAddFAB = findViewById(R.id.workout_add_fab);
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Open soft keyboard
     public void showKeyboard() {
         View view = getCurrentFocus();
         if (view != null) {

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/completed_exercise_cv"
-    android:checkable="true"
-    android:clickable="true"
-    android:longClickable="true"
+    style="@style/journal_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/journal_card_view"
-    android:layout_margin="@dimen/card_view_margin">
+    android:layout_margin="@dimen/card_view_margin"
+    android:checkable="true"
+    android:clickable="true"
+    android:longClickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,9 +26,9 @@
                 android:layout_width="70dp"
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_calistenics_session"
+                android:paddingStart="8dp"
                 android:paddingEnd="16dp"
-                android:paddingStart="8dp"/>
+                android:src="@drawable/ic_calistenics_session" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/completed_exercise_name_tv"
@@ -47,26 +47,26 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/completed_exercise_name_tv"
                 android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
-                android:textAppearance="@style/open_sans_body2"
-                android:text="@string/placeholder" />
+                android:text="@string/placeholder"
+                android:textAppearance="@style/open_sans_body2" />
 
 
         </RelativeLayout>
 
         <View
             android:id="@+id/divider"
-            style="@style/Divider"/>
+            style="@style/Divider" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/has_note_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/open_sans_body2"
-            android:text="@string/placeholder"
-            android:paddingTop="4dp"
             android:paddingStart="16dp"
+            android:paddingTop="4dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="4dp"/>
+            android:paddingBottom="4dp"
+            android:text="@string/placeholder"
+            android:textAppearance="@style/open_sans_body2" />
 
     </LinearLayout>
 

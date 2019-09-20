@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,20 +24,19 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
     private OnItemLongClickListener mListener;
     private ExerciseType mExerciseType;
 
+    // Conditional Fields
+    private boolean mOnActivityCreated;
+    public boolean mOnNewSession;
+
     // Adapter constructor
     public SessionAdapter(ExerciseType exerciseType, OnItemLongClickListener listener) {
         super(DIFF_CALLBACK);
+        mOnActivityCreated = true;
         mListener = listener;
         mExerciseType = exerciseType;
     }
 
     private static final DiffUtil.ItemCallback<Session> DIFF_CALLBACK = new DiffUtil.ItemCallback<Session>() {
-
-        @Nullable
-        @Override
-        public Object getChangePayload(@NonNull Session oldItem, @NonNull Session newItem) {
-            return super.getChangePayload(oldItem, newItem);
-        }
 
         @Override
         public boolean areItemsTheSame(@NonNull Session oldItem, @NonNull Session newItem) {
@@ -58,7 +56,7 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
         private TextInputEditText mWeightTIET;
         private TextInputEditText mDurationTIET;
         private TextInputEditText mIntensityTIET;
-        private MaterialCardView mCardView;
+        private MaterialCardView mSessionCardView;
         private FirstEditTextListener mFirstEditTextListener;
         private SecondEditTextListener mSecondEditTextListener;
 
@@ -72,8 +70,8 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
                     mFirstEditTextListener = firstEditTextListener;
                     mRepTIET = itemView.findViewById(R.id.calisthenics_rep_tiet);
                     mRepTIET.addTextChangedListener(mFirstEditTextListener);
-                    mCardView = itemView.findViewById(R.id.calisthenics_cv);
-                    mCardView.setOnLongClickListener(this);
+                    mSessionCardView = itemView.findViewById(R.id.calisthenics_cv);
+                    mSessionCardView.setOnLongClickListener(this);
                     break;
                 case CARDIO:
                     mFirstEditTextListener = firstEditTextListener;
@@ -82,8 +80,8 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
                     mIntensityTIET = itemView.findViewById(R.id.cardio_intensity_tiet);
                     mDurationTIET.addTextChangedListener(mFirstEditTextListener);
                     mIntensityTIET.addTextChangedListener(mSecondEditTextListener);
-                    mCardView = itemView.findViewById(R.id.cardio_cv);
-                    mCardView.setOnLongClickListener(this);
+                    mSessionCardView = itemView.findViewById(R.id.cardio_cv);
+                    mSessionCardView.setOnLongClickListener(this);
                     break;
                 case STRENGTH:
                     mFirstEditTextListener = firstEditTextListener;
@@ -92,8 +90,8 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
                     mWeightTIET = itemView.findViewById(R.id.strength_weight_tiet);
                     mRepTIET.addTextChangedListener(mFirstEditTextListener);
                     mWeightTIET.addTextChangedListener(mSecondEditTextListener);
-                    mCardView = itemView.findViewById(R.id.strength_cv);
-                    mCardView.setOnLongClickListener(this);
+                    mSessionCardView = itemView.findViewById(R.id.strength_cv);
+                    mSessionCardView.setOnLongClickListener(this);
                     break;
             }
         }
@@ -134,6 +132,7 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
         if (mExerciseType == ExerciseType.CARDIO || mExerciseType == ExerciseType.STRENGTH) {
             holder.mSecondEditTextListener.updatePosition(holder.getAdapterPosition());
         }
+
         // Set values for view
         Session currentSession = getItem(holder.getAdapterPosition());
         if (!currentSession.isEmpty()) {
@@ -178,20 +177,59 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
                     break;
             }
         }
-        // Request focus on initial exercise creation or new set
-        if (holder.getAdapterPosition() == getCurrentList().size()-1) {
+        if (currentSession.isChecked()) {
+            holder.mSessionCardView.setChecked(true);
+        } else {
+            holder.mSessionCardView.setChecked(false);
+        }
+
+        // Set read-only fields in delete action mode
+        if (currentSession.isReadOnly()) {
             switch (mExerciseType) {
-                case STRENGTH:
                 case CALISTHENICS:
-                    holder.mRepTIET.requestFocus();
+                    holder.mRepTIET.setEnabled(false);
                     break;
                 case CARDIO:
-                    holder.mDurationTIET.requestFocus();
+                    holder.mDurationTIET.setEnabled(false);
+                    holder.mIntensityTIET.setEnabled(false);
+                    break;
+                case STRENGTH:
+                    holder.mRepTIET.setEnabled(false);
+                    holder.mWeightTIET.setEnabled(false);
+                    break;
+            }
+        } else {
+            switch (mExerciseType) {
+                case CALISTHENICS:
+                    holder.mRepTIET.setEnabled(true);
+                    break;
+                case CARDIO:
+                    holder.mDurationTIET.setEnabled(true);
+                    holder.mIntensityTIET.setEnabled(true);
+                    break;
+                case STRENGTH:
+                    holder.mRepTIET.setEnabled(true);
+                    holder.mWeightTIET.setEnabled(true);
                     break;
             }
         }
-        currentSession.setChecked(false);
-        holder.mCardView.setChecked(false);
+
+        // Request focus on initial exercise creation or new set
+        if (mOnActivityCreated  || mOnNewSession) {
+            if (holder.getAdapterPosition() == getCurrentList().size()-1 ) {
+                switch (mExerciseType) {
+                    case STRENGTH:
+                    case CALISTHENICS:
+                        holder.mRepTIET.requestFocus();
+                        break;
+                    case CARDIO:
+                        holder.mDurationTIET.requestFocus();
+                        break;
+                }
+            }
+            mOnActivityCreated = false;
+            mOnNewSession = false;
+        }
     }
 
     @Override

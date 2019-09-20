@@ -1,6 +1,5 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
-import com.gmail.plai2.ying.fitjournal.ui.workout.ViewPagerAdapter;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
@@ -37,7 +35,7 @@ public class SearchExerciseFragment extends Fragment {
     // UI fields
     private WorkoutViewModel mViewModel;
     private MaterialToolbar mToolbar;
-    private ViewPager mViewpager;
+    private CustomViewPager mViewpager;
     private TabLayout mTablayout;
 
     // Empty constructor
@@ -108,5 +106,14 @@ public class SearchExerciseFragment extends Fragment {
             Navigation.findNavController(getView()).popBackStack();
         }
         return true;
+    }
+
+    // Other methods
+    public TabLayout getTabLayout() {
+        return mTablayout;
+    }
+
+    public CustomViewPager getViewPager() {
+        return mViewpager;
     }
 }

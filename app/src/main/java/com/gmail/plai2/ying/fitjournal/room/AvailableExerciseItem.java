@@ -3,6 +3,7 @@ package com.gmail.plai2.ying.fitjournal.room;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "available_exercise_table")
@@ -23,16 +24,29 @@ public class AvailableExerciseItem {
     @ColumnInfo(name = "custom")
     private boolean mCustom;
 
+    @Ignore
+    private boolean mIsChecked;
+
     // Empty constructor
     public AvailableExerciseItem() {
     }
 
     // General constructor for available exercise item
-    public AvailableExerciseItem(ExerciseType type, String exerciseName, boolean favorited, boolean custom) {
+    public AvailableExerciseItem(ExerciseType type, String exerciseName, boolean favorite, boolean custom) {
         mExerciseType = type;
         mExerciseName = exerciseName;
-        mFavorited = favorited;
+        mFavorited = favorite;
         mCustom = custom;
+        mIsChecked = false;
+    }
+
+    // Copy constructor
+    public AvailableExerciseItem(AvailableExerciseItem anotherItem) {
+        mExerciseType = anotherItem.getExerciseType();
+        mExerciseName = anotherItem.getExerciseName();
+        mFavorited = anotherItem.isFavorited();
+        mCustom = anotherItem.isCustom();
+        mIsChecked = anotherItem.isChecked();
     }
 
     // Getters and setters for fields
@@ -57,16 +71,22 @@ public class AvailableExerciseItem {
     }
 
     public void setFavorited(boolean favorited) {
-        this.mFavorited = favorited;
+        mFavorited = favorited;
     }
 
     public boolean isCustom() {
         return mCustom;
     }
 
-    public void setCustom(boolean custom) {
-        this.mCustom = custom;
+    public void setCustom(boolean custom) { mCustom = custom; }
+
+    public boolean isChecked() {
+        return mIsChecked;
     }
 
-    // Other methods
+    public void setChecked(boolean isChecked) {
+        mIsChecked = isChecked;
+    }
+    
+// Other methods
 }

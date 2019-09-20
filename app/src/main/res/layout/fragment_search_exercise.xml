@@ -28,7 +28,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.CustomViewPager
         android:id="@+id/search_exercise_vp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

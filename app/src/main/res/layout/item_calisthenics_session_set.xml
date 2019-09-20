@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/calisthenics_cv"
+    style="@style/journal_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_view_margin"
     android:checkable="true"
-    android:clickable="true"
-    style="@style/journal_card_view"
-    android:layout_margin="@dimen/card_view_margin">
+    android:clickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="7"
                 android:hint="@string/rep"
@@ -41,9 +40,10 @@
                     android:id="@+id/calisthenics_rep_tiet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/open_sans_body2"
                     android:imeOptions="actionDone"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textAppearance="@style/open_sans_body2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

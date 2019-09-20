@@ -70,8 +70,12 @@ public class AddCustomDialogFragment extends AppCompatDialogFragment {
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewModel.insert(new AvailableExerciseItem(mExerciseTypeInput, mExerciseNameTIET.getText().toString(), false, true));
-                dismiss();
+                if (mExerciseNameTIET.getText().toString().equals("")) {
+                    mExerciseNameTIET.setError(getString(R.string.toast_error_message));
+                } else {
+                    mViewModel.insert(new AvailableExerciseItem(mExerciseTypeInput, mExerciseNameTIET.getText().toString(), false, true));
+                    dismiss();
+                }
             }
         });
         mCancelButton.setOnClickListener(new View.OnClickListener() {

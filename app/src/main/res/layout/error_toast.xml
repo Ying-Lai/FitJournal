@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/errorMessage"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_gray"
+    android:drawableStart="@drawable/ic_warning"
+    android:drawablePadding="8dp"
+    android:gravity="center"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp"
+    android:text="@string/toast_error_message"
+    android:textColor="@android:color/white"
+    android:textSize="16dp" />

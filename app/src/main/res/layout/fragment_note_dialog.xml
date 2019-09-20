@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,49 +12,49 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:hintTextAppearance="@android:style/TextAppearance.Medium"
             app:hintAnimationEnabled="false"
             app:hintEnabled="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            app:hintTextAppearance="@android:style/TextAppearance.Medium">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/add_note_tiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="8"
                 android:gravity="top|left"
                 android:imeOptions="actionDone"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:lines="8" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
             android:gravity="center|bottom"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:padding="16dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel_note_btn"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="5dp" />
+                android:text="@string/cancel" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_note_btn"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
-                android:text="@string/save"
-                android:layout_marginStart="5dp"/>
+                android:text="@string/save" />
 
         </LinearLayout>
 

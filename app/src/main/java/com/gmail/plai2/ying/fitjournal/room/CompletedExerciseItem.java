@@ -2,6 +2,7 @@ package com.gmail.plai2.ying.fitjournal.room;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -29,8 +30,8 @@ public class CompletedExerciseItem {
     @ColumnInfo(name = "note")
     private String mNote;
 
-    @ColumnInfo(name = "checked")
-    private boolean mChecked;
+    @Ignore
+    private boolean mIsChecked;
 
     // Empty constructor
     public CompletedExerciseItem() {
@@ -43,7 +44,18 @@ public class CompletedExerciseItem {
         mExerciseDate= exerciseDate;
         mListOfSessions = listOfSessions;
         mNote = note;
-        mChecked = false;
+        mIsChecked = false;
+    }
+
+    // Deep copy constructor
+    public CompletedExerciseItem(CompletedExerciseItem anotherItem) {
+        mId = anotherItem.getMId();
+        mExerciseType = anotherItem.getExerciseType();
+        mExerciseName = anotherItem.getExerciseName();
+        mExerciseDate= anotherItem.getExerciseDate();
+        mListOfSessions = anotherItem.getListOfSessions();
+        mNote = anotherItem.getNote();
+        mIsChecked = anotherItem.isChecked();
     }
 
     // Getters and setters for fields
@@ -94,11 +106,11 @@ public class CompletedExerciseItem {
     public String getNote() { return mNote; }
 
     public void setChecked(boolean checked) {
-        mChecked = checked;
+        mIsChecked = checked;
     }
 
     public boolean isChecked() {
-        return mChecked;
+        return mIsChecked;
     }
 
     // Other methods
@@ -116,7 +128,7 @@ public class CompletedExerciseItem {
                 switch (thisSession.getType()) {
                     case CALISTHENICS:
                     case STRENGTH:
-                        if (thisSession.getReps() != thatSession.getReps() && thisSession.getWeight() != thatSession.getWeight()) {
+                        if (thisSession.getReps() != thatSession.getReps() || thisSession.getWeight() != thatSession.getWeight()) {
                             return false;
                         }
                         break;

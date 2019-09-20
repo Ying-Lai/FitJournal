@@ -1,6 +1,8 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.session;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,9 +32,6 @@ import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,7 +54,10 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
     private Button mSaveButton;
     private MaterialToolbar mToolbar;
     private SessionAdapter mAdapter;
+
+    // Action mode fields
     private ActionMode mActionMode;
+    private boolean mDeleteUsed;
 
     public SessionFragment() {
         // To enable menu for this fragment
@@ -141,20 +142,27 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
             public boolean onLongClick(View view, int position) {
                 if (mActionMode == null) {
                     mActionMode = ((MainActivity) getActivity()).startSupportActionMode(mActionModeCallBack);
+                    mDeleteUsed = false;
                     mNewSessionButton.setVisibility(View.GONE);
                     mSaveButton.setVisibility(View.GONE);
+
+                    // Close keyboard when entering delete mode
                     ((MainActivity) getActivity()).closeKeyboard();
                 }
+                // Pass list of checked items to list adapter
                 Session currentSession = mAdapter.getSessionItem(position);
-                List<Session> newList = new ArrayList<>(mAdapter.getCurrentList());
-                if (!currentSession.isChecked()) {
-                    newList.get(position).setChecked(true);
-                    ((MaterialCardView) view).setChecked(true);
-                } else {
-                    newList.get(position).setChecked(false);
-                    ((MaterialCardView) view).setChecked(false);
+                List<Session> checkedSessionList = new ArrayList<>();
+                for (Session session : mAdapter.getCurrentList()) {
+                    Session newSession = new Session(session);
+                    newSession.setReadOnly(true);
+                    checkedSessionList.add(newSession);
                 }
-                mAdapter.submitList(newList);
+                if (currentSession.isChecked()) {
+                    checkedSessionList.get(position).setChecked(false);
+                } else {
+                    checkedSessionList.get(position).setChecked(true);
+                }
+                mAdapter.submitList(checkedSessionList);
                 return true;
             }
         });
@@ -164,20 +172,21 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         if (mShouldUpdate) {
             mAdapter.submitList(mExerciseSessionInput);
         } else {
-            List<Session> initialSet = new ArrayList<>();
+            List<Session> initialSession = new ArrayList<>();
             switch (mExerciseTypeInput) {
                 case CALISTHENICS:
-                    initialSet.add(new Session(ExerciseType.CALISTHENICS));
+                    initialSession.add(new Session(ExerciseType.CALISTHENICS));
                     break;
                 case CARDIO:
-                    initialSet.add(new Session(ExerciseType.CARDIO));
+                    initialSession.add(new Session(ExerciseType.CARDIO));
                     break;
                 case STRENGTH:
-                    initialSet.add(new Session(ExerciseType.STRENGTH));
+                    initialSession.add(new Session(ExerciseType.STRENGTH));
                     break;
             }
-            mAdapter.submitList(initialSet);
+            mAdapter.submitList(initialSession);
         }
+
         // Always show keyboard when opening an exercise
         ((MainActivity) getActivity()).showKeyboard();
 
@@ -185,19 +194,23 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         mNewSessionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Session> newList = new ArrayList<>(mAdapter.getCurrentList());
+                mAdapter.mOnNewSession = true;
+                List<Session> newSessionList = new ArrayList<>();
+                for (Session session : mAdapter.getCurrentList()) {
+                    newSessionList.add(new Session(session));
+                }
                 switch (mExerciseTypeInput) {
                     case CALISTHENICS:
-                        newList.add(new Session(ExerciseType.CALISTHENICS));
+                        newSessionList.add(new Session(ExerciseType.CALISTHENICS));
                         break;
                     case CARDIO:
-                        newList.add(new Session(ExerciseType.CARDIO));
+                        newSessionList.add(new Session(ExerciseType.CARDIO));
                         break;
                     case STRENGTH:
-                        newList.add(new Session(ExerciseType.STRENGTH));
+                        newSessionList.add(new Session(ExerciseType.STRENGTH));
                         break;
                 }
-                mAdapter.submitList(newList);
+                mAdapter.submitList(newSessionList);
                 // Open keyboard and focus on new set
                 ((MainActivity) getActivity()).showKeyboard();
             }
@@ -205,11 +218,11 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Session> newListOfSession = mAdapter.getCurrentList();
+                List<Session> currentListOfSessions = mAdapter.getCurrentList();
                 boolean showError = false;
                 switch (mExerciseTypeInput) {
                     case CALISTHENICS:
-                        for (Session session: newListOfSession) {
+                        for (Session session: currentListOfSessions) {
                             if (session.getReps() < 1) {
                                 showError = true;
                                 break;
@@ -217,7 +230,7 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
                         }
                         break;
                     case CARDIO:
-                        for (Session session: newListOfSession) {
+                        for (Session session: currentListOfSessions) {
                             if (session.getDuration() < 1 || session.getIntensity() < 1) {
                                 showError = true;
                                 break;
@@ -225,7 +238,7 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
                         }
                         break;
                     case STRENGTH:
-                        for (Session session: newListOfSession) {
+                        for (Session session: currentListOfSessions) {
                             if (session.getReps() < 1 || session.getWeight() < 1) {
                                 showError = true;
                                 break;
@@ -234,20 +247,30 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
                         break;
                 }
                 if (showError) {
-                    Toast toast = Toast.makeText(getContext(), "Fields cannot be empty!", Toast.LENGTH_SHORT);
-                    toast.show();
+
+                    // Create and display error toast
+                    Toast errorToast = new Toast(getContext());
+                    View errorToastView = getLayoutInflater().inflate(R.layout.error_toast, null);
+                    errorToast.setView(errorToastView);
+                    errorToast.setDuration(Toast.LENGTH_SHORT);
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                    int screenHeight = displayMetrics.heightPixels;
+                    errorToast.setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL, 0, screenHeight - mSaveButton.getTop() - mSaveButton.getPaddingTop());
+                    errorToast.show();
                     return;
                 }
                 Date today = new Date();
                 today.setTime(0);
                 if (mShouldUpdate) {
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSession, mExerciseNoteInput);
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, currentListOfSessions, mExerciseNoteInput);
                     updatedItem.setMId(mExerciseIdInput);
                     mViewModel.update(updatedItem);
                 } else {
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, newListOfSession, mExerciseNoteInput);
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, currentListOfSessions, mExerciseNoteInput);
                     mViewModel.insert(newItem);
                 }
+
                 // Close keyboard when leaving fragment
                 ((MainActivity) getActivity()).closeKeyboard();
                 Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
@@ -272,26 +295,29 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.delete_menu_item) {
-                List<Session> newList = new ArrayList<>();
+                List<Session> uncheckedSessionsList = new ArrayList<>();
                 for (int i = 0; i < mAdapter.getCurrentList().size(); i++) {
                     if (!mAdapter.getCurrentList().get(i).isChecked()) {
-                        newList.add(mAdapter.getCurrentList().get(i));
+                        Session uncheckedSession = new Session(mAdapter.getCurrentList().get(i));
+                        uncheckedSession.setReadOnly(false);
+                        uncheckedSessionsList.add(uncheckedSession);
                     }
                 }
-                if (newList.size() == 0) {
+                if (uncheckedSessionsList.size() == 0) {
                     switch (mExerciseTypeInput) {
                         case CALISTHENICS:
-                            newList.add(new Session(ExerciseType.CALISTHENICS));
+                            uncheckedSessionsList.add(new Session(ExerciseType.CALISTHENICS));
                             break;
                         case CARDIO:
-                            newList.add(new Session(ExerciseType.CARDIO));
+                            uncheckedSessionsList.add(new Session(ExerciseType.CARDIO));
                             break;
                         case STRENGTH:
-                            newList.add(new Session(ExerciseType.STRENGTH));
+                            uncheckedSessionsList.add(new Session(ExerciseType.STRENGTH));
                             break;
                     }
                 }
-                mAdapter.submitList(newList);
+                mAdapter.submitList(uncheckedSessionsList);
+                mDeleteUsed = true;
                 mode.finish();
                 return true;
             }
@@ -301,8 +327,23 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
-            mAdapter.notifyDataSetChanged();
-            ((MainActivity) getActivity()).showKeyboard();
+
+            // If delete icon was not used then uncheck the list before leaving delete action mode
+            if (!mDeleteUsed) {
+                List<Session> uncheckedSessionList = new ArrayList<>();
+                for (Session session : mAdapter.getCurrentList()) {
+                    Session editableSession = new Session(session);
+                    editableSession.setReadOnly(false);
+                    uncheckedSessionList.add(editableSession);
+                }
+                for (int i=0; i<uncheckedSessionList.size(); i++) {
+                    if (uncheckedSessionList.get(i).isChecked()) {
+                        uncheckedSessionList.get(i).setChecked(false);
+                    }
+                }
+                mAdapter.submitList(uncheckedSessionList);
+            }
+
             // Hide other buttons in delete action mode
             mNewSessionButton.setVisibility(View.VISIBLE);
             mSaveButton.setVisibility(View.VISIBLE);
@@ -320,6 +361,7 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+
             // Close keyboard when leaving fragment
             ((MainActivity) getActivity()).closeKeyboard();
             Navigation.findNavController(getView()).popBackStack();

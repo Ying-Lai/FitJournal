@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ public class FavoriteFragment extends Fragment {
     private WorkoutViewModel mViewModel;
     private AvailableExerciseAdapter mAdapter;
     private TextView mFavoriteInstructionsTV;
+    private ImageView mFavoriteInstructionsIV;
     private RecyclerView mAvailableExerciseRV;
 
     // Empty Constructor
@@ -77,6 +79,7 @@ public class FavoriteFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         mAvailableExerciseRV = root.findViewById(R.id.favorite_exercise_list_rv);
         mFavoriteInstructionsTV = root.findViewById(R.id.favorite_instructions_tv);
+        mFavoriteInstructionsIV = root.findViewById(R.id.favorite_instructions_iv);
         return root;
     }
 
@@ -86,7 +89,7 @@ public class FavoriteFragment extends Fragment {
         // Setup adaptor
         mAvailableExerciseRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mAvailableExerciseRV.setHasFixedSize(true);
-        mAdapter = new AvailableExerciseAdapter(Collections.emptyList(), new AvailableExerciseAdapter.OnItemClickListener() {
+        mAdapter = new AvailableExerciseAdapter(new AvailableExerciseAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 AvailableExerciseItem currentAvailableExercise = mAdapter.getExerciseItem(position);
@@ -109,6 +112,11 @@ public class FavoriteFragment extends Fragment {
                     mAdapter.notifyDataSetChanged();
                 }
             }
+
+            @Override
+            public boolean onLongClick(View view, int position) {
+                return false;
+            }
         });
         mAvailableExerciseRV.setAdapter(mAdapter);
 
@@ -116,10 +124,13 @@ public class FavoriteFragment extends Fragment {
         mViewModel.getAllAvailableFavoritedExercise(true, mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
             @Override
             public void onChanged(List<AvailableExerciseItem> availableFavoritedExercises) {
-                mAdapter.setAvailableExerciseItems(availableFavoritedExercises);
+                mAdapter.submitList(availableFavoritedExercises);
+                // Hide instructions if the list is not empty
                 if (availableFavoritedExercises.size() != 0) {
-                    mFavoriteInstructionsTV.setVisibility(View.INVISIBLE);
+                    mFavoriteInstructionsIV.setVisibility(View.GONE);
+                    mFavoriteInstructionsTV.setVisibility(View.GONE);
                 } else {
+                    mFavoriteInstructionsIV.setVisibility(View.VISIBLE);
                     mFavoriteInstructionsTV.setVisibility(View.VISIBLE);
                 }
             }

@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navigation_to_workout"
         android:icon="@drawable/ic_workout"
-        android:title="@string/workout"/>
+        android:title="@string/workout" />
 
     <item
         android:id="@+id/navigation_to_stats"
         android:icon="@drawable/ic_stats"
-        android:title="@string/stats"/>
+        android:title="@string/stats" />
 
     <item
         android:id="@+id/navigation_to_gallery"
         android:icon="@drawable/ic_gallery"
-        android:title="@string/gallery"/>
+        android:title="@string/gallery" />
 
     <item
         android:id="@+id/navigation_to_calendar"
         android:icon="@drawable/ic_calendar"
-        android:title="@string/calendar"/>
+        android:title="@string/calendar" />
 
 </menu>

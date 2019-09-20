@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <color name="navy_peony">#223A5E</color>
     <color name="sailor_blue">#2E4A62</color>
@@ -17,5 +18,6 @@
     <color name="dark_gray">#121212</color>
     <color name="chili_pepper">#9B1B30</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray">#808080</color>
 </resources>
 

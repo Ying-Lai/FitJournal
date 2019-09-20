@@ -65,6 +65,6 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
-    <string name="snackbar_message">Fields cannot be empty</string>
+    <string name="toast_error_message">Fields cannot be empty.</string>
 
 </resources>

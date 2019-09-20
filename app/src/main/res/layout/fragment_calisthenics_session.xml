@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="center|bottom"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/new_calisthenics_set_btn"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:text="@string/new_set" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_calisthenics_exercise_btn"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:text="@string/save" />
+    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -16,20 +43,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/calisthenics_session_ab"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:fitsSystemWindows="true">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/calisthenics_session_tb"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize" />
-
-            </com.google.android.material.appbar.AppBarLayout>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calisthenics_sets_rv"
                 android:layout_width="match_parent"
@@ -38,35 +51,22 @@
                 android:paddingBottom="62dp"
                 tools:listitem="@layout/item_strength_session_set" />
 
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/calisthenics_session_ab"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:fitsSystemWindows="true"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/calisthenics_session_tb"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center|bottom">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/new_calisthenics_set_btn"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/new_set"
-            android:layout_weight="1"
-            android:layout_marginEnd="5dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_calisthenics_exercise_btn"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp" />
-    </LinearLayout>
 
 </RelativeLayout>

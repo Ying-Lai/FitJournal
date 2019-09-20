@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardio_cv"
+    style="@style/journal_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_view_margin"
     android:checkable="true"
     android:clickable="true"
-    android:longClickable="true"
-    style="@style/journal_card_view"
-    android:layout_margin="@dimen/card_view_margin">
+    android:longClickable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="8"
                 android:hint="@string/duration"
@@ -41,9 +41,10 @@
                     android:id="@+id/cardio_duration_tiet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/open_sans_body2"
                     android:imeOptions="actionDone"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textAppearance="@style/open_sans_body2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +60,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="8"
                 android:hint="@string/intensity"
@@ -71,9 +72,10 @@
                     android:id="@+id/cardio_intensity_tiet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textAppearance="@style/open_sans_body2"
                     android:imeOptions="actionDone"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:textAppearance="@style/open_sans_body2" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

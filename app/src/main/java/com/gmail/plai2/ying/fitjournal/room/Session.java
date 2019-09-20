@@ -1,7 +1,5 @@
 package com.gmail.plai2.ying.fitjournal.room;
 
-import java.util.List;
-
 public class Session {
 
     // Static fields
@@ -17,13 +15,15 @@ public class Session {
     private int mDuration;
     private int mIntensity;
     private boolean mIsEmpty;
-    private boolean mChecked;
+    private boolean mIsChecked;
+    private boolean mIsReadOnly;
 
     // Empty session constructor
     public Session(ExerciseType exerciseType) {
         mType = exerciseType;
         mIsEmpty = true;
-        mChecked = false;
+        mIsChecked = false;
+        mIsReadOnly = false;
         mId = sId++;
         switch (mType) {
             case CALISTHENICS:
@@ -59,14 +59,40 @@ public class Session {
                 break;
         }
         mIsEmpty = false;
-        mChecked = false;
+        mIsChecked = false;
+        mIsReadOnly = false;
         mId = sId++;
+    }
+
+    // Deep copy constructor
+    public Session(Session anotherSession) {
+        mType = anotherSession.getType();
+        mId = anotherSession.getId();
+        switch (mType) {
+            case CALISTHENICS:
+                mReps = anotherSession.getReps();
+                mWeight = BODY_WEIGHT;
+                break;
+            case CARDIO:
+                mDuration = anotherSession.getDuration();
+                mIntensity = anotherSession.getIntensity();
+                break;
+            case STRENGTH:
+                mReps = anotherSession.getReps();
+                mWeight = anotherSession.getWeight();
+                break;
+        }
+        mIsChecked = anotherSession.isChecked();
+        mIsEmpty = anotherSession.isEmpty();
+        mIsReadOnly = anotherSession.isReadOnly();
     }
 
     // Setters and Getters
     public int getId() {
         return mId;
     }
+
+    public void setId(int id) { mId = id; }
 
     public ExerciseType getType() {
         return mType;
@@ -116,12 +142,20 @@ public class Session {
         mIsEmpty = empty;
     }
 
-    public void setChecked(boolean checked) {
-        mChecked = checked;
+    public boolean isChecked() {
+        return mIsChecked;
     }
 
-    public boolean isChecked() {
-        return mChecked;
+    public void setChecked(boolean checked) {
+        mIsChecked = checked;
+    }
+
+    public boolean isReadOnly() {
+        return mIsReadOnly;
+    }
+
+    public void setReadOnly(boolean isReadOnly) {
+        mIsReadOnly = isReadOnly;
     }
 
     // Other methods
@@ -133,12 +167,14 @@ public class Session {
             switch (this.getType()) {
                 case CALISTHENICS:
                 case STRENGTH:
-                    if (this.getReps() != anotherSession.getReps() && this.getWeight() != anotherSession.getWeight()) {
+                    if (this.getReps() != anotherSession.getReps() || this.getWeight() != anotherSession.getWeight() ||
+                            this.isChecked() != anotherSession.isChecked() || this.isReadOnly() != anotherSession.isReadOnly()) {
                         return false;
                     }
                     break;
                 case CARDIO:
-                    if (this.getDuration() != anotherSession.getDuration() && this.getIntensity() != anotherSession.getIntensity()) {
+                    if (this.getDuration() != anotherSession.getDuration() || this.getIntensity() != anotherSession.getIntensity() ||
+                            this.isChecked() != anotherSession.isChecked() || this.isReadOnly() != anotherSession.isReadOnly()) {
                         return false;
                     }
                     break;

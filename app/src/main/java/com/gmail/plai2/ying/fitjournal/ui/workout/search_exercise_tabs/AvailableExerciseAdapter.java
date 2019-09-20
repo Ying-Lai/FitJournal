@@ -8,45 +8,70 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExerciseAdapter.AvailableExerciseHolder> implements Filterable {
+public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem, AvailableExerciseAdapter.AvailableExerciseHolder> implements Filterable {
 
     // Adaptor fields
     private List<AvailableExerciseItem> mAvailableExerciseItems = new ArrayList<>();
-    private List<AvailableExerciseItem> mAvailableExerciseItemsFull = new ArrayList<>();
-    private OnItemClickListener mOnClickListener;
+    private OnItemClickListener mListener;
 
     // Adaptor constructor
-    public AvailableExerciseAdapter(List<AvailableExerciseItem> availableExerciseItems, OnItemClickListener listener) {
-        this.mAvailableExerciseItems = availableExerciseItems;
-        this.mOnClickListener = listener;
+    public AvailableExerciseAdapter(OnItemClickListener listener) {
+        super(DIFF_CALLBACK);
+        mListener = listener;
     }
 
-    class AvailableExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static final DiffUtil.ItemCallback<AvailableExerciseItem> DIFF_CALLBACK= new DiffUtil.ItemCallback<AvailableExerciseItem>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull AvailableExerciseItem oldItem, @NonNull AvailableExerciseItem newItem) {
+            return oldItem.getExerciseName().equals(newItem.getExerciseName());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull AvailableExerciseItem oldItem, @NonNull AvailableExerciseItem newItem) {
+            return oldItem.getExerciseName().equals(newItem.getExerciseName()) && oldItem.isChecked() == newItem.isChecked();
+        }
+    };
+
+    class AvailableExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         // View holder fields
         private TextView mAvailableExerciseName;
         private ImageView mAvailableExerciseFavorite;
+        private MaterialCardView mAvailableExerciseCardView;
 
         // View holder constructor
         public AvailableExerciseHolder(View itemView) {
             super(itemView);
             mAvailableExerciseName = itemView.findViewById(R.id.available_exercise_name_tv);
             mAvailableExerciseFavorite = itemView.findViewById(R.id.available_exercise_favorited_iv);
+            mAvailableExerciseCardView = itemView.findViewById(R.id.available_exercise_cv);
+            mAvailableExerciseName.setOnLongClickListener(this);
             mAvailableExerciseName.setOnClickListener(this);
             mAvailableExerciseFavorite.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (mOnClickListener != null) mOnClickListener.onClick(view, getAdapterPosition());
+            if (mListener != null) mListener.onClick(view, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (mListener != null) {
+                return mListener.onLongClick(view, getAdapterPosition());
+            }
+            return false;
         }
     }
 
@@ -60,8 +85,16 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
 
     @Override
     public void onBindViewHolder(@NonNull AvailableExerciseAdapter.AvailableExerciseHolder holder, int position) {
-        AvailableExerciseItem currentAvailableExerciseItem = mAvailableExerciseItems.get(position);
+        AvailableExerciseItem currentAvailableExerciseItem = getItem(position);
         holder.mAvailableExerciseName.setText(currentAvailableExerciseItem.getExerciseName());
+        if (currentAvailableExerciseItem.isCustom()) {
+            holder.mAvailableExerciseCardView.setCheckable(true);
+            if (currentAvailableExerciseItem.isChecked()) {
+                holder.mAvailableExerciseCardView.setChecked(true);
+            } else {
+                holder.mAvailableExerciseCardView.setChecked(false);
+            }
+        }
         if (currentAvailableExerciseItem.isFavorited()) {
             holder.mAvailableExerciseFavorite.setImageResource(R.drawable.ic_favorite_pressed);
         } else {
@@ -71,18 +104,12 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
 
     @Override
     public int getItemCount() {
-        return mAvailableExerciseItems.size();
+        return getCurrentList().size();
     }
 
     // Other adapter methods
     public AvailableExerciseItem getExerciseItem(int position) {
-        return mAvailableExerciseItems.get(position);
-    }
-
-    public void setAvailableExerciseItems(List<AvailableExerciseItem> availableExerciseItems) {
-        this.mAvailableExerciseItemsFull = availableExerciseItems;
-        this.mAvailableExerciseItems = new ArrayList<>(availableExerciseItems);
-        notifyDataSetChanged();
+        return getItem(position);
     }
 
     // Search filter methods
@@ -96,10 +123,10 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
         protected FilterResults performFiltering(CharSequence constraint) {
             List<AvailableExerciseItem> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(mAvailableExerciseItemsFull);
+                filteredList.addAll(getCurrentList());
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (AvailableExerciseItem item: mAvailableExerciseItemsFull) {
+                for (AvailableExerciseItem item: getCurrentList()) {
                     if (item.getExerciseName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -115,12 +142,13 @@ public class AvailableExerciseAdapter extends RecyclerView.Adapter<AvailableExer
         protected void publishResults(CharSequence charSequence, FilterResults results) {
             mAvailableExerciseItems.clear();
             mAvailableExerciseItems.addAll((List) results.values);
-            notifyDataSetChanged();
+            submitList(mAvailableExerciseItems);
         }
     };
 
     // On click interface
     public interface OnItemClickListener {
         public void onClick(View view, int position);
+        public boolean onLongClick(View view, int position);
     }
 }

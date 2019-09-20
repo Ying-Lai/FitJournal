@@ -35,6 +35,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
     }
 
     private static final DiffUtil.ItemCallback<CompletedExerciseItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<CompletedExerciseItem>() {
+
         @Override
         public boolean areItemsTheSame(@NonNull CompletedExerciseItem oldItem, @NonNull CompletedExerciseItem newItem) {
             return oldItem.getMId() == newItem.getMId();
@@ -42,7 +43,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
 
         @Override
         public boolean areContentsTheSame(@NonNull CompletedExerciseItem oldItem, @NonNull CompletedExerciseItem newItem) {
-            return oldItem.compareListOfSessions(newItem.getListOfSessions());
+            return oldItem.compareListOfSessions(newItem.getListOfSessions()) && oldItem.isChecked() == newItem.isChecked();
         }
     };
 
@@ -55,8 +56,8 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
         private MaterialTextView mCompletedExerciseName;
         private MaterialTextView mCompletedExerciseDescription;
         private MaterialTextView mCompletedExerciseHasNote;
-        private MaterialCardView mCardView;
-        private View mDivider;
+        private MaterialCardView mCompletedExerciseCardView;
+        private View mCompletedExerciseDivider;
 
         // View holder constructor
         public CompletedExerciseHolder(View itemView) {
@@ -65,9 +66,9 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
              mCompletedExerciseName = itemView.findViewById(R.id.completed_exercise_name_tv);
              mCompletedExerciseDescription = itemView.findViewById(R.id.completed_exercise_description_tv);
              mCompletedExerciseHasNote = itemView.findViewById(R.id.has_note_tv);
-             mDivider = itemView.findViewById(R.id.divider);
-             mCardView = itemView.findViewById(R.id.completed_exercise_cv);
-             mCardView.setOnLongClickListener(this);
+             mCompletedExerciseDivider = itemView.findViewById(R.id.divider);
+             mCompletedExerciseCardView = itemView.findViewById(R.id.completed_exercise_cv);
+             mCompletedExerciseCardView.setOnLongClickListener(this);
              itemView.setOnClickListener(this);
         }
 
@@ -127,10 +128,10 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
             }
         }
         if (currentCompletedExerciseItem.getNote() != null && !currentCompletedExerciseItem.getNote().equals("")) {
-            holder.mDivider.setVisibility(View.VISIBLE);
+            holder.mCompletedExerciseDivider.setVisibility(View.VISIBLE);
             holder.mCompletedExerciseHasNote.setVisibility(View.VISIBLE);
         } else {
-            holder.mDivider.setVisibility(View.GONE);
+            holder.mCompletedExerciseDivider.setVisibility(View.GONE);
             holder.mCompletedExerciseHasNote.setVisibility((View.GONE));
         }
         CharSequence note = "Note: " + currentCompletedExerciseItem.getNote();
@@ -139,8 +140,11 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
         holder.mCompletedExerciseHasNote.setText(formattedNote);
         holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getExerciseName());
         holder.mCompletedExerciseDescription.setText(description);
-        currentCompletedExerciseItem.setChecked(false);
-        holder.mCardView.setChecked(false);
+        if (currentCompletedExerciseItem.isChecked()) {
+            holder.mCompletedExerciseCardView.setChecked(true);
+        } else {
+            holder.mCompletedExerciseCardView.setChecked(false);
+        }
     }
 
     @Override
