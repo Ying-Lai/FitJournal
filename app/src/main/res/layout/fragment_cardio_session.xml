@@ -43,14 +43,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cardio_session_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="true"
-                android:paddingBottom="62dp"
-                tools:listitem="@layout/item_cardio_session" />
-
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/cardio_session_ab"
                 android:layout_width="match_parent"
@@ -64,6 +56,14 @@
                     android:layout_height="?attr/actionBarSize" />
 
             </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cardio_session_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="true"
+                android:paddingBottom="62dp"
+                tools:listitem="@layout/item_cardio_session" />
 
         </LinearLayout>
 

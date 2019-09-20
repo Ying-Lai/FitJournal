@@ -10,14 +10,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/completed_exercise_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="true"
-            android:paddingBottom="56dp"
-            tools:listitem="@layout/item_completed_exercise" />
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/workout_ab"
             android:layout_width="match_parent"
@@ -46,6 +38,14 @@
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/completed_exercise_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="true"
+            android:paddingBottom="56dp"
+            tools:listitem="@layout/item_completed_exercise" />
 
     </LinearLayout>
 
