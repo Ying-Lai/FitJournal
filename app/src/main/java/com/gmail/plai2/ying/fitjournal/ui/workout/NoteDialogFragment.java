@@ -34,7 +34,6 @@ public class NoteDialogFragment extends AppCompatDialogFragment {
     private String mNoteInput;
 
     // UI fields
-    private WorkoutViewModel mViewModel;
     private TextInputEditText mExerciseNoteTIET;
     private Button mSaveButton;
     private Button mCancelButton;

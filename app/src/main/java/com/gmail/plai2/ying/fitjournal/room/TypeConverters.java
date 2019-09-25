@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -32,21 +33,21 @@ public class TypeConverters {
     }
 
     @TypeConverter
-    public static Date stringToDate(String data) {
+    public static LocalDate stringToDate(String data) {
         if (data == null) {
             return null;
+        } else {
+            return LocalDate.parse(data);
         }
-
-        Type listType = new TypeToken<Date>(){}.getType();
-
-        return new Gson().fromJson(data, listType);
     }
 
     @TypeConverter
-    public static String dateToString(Date date) {
-        Gson gson = new Gson();
-        String json = gson.toJson(date);
-        return json;
+    public static String dateToString(LocalDate date) {
+        if (date == null) {
+            return null;
+        } else {
+            return date.toString();
+        }
     }
 
     @TypeConverter
@@ -58,12 +59,28 @@ public class TypeConverters {
         } else if (exerciseType == 2) {
             return ExerciseType.CALISTHENICS;
         }else {
-            throw new IllegalArgumentException("Could not recognize this intensity level");
+            throw new IllegalArgumentException("Could not recognize this exercise type");
         }
     }
 
     @TypeConverter
-    public static int exerciseTypetoInt(ExerciseType exerciseType) {
+    public static int exerciseTypeToInt(ExerciseType exerciseType) {
         return exerciseType.getCategory();
+    }
+
+    @TypeConverter
+    public static String statTypeToString(StatType statType) {
+        return statType.getCategoryName();
+    }
+
+    @TypeConverter
+    public static StatType stringToStatType(String statType) {
+        if (statType.equals(StatType.WEIGHT.getCategoryName())) {
+            return StatType.WEIGHT;
+        } else if (statType.equals(StatType.BODYFAT.getCategoryName())) {
+            return StatType.BODYFAT;
+        }else {
+            throw new IllegalArgumentException("Could not recognize this stat type");
+        }
     }
 }

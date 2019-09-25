@@ -26,7 +26,6 @@ import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class BrowseFragment extends Fragment {
@@ -49,7 +48,7 @@ public class BrowseFragment extends Fragment {
         BrowseFragment fragment = new BrowseFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> exerciseInfo = new ArrayList<>();
-        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(exerciseTypeInput)));
+        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(exerciseTypeInput)));
         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
         fragment.setArguments(bundle);
         return fragment;
@@ -89,8 +88,8 @@ public class BrowseFragment extends Fragment {
                 if (view.getId() == R.id.available_exercise_name_tv) {
                     Bundle bundle = new Bundle();
                     ArrayList<String> exerciseInfo = new ArrayList<>();
-                    exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(mExerciseTypeInput)));
-                    exerciseInfo.add(currentAvailableExercise.getExerciseName());
+                    exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(mExerciseTypeInput)));
+                    exerciseInfo.add(currentAvailableExercise.getMExerciseName());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
                     if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_search_exercise) {
                         Navigation.findNavController(view).navigate(R.id.to_session, bundle);

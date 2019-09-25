@@ -1,8 +1,6 @@
 package com.gmail.plai2.ying.fitjournal;
 
-import android.app.Activity;
 import android.content.Context;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,7 +8,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
@@ -32,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Static fields
     public static final String EXERCISE_INFO = "exercise_info_key";
+    public static final String STAT_INFO = "stat_info_key";
+    public static final int EMPTY = -1;
 
     // Fab state fields
     private boolean mFabVisible;
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 ArrayList<String> exerciseInfo = new ArrayList<>();
-                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.STRENGTH)));
+                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.STRENGTH)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
                 if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
                     navController.navigate(R.id.to_search_exercise, bundle);
@@ -118,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 ArrayList<String> exerciseInfo = new ArrayList<>();
-                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
+                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.CARDIO)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
                 if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
                     navController.navigate(R.id.to_search_exercise, bundle);
@@ -130,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 ArrayList<String> exerciseInfo = new ArrayList<>();
-                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CALISTHENICS)));
+                exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.CALISTHENICS)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
                 if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
                     navController.navigate(R.id.to_search_exercise, bundle);
@@ -151,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     public void showFloatingActionButton() {
         if (mAddFAB != null) {
             mAddFAB.startAnimation(fab_anticlock);
+            mAddFAB.setClickable(true);
             mAddFAB.show();
             mFabVisible = true;
         }
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             mAddFAB.startAnimation(fab_clock);
             if (mFabExpanded) closeSubMenusFab();
             mAddFAB.hide();
+            mAddFAB.setClickable(false);
             mFabVisible = false;
         }
     }

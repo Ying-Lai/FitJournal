@@ -34,12 +34,12 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
     private static final DiffUtil.ItemCallback<AvailableExerciseItem> DIFF_CALLBACK= new DiffUtil.ItemCallback<AvailableExerciseItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull AvailableExerciseItem oldItem, @NonNull AvailableExerciseItem newItem) {
-            return oldItem.getExerciseName().equals(newItem.getExerciseName());
+            return oldItem.getMExerciseName().equals(newItem.getMExerciseName());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull AvailableExerciseItem oldItem, @NonNull AvailableExerciseItem newItem) {
-            return oldItem.getExerciseName().equals(newItem.getExerciseName()) && oldItem.isChecked() == newItem.isChecked();
+            return oldItem.getMExerciseName().equals(newItem.getMExerciseName()) && oldItem.isChecked() == newItem.isChecked();
         }
     };
 
@@ -86,7 +86,7 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
     @Override
     public void onBindViewHolder(@NonNull AvailableExerciseAdapter.AvailableExerciseHolder holder, int position) {
         AvailableExerciseItem currentAvailableExerciseItem = getItem(position);
-        holder.mAvailableExerciseName.setText(currentAvailableExerciseItem.getExerciseName());
+        holder.mAvailableExerciseName.setText(currentAvailableExerciseItem.getMExerciseName());
         if (currentAvailableExerciseItem.isCustom()) {
             holder.mAvailableExerciseCardView.setCheckable(true);
             if (currentAvailableExerciseItem.isChecked()) {
@@ -127,7 +127,7 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (AvailableExerciseItem item: getCurrentList()) {
-                    if (item.getExerciseName().toLowerCase().contains(filterPattern)) {
+                    if (item.getMExerciseName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

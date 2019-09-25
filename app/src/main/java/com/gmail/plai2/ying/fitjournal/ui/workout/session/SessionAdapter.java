@@ -221,14 +221,15 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
                     case STRENGTH:
                     case CALISTHENICS:
                         holder.mRepTIET.requestFocus();
+
                         break;
                     case CARDIO:
                         holder.mDurationTIET.requestFocus();
                         break;
                 }
+                mOnActivityCreated = false;
+                mOnNewSession = false;
             }
-            mOnActivityCreated = false;
-            mOnNewSession = false;
         }
     }
 

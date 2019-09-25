@@ -1,19 +1,57 @@
 package com.gmail.plai2.ying.fitjournal.ui.stats;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-public class StatsViewModel extends ViewModel {
+import com.gmail.plai2.ying.fitjournal.repository.StatRepository;
+import com.gmail.plai2.ying.fitjournal.room.Stat;
 
-    private MutableLiveData<String> mText;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
-    public StatsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("Work in progress.");
+public class StatsViewModel extends AndroidViewModel {
+
+    // Fields
+    private StatRepository mRepository;
+    private LiveData<List<Stat>> mAllStat;
+
+    // Constructor
+    public StatsViewModel(@NonNull Application application) {
+        super(application);
+        mRepository = new StatRepository(application);
+        mAllStat = mRepository.getAllStats();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    // Methods for Stats
+    public void insert(Stat stat) {
+        mRepository.insert(stat);
+    }
+
+    public void update(Stat stat) {
+        mRepository.update(stat);
+    }
+
+    public void delete(Stat stat) {
+        mRepository.delete(stat);
+    }
+
+    public void deleteAllStatByDate(LocalDate date) {
+        mRepository.deleteStatByDate(date);
+    }
+
+    public void deleteAllStats() {
+        mRepository.deleteAlStats();
+    }
+
+    public LiveData<List<Stat>> getStatByDate(LocalDate date) {
+        return mRepository.getStatByDate(date);
+    }
+
+    public LiveData<List<Stat>> getAllStats() {
+        return mAllStat;
     }
 }

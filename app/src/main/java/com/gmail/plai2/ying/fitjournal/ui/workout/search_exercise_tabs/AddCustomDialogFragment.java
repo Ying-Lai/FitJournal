@@ -44,7 +44,7 @@ public class AddCustomDialogFragment extends AppCompatDialogFragment {
         AddCustomDialogFragment fragment = new AddCustomDialogFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> exerciseInfo = new ArrayList<>();
-        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(exerciseTypeInput)));
+        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(exerciseTypeInput)));
         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
         fragment.setArguments(bundle);
         return fragment;

@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CompletedExerciseItem {
     private String mExerciseName;
 
     @ColumnInfo(name = "exercise_date")
-    private Date mExerciseDate;
+    private LocalDate mExerciseDate;
 
     @ColumnInfo(name = "list_of_session")
     private List<Session> mListOfSessions;
@@ -38,7 +39,7 @@ public class CompletedExerciseItem {
     }
 
     // Constructor for completed exercises
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, Date exerciseDate, List<Session> listOfSessions, String note) {
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, LocalDate exerciseDate, List<Session> listOfSessions, String note) {
         mExerciseType = type;
         mExerciseName = exerciseName;
         mExerciseDate= exerciseDate;
@@ -50,11 +51,11 @@ public class CompletedExerciseItem {
     // Deep copy constructor
     public CompletedExerciseItem(CompletedExerciseItem anotherItem) {
         mId = anotherItem.getMId();
-        mExerciseType = anotherItem.getExerciseType();
-        mExerciseName = anotherItem.getExerciseName();
-        mExerciseDate= anotherItem.getExerciseDate();
-        mListOfSessions = anotherItem.getListOfSessions();
-        mNote = anotherItem.getNote();
+        mExerciseType = anotherItem.getMExerciseType();
+        mExerciseName = anotherItem.getMExerciseName();
+        mExerciseDate= anotherItem.getMExerciseDate();
+        mListOfSessions = anotherItem.getMListOfSessions();
+        mNote = anotherItem.getMNote();
         mIsChecked = anotherItem.isChecked();
     }
 
@@ -67,43 +68,44 @@ public class CompletedExerciseItem {
         return mId;
     }
 
-    public ExerciseType getExerciseType() {
+    public ExerciseType getMExerciseType() {
         return mExerciseType;
     }
 
-    public void setExerciseType(ExerciseType exerciseType) {
+    public void setMExerciseType(ExerciseType exerciseType) {
         mExerciseType = exerciseType;
     }
 
-    public void setExerciseName(String exerciseName) {
-        mExerciseName = exerciseName;
-    }
-
-    public String getExerciseName() {
+    public String getMExerciseName() {
         return mExerciseName;
     }
 
-    public Date getExerciseDate() {
+    public void setMExerciseName(String exerciseName) {
+        mExerciseName = exerciseName;
+    }
+
+
+    public LocalDate getMExerciseDate() {
         return mExerciseDate;
     }
 
-    public void setExerciseDate(Date exerciseDate) {
+    public void setMExerciseDate(LocalDate exerciseDate) {
         mExerciseDate = exerciseDate;
     }
 
-    public void setListOfSessions(List<Session> listOfSession) {
+    public void setMListOfSessions(List<Session> listOfSession) {
         mListOfSessions = listOfSession;
     }
 
-    public List<Session> getListOfSessions() {
+    public List<Session> getMListOfSessions() {
         return mListOfSessions;
     }
 
-    public void setNote(String note) {
+    public void setMNote(String note) {
         mNote = note;
     }
 
-    public String getNote() { return mNote; }
+    public String getMNote() { return mNote; }
 
     public void setChecked(boolean checked) {
         mIsChecked = checked;

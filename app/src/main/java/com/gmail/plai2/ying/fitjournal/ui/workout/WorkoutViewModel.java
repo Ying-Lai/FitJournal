@@ -12,6 +12,7 @@ import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.repository.ExerciseRepository;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -77,12 +78,12 @@ public class WorkoutViewModel extends AndroidViewModel {
         mRepository.delete(completedExerciseItem);
     }
 
-    public void deleteAllCompletedExerciseByDate(Date date) {
+    public void deleteAllCompletedExerciseByDate(LocalDate date) {
         mRepository.deleteAllCompletedExerciseByDate(date); }
 
     public void deleteAllCompletedExercise() { mRepository.deleteAllCompletedExercises();}
 
-    public LiveData<List<CompletedExerciseItem>> getAllCompletedExercisesByDate(Date date) {
+    public LiveData<List<CompletedExerciseItem>> getAllCompletedExercisesByDate(LocalDate date) {
         return mRepository.getAllCompletedExerciseByDate(date);
     }
 

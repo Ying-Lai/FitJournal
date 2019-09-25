@@ -33,6 +33,7 @@ import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -260,8 +261,7 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
                     errorToast.show();
                     return;
                 }
-                Date today = new Date();
-                today.setTime(0);
+                LocalDate today = LocalDate.now();
                 if (mShouldUpdate) {
                     CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, currentListOfSessions, mExerciseNoteInput);
                     updatedItem.setMId(mExerciseIdInput);

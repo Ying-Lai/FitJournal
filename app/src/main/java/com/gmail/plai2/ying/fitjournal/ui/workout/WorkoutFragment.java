@@ -1,6 +1,5 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,17 +29,15 @@ import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class WorkoutFragment extends Fragment {
 
     // UI fields
-    private WorkoutViewModel mViewModel;
     private RecyclerView mCompletedExerciseRV;
     private MaterialToolbar mToolbar;
-    private ImageView test;
     private CompletedExerciseAdapter mAdapter;
     private ImageView mWorkoutInstructionsIV;
     private MaterialTextView mWorkoutInstructionsTV;
@@ -48,6 +45,9 @@ public class WorkoutFragment extends Fragment {
     // Action mode fields
     private boolean mDeleteUsed;
     private ActionMode mActionMode;
+
+    // View model fields
+    private WorkoutViewModel mViewModel;
 
     public WorkoutFragment() {
         // To enable menu for this fragment
@@ -67,7 +67,6 @@ public class WorkoutFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_workout, container, false);
         mCompletedExerciseRV = root.findViewById(R.id.completed_exercise_rv);
         mToolbar = root.findViewById(R.id.workout_tb);
-        test = root.findViewById(R.id.testtesttest);
         mWorkoutInstructionsIV = root.findViewById(R.id.workout_instruction_iv);
         mWorkoutInstructionsTV = root.findViewById(R.id.workout_instruction_tv);
         // Setup app tool bar
@@ -80,7 +79,6 @@ public class WorkoutFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        test.setColorFilter(Color.WHITE);
         // Setup adaptor
         mCompletedExerciseRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mCompletedExerciseRV.setHasFixedSize(true);
@@ -91,21 +89,21 @@ public class WorkoutFragment extends Fragment {
                     CompletedExerciseItem currentCompletedExercise = mAdapter.getExerciseItem(position);
                     ArrayList<String> exerciseInfo = new ArrayList<>();
                     Bundle bundle = new Bundle();
-                    switch (currentCompletedExercise.getExerciseType()) {
+                    switch (currentCompletedExercise.getMExerciseType()) {
                         case CALISTHENICS:
-                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CALISTHENICS)));
+                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.CALISTHENICS)));
                             break;
                         case CARDIO:
-                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.CARDIO)));
+                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.CARDIO)));
                             break;
                         case STRENGTH:
-                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(ExerciseType.STRENGTH)));
+                            exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.STRENGTH)));
                             break;
                     }
-                    exerciseInfo.add(currentCompletedExercise.getExerciseName());
+                    exerciseInfo.add(currentCompletedExercise.getMExerciseName());
                     exerciseInfo.add(Integer.toString(currentCompletedExercise.getMId()));
-                    exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getListOfSessions()));
-                    exerciseInfo.add(currentCompletedExercise.getNote());
+                    exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getMListOfSessions()));
+                    exerciseInfo.add(currentCompletedExercise.getMNote());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
                     if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout) {
                         Navigation.findNavController(view).navigate(R.id.to_session, bundle);
@@ -139,8 +137,7 @@ public class WorkoutFragment extends Fragment {
 
         // Observe live data
         mViewModel = ViewModelProviders.of(getActivity()).get(WorkoutViewModel.class);
-        Date today = new Date();
-        today.setTime(0);
+        LocalDate today = LocalDate.now();
         mViewModel.getAllCompletedExercisesByDate(today).observe(getViewLifecycleOwner(), new Observer<List<CompletedExerciseItem>>() {
             @Override
             public void onChanged(List<CompletedExerciseItem> completedExerciseItems) {

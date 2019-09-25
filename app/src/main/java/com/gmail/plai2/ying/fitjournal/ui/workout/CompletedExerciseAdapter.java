@@ -43,7 +43,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
 
         @Override
         public boolean areContentsTheSame(@NonNull CompletedExerciseItem oldItem, @NonNull CompletedExerciseItem newItem) {
-            return oldItem.compareListOfSessions(newItem.getListOfSessions()) && oldItem.isChecked() == newItem.isChecked();
+            return oldItem.compareListOfSessions(newItem.getMListOfSessions()) && oldItem.isChecked() == newItem.isChecked();
         }
     };
 
@@ -66,7 +66,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
              mCompletedExerciseName = itemView.findViewById(R.id.completed_exercise_name_tv);
              mCompletedExerciseDescription = itemView.findViewById(R.id.completed_exercise_description_tv);
              mCompletedExerciseHasNote = itemView.findViewById(R.id.has_note_tv);
-             mCompletedExerciseDivider = itemView.findViewById(R.id.divider);
+             mCompletedExerciseDivider = itemView.findViewById(R.id.workout_divider);
              mCompletedExerciseCardView = itemView.findViewById(R.id.completed_exercise_cv);
              mCompletedExerciseCardView.setOnLongClickListener(this);
              itemView.setOnClickListener(this);
@@ -98,8 +98,8 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
     public void onBindViewHolder(@NonNull CompletedExerciseHolder holder, int position) {
         CompletedExerciseItem currentCompletedExerciseItem = getItem(position);
         String description = "";
-        List<Session> listOfSessions = currentCompletedExerciseItem.getListOfSessions();
-        if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CARDIO) {
+        List<Session> listOfSessions = currentCompletedExerciseItem.getMListOfSessions();
+        if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.CARDIO) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_cardio_session);
             for (int i=0; i<listOfSessions.size(); i++) {
                 if (i == listOfSessions.size() -1) {
@@ -108,7 +108,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
                     description += listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity() + "%, ";
                 }
             }
-        } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.STRENGTH) {
+        } else if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.STRENGTH) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_strength_session);
             for (int i=0; i<listOfSessions.size(); i++) {
                 if (i == listOfSessions.size() -1) {
@@ -117,7 +117,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
                     description += listOfSessions.get(i).getReps() + " reps x " + listOfSessions.get(i).getWeight() + " lbs, ";
                 }
             }
-        } else if (currentCompletedExerciseItem.getExerciseType() == ExerciseType.CALISTHENICS) {
+        } else if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.CALISTHENICS) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_calistenics_session);
             for (int i=0; i<listOfSessions.size(); i++) {
                 if (i == listOfSessions.size() -1) {
@@ -127,18 +127,18 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
                 }
             }
         }
-        if (currentCompletedExerciseItem.getNote() != null && !currentCompletedExerciseItem.getNote().equals("")) {
+        if (currentCompletedExerciseItem.getMNote() != null && !currentCompletedExerciseItem.getMNote().equals("")) {
             holder.mCompletedExerciseDivider.setVisibility(View.VISIBLE);
             holder.mCompletedExerciseHasNote.setVisibility(View.VISIBLE);
         } else {
             holder.mCompletedExerciseDivider.setVisibility(View.GONE);
             holder.mCompletedExerciseHasNote.setVisibility((View.GONE));
         }
-        CharSequence note = "Note: " + currentCompletedExerciseItem.getNote();
+        CharSequence note = "Note: " + currentCompletedExerciseItem.getMNote();
         SpannableStringBuilder formattedNote = new SpannableStringBuilder(note);
         formattedNote.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.mCompletedExerciseHasNote.setText(formattedNote);
-        holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getExerciseName());
+        holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getMExerciseName());
         holder.mCompletedExerciseDescription.setText(description);
         if (currentCompletedExerciseItem.isChecked()) {
             holder.mCompletedExerciseCardView.setChecked(true);

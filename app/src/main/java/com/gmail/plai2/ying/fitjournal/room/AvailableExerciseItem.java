@@ -42,27 +42,27 @@ public class AvailableExerciseItem {
 
     // Copy constructor
     public AvailableExerciseItem(AvailableExerciseItem anotherItem) {
-        mExerciseType = anotherItem.getExerciseType();
-        mExerciseName = anotherItem.getExerciseName();
+        mExerciseType = anotherItem.getMExerciseType();
+        mExerciseName = anotherItem.getMExerciseName();
         mFavorited = anotherItem.isFavorited();
         mCustom = anotherItem.isCustom();
         mIsChecked = anotherItem.isChecked();
     }
 
     // Getters and setters for fields
-    public ExerciseType getExerciseType() {
+    public ExerciseType getMExerciseType() {
         return mExerciseType;
     }
 
-    public void setExerciseType(ExerciseType exerciseType) {
+    public void setMExerciseType(ExerciseType exerciseType) {
         this.mExerciseType = exerciseType;
     }
 
-    public void setExerciseName(String exerciseName) {
+    public void setMExerciseName(String exerciseName) {
         this.mExerciseName = exerciseName;
     }
 
-    public String getExerciseName() {
+    public String getMExerciseName() {
         return mExerciseName;
     }
 

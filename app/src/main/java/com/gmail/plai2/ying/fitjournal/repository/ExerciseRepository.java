@@ -9,9 +9,10 @@ import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseDao;
 import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseDao;
 import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
-import com.gmail.plai2.ying.fitjournal.room.ExerciseDatabase;
+import com.gmail.plai2.ying.fitjournal.room.FitJournalDatabase;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class ExerciseRepository {
 
     // Constructor
     public ExerciseRepository(Application application) {
-        ExerciseDatabase database = ExerciseDatabase.getInstance(application);
+        FitJournalDatabase database = FitJournalDatabase.getInstance(application);
         mAvailableExerciseDao = database.availableExerciseDao();
         mCompletedExerciseDao = database.completedExerciseDao();
         mAllCompletedExercises = mCompletedExerciseDao.getAllCompletedExercises();
@@ -133,7 +134,7 @@ public class ExerciseRepository {
         new DeleteCompletedExerciseAsyncTask(mCompletedExerciseDao).execute(completedExerciseItem);
     }
 
-    public void deleteAllCompletedExerciseByDate(Date date) {
+    public void deleteAllCompletedExerciseByDate(LocalDate date) {
         new DeleteAllCompletedExerciseByDateAsyncTask(mCompletedExerciseDao).execute(date);
     }
 
@@ -141,7 +142,7 @@ public class ExerciseRepository {
         new DeleteAllCompletedExerciseAsyncTask(mCompletedExerciseDao).execute();
     }
 
-    public LiveData<List<CompletedExerciseItem>> getAllCompletedExerciseByDate(Date date) { return mCompletedExerciseDao.getCompletedExerciseByDate(date); }
+    public LiveData<List<CompletedExerciseItem>> getAllCompletedExerciseByDate(LocalDate date) { return mCompletedExerciseDao.getCompletedExerciseByDate(date); }
 
     public LiveData<List<CompletedExerciseItem>> getAllCompletedExercises() {
         return mAllCompletedExercises;
@@ -193,7 +194,7 @@ public class ExerciseRepository {
         }
     }
 
-    private static class DeleteAllCompletedExerciseByDateAsyncTask extends AsyncTask<Date, Void, Void> {
+    private static class DeleteAllCompletedExerciseByDateAsyncTask extends AsyncTask<LocalDate, Void, Void> {
 
         private CompletedExerciseDao completedExerciseDao;
 
@@ -202,7 +203,7 @@ public class ExerciseRepository {
         }
 
         @Override
-        protected Void doInBackground(Date... dates) {
+        protected Void doInBackground(LocalDate... dates) {
             completedExerciseDao.deleteAllCompletedExerciseByDate(dates[0]);
             return null;
         }

@@ -54,6 +54,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"

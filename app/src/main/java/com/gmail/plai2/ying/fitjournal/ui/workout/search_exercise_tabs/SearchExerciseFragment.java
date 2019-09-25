@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
-import androidx.viewpager.widget.ViewPager;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
@@ -49,7 +48,7 @@ public class SearchExerciseFragment extends Fragment {
         SearchExerciseFragment fragment = new SearchExerciseFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> exerciseInfo = new ArrayList<>();
-        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypetoInt(exerciseTypeInput)));
+        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(exerciseTypeInput)));
         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
         fragment.setArguments(bundle);
         return fragment;

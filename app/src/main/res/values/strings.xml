@@ -15,6 +15,13 @@
     <!-- Stats Fragment -->
     <string name="body_weight">Body Weight</string>
     <string name="body_fat">Body Fat</string>
+    <string name="todays_body_weight">Today\'s Weight:</string>
+    <string name="todays_body_fat">Today\'s Body Fat:</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
+    <string name="weight_no_data">Body Weight: No data points</string>
+    <string name="fat_no_data">Body Fat: No data points</string>
+    <string name="none">None</string>
 
     <!-- Gallery Fragment -->
 
@@ -56,7 +63,8 @@
     <string name="note">Note</string>
 
     <!-- Miscellaneous -->
-    <string name="placeholder">Placeholder</string>
+    <string name="full_placeholder">Placeholder</string>
+    <string name="short_placeholder">PH---</string>
     <string name="x">"x"</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>

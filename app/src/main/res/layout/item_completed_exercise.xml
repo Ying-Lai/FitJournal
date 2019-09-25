@@ -38,7 +38,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
                 android:paddingBottom="4dp"
-                android:text="@string/placeholder"
+                android:text="@string/full_placeholder"
                 android:textAppearance="@style/open_sans_title" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -47,14 +47,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/completed_exercise_name_tv"
                 android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
-                android:text="@string/placeholder"
+                android:text="@string/full_placeholder"
                 android:textAppearance="@style/open_sans_body2" />
 
 
         </RelativeLayout>
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/workout_divider"
             style="@style/Divider" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -65,7 +65,7 @@
             android:paddingTop="4dp"
             android:paddingEnd="16dp"
             android:paddingBottom="4dp"
-            android:text="@string/placeholder"
+            android:text="@string/full_placeholder"
             android:textAppearance="@style/open_sans_body2" />
 
     </LinearLayout>
