@@ -25,10 +25,10 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
     // Input fields
     private String mWeightInput;
     private String mFatInput;
-    private String mStatType;
 
     // UI fields
-    private TextInputEditText mStatTIET;
+    private TextInputEditText mWeightTIET;
+    private TextInputEditText mFatTiet;
     private Button mSaveButton;
     private Button mCancelButton;
 
@@ -40,7 +40,7 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
     }
 
     // New instance constructor
-    public static AddStatDialogFragment newInstance(int weight, int fat, StatType statType) {
+    public static AddStatDialogFragment newInstance(int weight, int fat) {
         AddStatDialogFragment fragment = new AddStatDialogFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> statInfo = new ArrayList<>();
@@ -54,7 +54,6 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
         } else {
             statInfo.add(fat+"");
         }
-        statInfo.add(TypeConverters.statTypeToString(statType));
         bundle.putStringArrayList(MainActivity.STAT_INFO, statInfo);
         fragment.setArguments(bundle);
         return fragment;
@@ -72,30 +71,36 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
             ArrayList<String> statInfo = getArguments().getStringArrayList(MainActivity.STAT_INFO);
             mWeightInput = statInfo.get(0);
             mFatInput = statInfo.get(1);
-            mStatType = statInfo.get(2);
         }
-        mStatTIET = view.findViewById(R.id.add_stat_tiet);
+        mWeightTIET = view.findViewById(R.id.weight_input_tiet);
+        mFatTiet = view.findViewById(R.id.fat_input_tiet);
         mSaveButton = view.findViewById(R.id.stat_save_btn);
         mCancelButton = view.findViewById(R.id.stat_cancel_btn);
 
         // Update note if there is already input
-        if (mStatType.equals(StatType.WEIGHT.getCategoryName()) && !mWeightInput.equals("")) {
-            mStatTIET.setText(mWeightInput);
-        } else if (mStatType.equals(StatType.BODYFAT.getCategoryName()) && !mFatInput.equals("")) {
-            mStatTIET.setText(mFatInput);
+        if (!mWeightInput.equals("")) {
+            mWeightTIET.setText(mWeightInput);
+        }
+        if (!mFatInput.equals("")) {
+            mFatTiet.setText((mFatInput));
         }
 
         // On click listeners
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int data;
-                if (mStatTIET.getText().toString().equals("")) {
-                    data = MainActivity.EMPTY;
+                int weight, fat;
+                if (mWeightTIET.getText().toString().equals("")) {
+                    weight = MainActivity.EMPTY;
                 } else {
-                    data = Integer.parseInt(mStatTIET.getText().toString());
+                    weight = Integer.parseInt(mWeightTIET.getText().toString());
                 }
-                mListener.sendStat(TypeConverters.stringToStatType(mStatType), data);
+                if (mFatTiet.getText().toString().equals("")) {
+                    fat = MainActivity.EMPTY;
+                } else {
+                    fat = Integer.parseInt(mFatTiet.getText().toString());
+                }
+                mListener.sendStat(weight, fat);
                 dismiss();
             }
         });
@@ -106,7 +111,7 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
             }
         });
         builder.setView(view)
-                .setTitle(mStatType.equals(StatType.WEIGHT.getCategoryName())?getResources().getString(R.string.todays_body_weight):getResources().getString(R.string.todays_body_fat));
+                .setTitle(getResources().getString(R.string.update_stat_title));
         return builder.create();
     }
 
@@ -129,6 +134,6 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
 
     // Note listener interface
     public interface StatListener {
-        void sendStat(StatType type, int data);
+        void sendStat(int weight, int fat);
     }
 }

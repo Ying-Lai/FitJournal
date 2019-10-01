@@ -9,7 +9,7 @@
         <item name="android:colorBackground">@color/coconut_milk</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeBackground">@color/navy_peony</item>
+        <item name="actionModeBackground">@color/eclipse</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
@@ -36,6 +36,13 @@
         <item name="android:letterSpacing">0</item>
     </style>
 
+    <style name="open_sans_body3" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
     <!-- Card view style -->
     <style name="journal_card_view" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.FitJournal.MaterialCardView</item>
@@ -45,24 +52,6 @@
     <style name="ShapeAppearanceOverlay.FitJournal.MaterialCardView" parent="">
         <item name="cornerFamily">cut</item>
         <item name="cornerSize">0dp</item>
-    </style>
-
-    <!-- Calendar Theme-->
-    <style name="HeaderTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Header">
-        <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-    </style>
-
-    <style name="WeekDayTextAppearance" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
-        <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-    </style>
-
-    <style name="DayTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
-        <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:fontFamily">@font/roboto</item>
     </style>
 
     <!-- Divider -->

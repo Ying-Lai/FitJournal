@@ -33,14 +33,15 @@ import com.gmail.plai2.ying.fitjournal.ui.workout.NoteDialogFragment;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SessionFragment extends Fragment implements NoteDialogFragment.NoteListener {
 
     // Input fields
+    private LocalDate mCurrentDateInput;
     private ExerciseType mExerciseTypeInput;
     private String mExerciseNameInput;
     private int mExerciseIdInput;
@@ -60,6 +61,7 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
     private ActionMode mActionMode;
     private boolean mDeleteUsed;
 
+    // Empty constructor
     public SessionFragment() {
         // To enable menu for this fragment
         setHasOptionsMenu(true);
@@ -72,6 +74,7 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         setHasOptionsMenu(true);
         // Parse through bundle
         if (getArguments() != null) {
+            mCurrentDateInput = TypeConverters.stringToDate(getArguments().getString(MainActivity.DATE_INFO));
             List<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
             mExerciseNameInput = exerciseInfo.get(1);
@@ -261,19 +264,23 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
                     errorToast.show();
                     return;
                 }
-                LocalDate today = LocalDate.now();
                 if (mShouldUpdate) {
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, currentListOfSessions, mExerciseNoteInput);
+                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, mCurrentDateInput, currentListOfSessions, mExerciseNoteInput);
                     updatedItem.setMId(mExerciseIdInput);
                     mViewModel.update(updatedItem);
                 } else {
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, today, currentListOfSessions, mExerciseNoteInput);
+                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, mCurrentDateInput, currentListOfSessions, mExerciseNoteInput);
                     mViewModel.insert(newItem);
                 }
 
                 // Close keyboard when leaving fragment
                 ((MainActivity) getActivity()).closeKeyboard();
-                Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout, false);
+                if (mCurrentDateInput.equals(LocalDate.now())) {
+                    Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout_today, false);
+                } else {
+                    Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout_another_day, false);
+                }
+
             }
         });
     }
@@ -363,8 +370,8 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         if (item.getItemId() == android.R.id.home) {
 
             // Close keyboard when leaving fragment
-            ((MainActivity) getActivity()).closeKeyboard();
             Navigation.findNavController(getView()).popBackStack();
+            ((MainActivity) getActivity()).closeKeyboard();
         }
         if (item.getItemId() == R.id.note_menu_item) {
             NoteDialogFragment noteDialogFragment = NoteDialogFragment.newInstance(mExerciseNoteInput);

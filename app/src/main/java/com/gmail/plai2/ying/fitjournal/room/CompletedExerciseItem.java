@@ -5,8 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 @Entity(tableName = "completed_exercise_table")
@@ -39,7 +39,7 @@ public class CompletedExerciseItem {
     }
 
     // Constructor for completed exercises
-    public CompletedExerciseItem(ExerciseType type, String exerciseName, LocalDate exerciseDate, List<Session> listOfSessions, String note) {
+    public CompletedExerciseItem(ExerciseType type, String exerciseName, org.threeten.bp.LocalDate exerciseDate, List<Session> listOfSessions, String note) {
         mExerciseType = type;
         mExerciseName = exerciseName;
         mExerciseDate= exerciseDate;

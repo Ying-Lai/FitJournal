@@ -4,7 +4,7 @@
     <string name="app_name_abr">FJ</string>
 
     <!-- Main Activity - General -->
-    <string name="workout">Workout</string>
+    <string name="workout_today">Workout</string>
     <string name="stats">Stats</string>
     <string name="gallery">Gallery</string>
     <string name="calendar">Calendar</string>
@@ -15,17 +15,23 @@
     <!-- Stats Fragment -->
     <string name="body_weight">Body Weight</string>
     <string name="body_fat">Body Fat</string>
-    <string name="todays_body_weight">Today\'s Weight:</string>
-    <string name="todays_body_fat">Today\'s Body Fat:</string>
-    <string name="add">Add</string>
     <string name="update">Update</string>
-    <string name="weight_no_data">Body Weight: No data points</string>
-    <string name="fat_no_data">Body Fat: No data points</string>
+    <string name="no_data">No data points</string>
     <string name="none">None</string>
-
-    <!-- Gallery Fragment -->
+    <string name="update_stat_title">Update body stats: </string>
+    <string name="body_weight_w_units">Body Weight (lbs)</string>
+    <string name="body_fat_w_units">Body Fat (%)</string>
 
     <!-- Calendar Fragment -->
+    <string name="sun">SUN</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="workout_another_day">Workout Another Day</string>
+
 
     <!-- Search Fragments -->
 

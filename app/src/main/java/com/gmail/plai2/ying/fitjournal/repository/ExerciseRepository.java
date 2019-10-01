@@ -12,8 +12,8 @@ import com.gmail.plai2.ying.fitjournal.room.CompletedExerciseItem;
 import com.gmail.plai2.ying.fitjournal.room.FitJournalDatabase;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 
-import java.time.LocalDate;
-import java.util.Date;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 public class ExerciseRepository {

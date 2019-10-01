@@ -25,12 +25,15 @@ import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseFragment extends Fragment {
 
     // Input fields
+    private LocalDate mCurrentDateInput;
     private ExerciseType mExerciseTypeInput;
 
     // UI Fields
@@ -44,9 +47,11 @@ public class BrowseFragment extends Fragment {
     }
 
     // New instance constructor
-    public static BrowseFragment newInstance(ExerciseType exerciseTypeInput) {
+    public static BrowseFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
         BrowseFragment fragment = new BrowseFragment();
         Bundle bundle = new Bundle();
+        String dateInfo = TypeConverters.dateToString(currentDateInput);
+        bundle.putString(MainActivity.DATE_INFO, dateInfo);
         ArrayList<String> exerciseInfo = new ArrayList<>();
         exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(exerciseTypeInput)));
         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
@@ -61,6 +66,8 @@ public class BrowseFragment extends Fragment {
         setHasOptionsMenu(true);
         // Parse through bundle
         if (getArguments() != null) {
+            String dateInfo = getArguments().getString(MainActivity.DATE_INFO);
+            mCurrentDateInput = TypeConverters.stringToDate(dateInfo);
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
@@ -87,6 +94,8 @@ public class BrowseFragment extends Fragment {
                 AvailableExerciseItem currentAvailableExercise = mAdapter.getExerciseItem(position);
                 if (view.getId() == R.id.available_exercise_name_tv) {
                     Bundle bundle = new Bundle();
+                    String dateInfo = TypeConverters.dateToString(mCurrentDateInput);
+                    bundle.putString(MainActivity.DATE_INFO, dateInfo);
                     ArrayList<String> exerciseInfo = new ArrayList<>();
                     exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(mExerciseTypeInput)));
                     exerciseInfo.add(currentAvailableExercise.getMExerciseName());
@@ -116,6 +125,7 @@ public class BrowseFragment extends Fragment {
         mViewModel.getAllAvailableExercises(mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
             @Override
             public void onChanged(List<AvailableExerciseItem> availableExerciseItems) {
+                mAdapter.setFullList(availableExerciseItems);
                 mAdapter.submitList(availableExerciseItems);
             }
         });

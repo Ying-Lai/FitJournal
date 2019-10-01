@@ -2,8 +2,7 @@ package com.gmail.plai2.ying.fitjournal;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,15 +12,19 @@ import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavArgument;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     // Static fields
     public static final String EXERCISE_INFO = "exercise_info_key";
     public static final String STAT_INFO = "stat_info_key";
+    public static final String DATE_INFO = "date_info_key";
     public static final int EMPTY = -1;
 
     // Fab state fields
@@ -44,11 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mCardioFAB;
     private BottomNavigationView mBottomNav;
 
+    // Navigation fields
+    private NavController mNavController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        AndroidThreeTen.init(this);
         // Initialize fields and variables
         mBottomNav = findViewById(R.id.nav_view);
         mAddFAB = findViewById(R.id.workout_add_fab);
@@ -67,19 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup bottom navigation
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_to_workout, R.id.navigation_to_stats, R.id.navigation_to_gallery, R.id.navigation_to_calendar)
+                R.id.navigation_to_workout_today, R.id.navigation_to_stats, R.id.navigation_to_calendar)
                 .build();
-        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(mBottomNav, navController);
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+        mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(mBottomNav, mNavController);
+        mNavController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if(destination.getId() == R.id.navigation_to_workout) {
+                if(destination.getId() == R.id.navigation_to_workout_today || destination.getId() == R.id.navigation_to_workout_another_day) {
                     showFloatingActionButton();
                 } else {
                     if (mFabVisible) hideFloatingActionButton();
                 }
-                if (destination.getId() != R.id.navigation_to_workout && destination.getId() != R.id.navigation_to_stats && destination.getId() != R.id.navigation_to_gallery && destination.getId() != R.id.navigation_to_calendar) {
+                if (destination.getId() != R.id.navigation_to_workout_today && destination.getId() != R.id.navigation_to_stats && destination.getId()
+                        != R.id.navigation_to_calendar && destination.getId() != R.id.navigation_to_workout_another_day) {
                     hideBottomNavigationView();
                 } else {
                     showBottomNavigationView();
@@ -107,8 +115,15 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> exerciseInfo = new ArrayList<>();
                 exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.STRENGTH)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
-                if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
-                    navController.navigate(R.id.to_search_exercise, bundle);
+                if (mNavController.getCurrentDestination().getId() == R.id.navigation_to_workout_another_day) {
+                    NavArgument dateArgument = mNavController.getCurrentDestination().getArguments().get(DATE_INFO);
+                    String dateInfo = (String) dateArgument.getDefaultValue();
+                    bundle.putString(DATE_INFO, dateInfo);
+                    mNavController.navigate(R.id.to_search_exercise, bundle);
+                } else if (mNavController.getCurrentDestination().getId() == R.id.navigation_to_workout_today) {
+                    String dateInfo = TypeConverters.dateToString(LocalDate.now()) ;
+                    bundle.putString(DATE_INFO, dateInfo);
+                    mNavController.navigate(R.id.to_search_exercise, bundle);
                 }
             }
         });
@@ -119,8 +134,15 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> exerciseInfo = new ArrayList<>();
                 exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.CARDIO)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
-                if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
-                    navController.navigate(R.id.to_search_exercise, bundle);
+                if (mNavController.getCurrentDestination().getId() == R.id.navigation_to_workout_another_day) {
+                    NavArgument dateArgument = mNavController.getCurrentDestination().getArguments().get(DATE_INFO);
+                    String dateInfo = (String) dateArgument.getDefaultValue();
+                    bundle.putString(DATE_INFO, dateInfo);
+                    mNavController.navigate(R.id.to_search_exercise, bundle);
+                } else if (mNavController.getCurrentDestination().getId() == R.id.navigation_to_workout_today) {
+                    String dateInfo = TypeConverters.dateToString(LocalDate.now()) ;
+                    bundle.putString(DATE_INFO, dateInfo);
+                    mNavController.navigate(R.id.to_search_exercise, bundle);
                 }
             }
         });
@@ -131,22 +153,22 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> exerciseInfo = new ArrayList<>();
                 exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(ExerciseType.CALISTHENICS)));
                 bundle.putStringArrayList(EXERCISE_INFO, exerciseInfo);
-                if (navController.getCurrentDestination().getId() == R.id.navigation_to_workout) {
-                    navController.navigate(R.id.to_search_exercise, bundle);
+                if (mNavController.getCurrentDestination().getId() == R.id.navigation_to_workout_another_day) {
+                    NavArgument dateArgument = mNavController.getCurrentDestination().getArguments().get(DATE_INFO);
+                    String dateInfo = (String) dateArgument.getDefaultValue();
+                    bundle.putString(DATE_INFO, dateInfo);
+                    mNavController.navigate(R.id.to_search_exercise, bundle);
+                } else if (mNavController.getCurrentDestination().getId() == R.id.navigation_to_workout_today) {
+                    String dateInfo = TypeConverters.dateToString(LocalDate.now()) ;
+                    bundle.putString(DATE_INFO, dateInfo);
+                    mNavController.navigate(R.id.to_search_exercise, bundle);
                 }
             }
         });
     }
 
-    // Setup menu options
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_exercise_menu, menu);
-        return true;
-    }
-
     // Other main activity methods
+
     public void showFloatingActionButton() {
         if (mAddFAB != null) {
             mAddFAB.startAnimation(fab_anticlock);
@@ -176,25 +198,35 @@ public class MainActivity extends AppCompatActivity {
         mBottomNav.animate().translationY(0).setDuration(300);
     }
 
+    public NavController getNavController() {
+        return mNavController;
+    }
+
     // Closes FAB submenus
     private void closeSubMenusFab(){
-        mCalisthenicFAB.setVisibility(View.GONE);
-        mCardioFAB.setVisibility(View.GONE);
-        mStrengthFAB.setVisibility(View.GONE);
         mCalisthenicFAB.startAnimation(fab_close);
         mCardioFAB.startAnimation(fab_close);
         mStrengthFAB.startAnimation(fab_close);
+        mCalisthenicFAB.setVisibility(View.GONE);
+        mCardioFAB.setVisibility(View.GONE);
+        mStrengthFAB.setVisibility(View.GONE);
+        mCalisthenicFAB.setClickable(false);
+        mCardioFAB.setClickable(false);
+        mStrengthFAB.setClickable(false);
         mFabExpanded = false;
     }
 
     // Opens FAB submenus
     private void openSubMenusFab(){
-        mCalisthenicFAB.setVisibility(View.VISIBLE);
-        mCardioFAB.setVisibility(View.VISIBLE);
-        mStrengthFAB.setVisibility(View.VISIBLE);
         mCalisthenicFAB.startAnimation(fab_open);
         mCardioFAB.startAnimation(fab_open);
         mStrengthFAB.startAnimation(fab_open);
+        mCalisthenicFAB.setVisibility(View.VISIBLE);
+        mCardioFAB.setVisibility(View.VISIBLE);
+        mStrengthFAB.setVisibility(View.VISIBLE);
+        mCalisthenicFAB.setClickable(true);
+        mCardioFAB.setClickable(true);
+        mStrengthFAB.setClickable(true);
         mFabExpanded = true;
     }
 

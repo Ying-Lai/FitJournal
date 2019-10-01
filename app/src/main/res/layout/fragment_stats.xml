@@ -2,7 +2,6 @@
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -44,100 +43,147 @@
             style="@style/journal_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/card_view_margin">
+            android:layout_marginTop="@dimen/card_view_margin"
+            android:layout_marginStart="@dimen/card_view_margin"
+            android:layout_marginEnd="@dimen/card_view_margin"
+            android:layout_marginBottom="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <View
+                    android:id="@+id/stats_divider"
+                    style="@style/Divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stats_current_date_tv" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/vertical_guideline_33percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.33" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/vertical_guideline_66percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.66" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/stats_update_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/update"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/vertical_guideline_66percent"
+                    app:layout_constraintTop_toBottomOf="@id/stats_divider" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Weight"
+                    android:textAppearance="@style/open_sans_body3"
+                    app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_33percent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stats_weight_tv" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Body Fat"
+                    android:textAppearance="@style/open_sans_body3"
+                    app:layout_constraintEnd_toStartOf="@id/vertical_guideline_66percent"
+                    app:layout_constraintStart_toEndOf="@id/vertical_guideline_33percent"
+                    app:layout_constraintTop_toBottomOf="@id/stats_body_fat_tv" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/stats_current_date_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="2dp"
+                    android:gravity="start"
+                    android:textAppearance="@style/open_sans_body2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/stats_weight_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/none"
+                    android:textAppearance="@style/open_sans_title"
+                    app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_33percent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stats_divider" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/stats_body_fat_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/none"
+                    android:textAppearance="@style/open_sans_title"
+                    app:layout_constraintEnd_toStartOf="@id/vertical_guideline_66percent"
+                    app:layout_constraintStart_toEndOf="@id/vertical_guideline_33percent"
+                    app:layout_constraintTop_toBottomOf="@id/stats_divider" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/journal_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="4.4">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="horizontal"
-                    android:padding="4dp"
-                    android:weightSum="10">
+                    android:text="@string/body_weight_w_units"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="2dp"
+                    android:gravity="start"
+                    android:textAppearance="@style/open_sans_body2" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/stats_weight_tv"
-                        style="@style/open_sans_body1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:gravity="start"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="@string/todays_body_weight" />
+                <View
+                    style="@style/Divider" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/stats_weight_input_tv"
-                        style="@style/open_sans_body1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/short_placeholder" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1.5" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/stats_update_weight_btn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.5"
-                        android:text="@string/add" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/weight_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="horizontal"
-                    android:padding="4dp"
-                    android:weightSum="10">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/stats_body_fat_tv"
-                        style="@style/open_sans_body1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:gravity="start"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="@string/todays_body_fat" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/stats_body_fat_input_tv"
-                        style="@style/open_sans_body1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/short_placeholder" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1.5" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/stats_update_fat_btn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.5"
-                        android:text="@string/add" />
-
-                </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp" />
 
             </LinearLayout>
 
@@ -147,29 +193,40 @@
             style="@style/journal_card_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/card_view_margin"
-            android:layout_weight="4.25">
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="4.4">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/weight_chart"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="16dp" />
+                android:orientation="vertical">
 
-        </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="2dp"
+                    android:gravity="start"
+                    android:text="@string/body_fat_w_units"
+                    android:textAppearance="@style/open_sans_body2" />
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/journal_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/card_view_margin"
-            android:layout_weight="4.25">
+                <View
+                    style="@style/Divider" />
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/fat_chart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="16dp" />
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/fat_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp" />
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 

@@ -9,7 +9,8 @@ import com.gmail.plai2.ying.fitjournal.room.FitJournalDatabase;
 import com.gmail.plai2.ying.fitjournal.room.Stat;
 import com.gmail.plai2.ying.fitjournal.room.StatDao;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 public class StatRepository {

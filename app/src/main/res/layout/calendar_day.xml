@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calendar_day_fl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white_grid_background"
+    android:focusable="true"
+    android:clickable="true">
+
+    <TextView
+        android:id="@+id/calendar_day_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/evening_blue"
+        android:textSize="16sp"
+        tools:text="22" />
+
+    <View
+        android:id="@+id/calendar_dot_v"
+        android:layout_width="4.5dp"
+        android:layout_height="4.5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@drawable/regular_workout_dot" />
+</FrameLayout>

@@ -23,11 +23,14 @@ import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 
 public class SearchExerciseFragment extends Fragment {
 
     // Input fields
+    private LocalDate mCurrentDateInput;
     private ExerciseType mExerciseTypeInput;
 
 
@@ -43,7 +46,7 @@ public class SearchExerciseFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    // New instance constructor
+   /* // New instance constructor
     public static SearchExerciseFragment newInstance(ExerciseType exerciseTypeInput) {
         SearchExerciseFragment fragment = new SearchExerciseFragment();
         Bundle bundle = new Bundle();
@@ -52,7 +55,7 @@ public class SearchExerciseFragment extends Fragment {
         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
         fragment.setArguments(bundle);
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class SearchExerciseFragment extends Fragment {
         // Parse through bundle
         if (getArguments() != null) {
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
+            mCurrentDateInput = TypeConverters.stringToDate(getArguments().getString(MainActivity.DATE_INFO));
             mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
@@ -83,9 +87,9 @@ public class SearchExerciseFragment extends Fragment {
 
         // Setup viewpager
         ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
-        adapter.addFragment(FavoriteFragment.newInstance(mExerciseTypeInput), "Favorite");
-        adapter.addFragment(CustomFragment.newInstance(mExerciseTypeInput), "Custom");
-        adapter.addFragment(BrowseFragment.newInstance(mExerciseTypeInput), "Browse");
+        adapter.addFragment(FavoriteFragment.newInstance(mCurrentDateInput, mExerciseTypeInput), "Favorite");
+        adapter.addFragment(CustomFragment.newInstance(mCurrentDateInput, mExerciseTypeInput), "Custom");
+        adapter.addFragment(BrowseFragment.newInstance(mCurrentDateInput, mExerciseTypeInput), "Browse");
         mViewpager.setAdapter(adapter);
         mTablayout.setupWithViewPager(mViewpager);
         return root;

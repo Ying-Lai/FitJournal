@@ -4,7 +4,7 @@
     android:id="@+id/errorMessage"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/dark_gray"
+    android:background="@color/evening_blue"
     android:drawableStart="@drawable/ic_warning"
     android:drawablePadding="8dp"
     android:gravity="center"

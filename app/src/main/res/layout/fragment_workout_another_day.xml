@@ -11,35 +11,23 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/workout_ab"
+            android:id="@+id/workout_another_day_ab"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/workout_tb"
+                android:id="@+id/workout_another_day_tb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_fitjournal_outline" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/app_name_abr"
-                    android:textAppearance="@style/decorative_title" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/completed_exercise_rv"
+            android:id="@+id/another_day_completed_exercise_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="true"
@@ -55,7 +43,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/workout_instruction_iv"
+            android:id="@+id/another_day_workout_instruction_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -63,7 +51,7 @@
             android:src="@drawable/ic_workout_instructions" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/workout_instruction_tv"
+            android:id="@+id/another_day_workout_instruction_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

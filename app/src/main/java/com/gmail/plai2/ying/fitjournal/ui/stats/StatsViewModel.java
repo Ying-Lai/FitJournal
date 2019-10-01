@@ -9,7 +9,8 @@ import androidx.lifecycle.LiveData;
 import com.gmail.plai2.ying.fitjournal.repository.StatRepository;
 import com.gmail.plai2.ying.fitjournal.room.Stat;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class StatsViewModel extends AndroidViewModel {
         mRepository.deleteAlStats();
     }
 
-    public LiveData<List<Stat>> getStatByDate(LocalDate date) {
+    public LiveData<List<Stat>> getStatByDate(org.threeten.bp.LocalDate date) {
         return mRepository.getStatByDate(date);
     }
 

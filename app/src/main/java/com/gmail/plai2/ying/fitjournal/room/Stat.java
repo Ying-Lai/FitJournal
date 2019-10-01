@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
 
 @Entity(tableName = "stat_table")
 public class Stat {
@@ -31,18 +31,18 @@ public class Stat {
     }
 
     // General constructor
-    public Stat(LocalDate date, int weight, int fat) {
+    public Stat(org.threeten.bp.LocalDate date, int weight, int fat) {
         mDate = date;
         mWeight = weight;
         mBodyFat = fat;
     }
 
     // Getters and setters
-    public LocalDate getMDate() {
+    public org.threeten.bp.LocalDate getMDate() {
         return mDate;
     }
 
-    public void setMDate(LocalDate mStatDate) {
+    public void setMDate(org.threeten.bp.LocalDate mStatDate) {
         this.mDate = mStatDate;
     }
 

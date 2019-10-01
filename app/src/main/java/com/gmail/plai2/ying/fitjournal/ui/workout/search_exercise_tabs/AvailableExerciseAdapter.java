@@ -22,7 +22,7 @@ import java.util.List;
 public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem, AvailableExerciseAdapter.AvailableExerciseHolder> implements Filterable {
 
     // Adaptor fields
-    private List<AvailableExerciseItem> mAvailableExerciseItems = new ArrayList<>();
+    private List<AvailableExerciseItem> mAvailableExerciseItemsFull = new ArrayList<>();
     private OnItemClickListener mListener;
 
     // Adaptor constructor
@@ -112,6 +112,10 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
         return getItem(position);
     }
 
+    public void setFullList(List<AvailableExerciseItem> fullList) {
+        mAvailableExerciseItemsFull = fullList;
+    }
+
     // Search filter methods
     @Override
     public Filter getFilter() {
@@ -123,10 +127,10 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
         protected FilterResults performFiltering(CharSequence constraint) {
             List<AvailableExerciseItem> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(getCurrentList());
+                filteredList.addAll(mAvailableExerciseItemsFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (AvailableExerciseItem item: getCurrentList()) {
+                for (AvailableExerciseItem item: mAvailableExerciseItemsFull) {
                     if (item.getMExerciseName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -140,9 +144,8 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults results) {
-            mAvailableExerciseItems.clear();
-            mAvailableExerciseItems.addAll((List) results.values);
-            submitList(mAvailableExerciseItems);
+            List<AvailableExerciseItem> filteredList = new ArrayList<AvailableExerciseItem>((List) results.values);
+            submitList(filteredList);
         }
     };
 

@@ -10,7 +10,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,9 +57,11 @@ public abstract class FitJournalDatabase extends RoomDatabase {
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private AvailableExerciseDao mAvailableExerciseDao;
         private StatDao mStatDao;
+        private CompletedExerciseDao mCompletedExerciseDao;
         private PopulateDbAsyncTask(FitJournalDatabase db) {
             mAvailableExerciseDao = db.availableExerciseDao();
             mStatDao = db.statDao();
+            mCompletedExerciseDao = db.completedExerciseDao();
         }
         @Override
         protected Void doInBackground(Void... voids) {
@@ -88,28 +92,39 @@ public abstract class FitJournalDatabase extends RoomDatabase {
             // Add stats for testing
             LocalDate date1 = LocalDate.of(2019, Calendar.SEPTEMBER,12);
             mStatDao.insert(new Stat(date1, 148, 19));
-            LocalDate date2 = LocalDate.of(2019, Calendar.SEPTEMBER,13);
+            org.threeten.bp.LocalDate date2 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,13);
             mStatDao.insert(new Stat(date2, 155, 15));
-            LocalDate date3 = LocalDate.of(2019, Calendar.SEPTEMBER,14);
+            org.threeten.bp.LocalDate date3 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,14);
             mStatDao.insert(new Stat(date3, 142, 17));
-            LocalDate date4 = LocalDate.of(2019, Calendar.SEPTEMBER,15);
+            org.threeten.bp.LocalDate date4 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,15);
             mStatDao.insert(new Stat(date4, 111, 12));
-            LocalDate date5 = LocalDate.of(2019, Calendar.SEPTEMBER,16);
+            org.threeten.bp.LocalDate date5 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,16);
             mStatDao.insert(new Stat(date5, 148, 19));
-            LocalDate date6 = LocalDate.of(2019, Calendar.SEPTEMBER,17);
+            org.threeten.bp.LocalDate date6 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,17);
             mStatDao.insert(new Stat(date6, 155, 15));
-            LocalDate date7 = LocalDate.of(2019, Calendar.SEPTEMBER,18);
+            org.threeten.bp.LocalDate date7 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,18);
             mStatDao.insert(new Stat(date7, 142, 17));
-            LocalDate date8 = LocalDate.of(2019, Calendar.SEPTEMBER,19);
+            org.threeten.bp.LocalDate date8 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,19);
             mStatDao.insert(new Stat(date8, 111, 12));
-            LocalDate date9 = LocalDate.of(2019, Calendar.SEPTEMBER,20);
+            org.threeten.bp.LocalDate date9 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,20);
             mStatDao.insert(new Stat(date9, 148, 19));
-            LocalDate date10 = LocalDate.of(2019, Calendar.SEPTEMBER,21);
+            org.threeten.bp.LocalDate date10 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,21);
             mStatDao.insert(new Stat(date10, 155, 15));
-            LocalDate date11 = LocalDate.of(2019, Calendar.SEPTEMBER,22);
+            org.threeten.bp.LocalDate date11 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,22);
             mStatDao.insert(new Stat(date11, 142, 17));
-            LocalDate date12 = LocalDate.of(2019, Calendar.SEPTEMBER,23);
+            org.threeten.bp.LocalDate date12 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,23);
             mStatDao.insert(new Stat(date12, 111, 12));
+
+            List<Session> sess1 = new ArrayList<>();
+            sess1.add(new Session(ExerciseType.CARDIO, 10, 10));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date1, sess1, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date2, sess1, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date3, sess1, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date4, sess1, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date5, sess1, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date6, sess1, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date7, sess1, ""));
+
             return null;
         }
     }

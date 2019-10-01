@@ -4,8 +4,9 @@ import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.gmail.plai2.ying.fitjournal.room.Stat;
 
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.List;

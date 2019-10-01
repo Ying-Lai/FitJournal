@@ -8,25 +8,19 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+
 import android.widget.Button;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
-import com.gmail.plai2.ying.fitjournal.room.AvailableExerciseItem;
-import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
-import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
-import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
-import com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs.AddCustomDialogFragment;
+
 import com.google.android.material.textfield.TextInputEditText;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class NoteDialogFragment extends AppCompatDialogFragment {
 

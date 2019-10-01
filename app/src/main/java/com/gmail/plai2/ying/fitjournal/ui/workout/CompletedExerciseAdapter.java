@@ -111,19 +111,21 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
         } else if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.STRENGTH) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_strength_session);
             for (int i=0; i<listOfSessions.size(); i++) {
+                String repOrReps = (listOfSessions.get(i).getReps() == 1) ? " rep x " : " reps x ";
                 if (i == listOfSessions.size() -1) {
-                    description += listOfSessions.get(i).getReps() + " reps x " + listOfSessions.get(i).getWeight()+" lbs.";
+                    description += listOfSessions.get(i).getReps() + repOrReps + listOfSessions.get(i).getWeight()+" lbs.";
                 } else {
-                    description += listOfSessions.get(i).getReps() + " reps x " + listOfSessions.get(i).getWeight() + " lbs, ";
+                    description += listOfSessions.get(i).getReps() + repOrReps + listOfSessions.get(i).getWeight() + " lbs, ";
                 }
             }
         } else if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.CALISTHENICS) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_calistenics_session);
             for (int i=0; i<listOfSessions.size(); i++) {
+                String repOrReps = (listOfSessions.get(i).getReps() == 1) ? " rep" : " reps";
                 if (i == listOfSessions.size() -1) {
-                    description += listOfSessions.get(i).getReps() + " reps";
+                    description += listOfSessions.get(i).getReps() + repOrReps;
                 } else {
-                    description += listOfSessions.get(i).getReps() + " reps, ";
+                    description += listOfSessions.get(i).getReps() + repOrReps + ", ";
                 }
             }
         }

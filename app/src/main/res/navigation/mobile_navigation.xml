@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_to_workout">
+    app:startDestination="@+id/navigation_to_workout_today">
 
     <fragment
-        android:id="@+id/navigation_to_workout"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutFragment"
-        android:label="@string/workout"
-        tools:layout="@layout/fragment_workout">
+        android:id="@+id/navigation_to_workout_today"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutTodayFragment"
+        android:label="@string/workout_today"
+        tools:layout="@layout/fragment_workout_today">
         <action
             android:id="@+id/to_search_exercise"
             app:destination="@id/navigation_search_exercise"
@@ -35,16 +35,25 @@
         tools:layout="@layout/fragment_stats" />
 
     <fragment
-        android:id="@+id/navigation_to_gallery"
-        android:name="com.gmail.plai2.ying.fitjournal.ui.gallery.GalleryFragment"
-        android:label="@string/gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
         android:id="@+id/navigation_to_calendar"
         android:name="com.gmail.plai2.ying.fitjournal.ui.calendar.CalendarFragment"
         android:label="@string/calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar">
+        <action
+            android:id="@+id/to_workout_today"
+            app:destination="@id/navigation_to_workout_today"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/to_workout_another_day"
+            app:destination="@id/navigation_to_workout_another_day"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search_exercise"
@@ -67,8 +76,36 @@
         android:label="@string/session"
         tools:layout="@layout/fragment_calisthenics_session">
         <action
-            android:id="@+id/to_workout"
-            app:destination="@id/navigation_to_workout"
+            android:id="@+id/to_workout_today"
+            app:destination="@id/navigation_to_workout_today"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/to_workout_another_day"
+            app:destination="@id/navigation_to_workout_another_day"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_to_workout_another_day"
+        android:name="com.gmail.plai2.ying.fitjournal.ui.calendar.WorkoutAnotherDayFragment"
+        android:label="@string/workout_another_day"
+        tools:layout="@layout/fragment_calisthenics_session">
+        <action
+            android:id="@+id/to_search_exercise"
+            app:destination="@id/navigation_search_exercise"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/to_session"
+            app:destination="@id/navigation_to_session"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
