@@ -67,6 +67,8 @@ public class WorkoutAnotherDayFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // To enable menu for this fragment
+        setHasOptionsMenu(true);
         // Parse through bundle
         if (getArguments() != null) {
             mCurrentDateInput = TypeConverters.stringToDate(getArguments().getString(MainActivity.DATE_INFO));
