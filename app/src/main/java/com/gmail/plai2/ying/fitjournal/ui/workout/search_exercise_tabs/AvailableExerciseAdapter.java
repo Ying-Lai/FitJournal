@@ -26,7 +26,7 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
     private OnItemClickListener mListener;
 
     // Adaptor constructor
-    public AvailableExerciseAdapter(OnItemClickListener listener) {
+    AvailableExerciseAdapter(OnItemClickListener listener) {
         super(DIFF_CALLBACK);
         mListener = listener;
     }
@@ -51,7 +51,7 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
         private MaterialCardView mAvailableExerciseCardView;
 
         // View holder constructor
-        public AvailableExerciseHolder(View itemView) {
+        AvailableExerciseHolder(View itemView) {
             super(itemView);
             mAvailableExerciseName = itemView.findViewById(R.id.available_exercise_name_tv);
             mAvailableExerciseFavorite = itemView.findViewById(R.id.available_exercise_favorited_iv);
@@ -108,11 +108,11 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
     }
 
     // Other adapter methods
-    public AvailableExerciseItem getExerciseItem(int position) {
+    AvailableExerciseItem getExerciseItem(int position) {
         return getItem(position);
     }
 
-    public void setFullList(List<AvailableExerciseItem> fullList) {
+    void setFullList(List<AvailableExerciseItem> fullList) {
         mAvailableExerciseItemsFull = fullList;
     }
 
@@ -138,20 +138,27 @@ public class AvailableExerciseAdapter extends ListAdapter<AvailableExerciseItem,
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
-
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults results) {
-            List<AvailableExerciseItem> filteredList = new ArrayList<AvailableExerciseItem>((List) results.values);
+            List<AvailableExerciseItem> filteredList = new ArrayList<>();
+            if (results.values instanceof List){
+                for(int i = 0; i < ((List<?>)results.values).size(); i++){
+                    Object item = ((List<?>) results.values).get(i);
+                    if(item instanceof AvailableExerciseItem){
+                        filteredList.add((AvailableExerciseItem) item);
+                    }
+                }
+            }
             submitList(filteredList);
         }
     };
 
     // On click interface
     public interface OnItemClickListener {
-        public void onClick(View view, int position);
-        public boolean onLongClick(View view, int position);
+        void onClick(View view, int position);
+        boolean onLongClick(View view, int position);
     }
 }

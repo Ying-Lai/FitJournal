@@ -1,6 +1,9 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,11 +14,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,9 +36,11 @@ import java.util.List;
 
 public class WorkoutTodayFragment extends Fragment {
 
+    // Static fields
+    private static final String TAG = "WorkoutTodayFragment";
+
     // UI fields
     private RecyclerView mCompletedExerciseRV;
-    private MaterialToolbar mToolbar;
     private CompletedExerciseAdapter mAdapter;
     private ImageView mWorkoutInstructionsIV;
     private MaterialTextView mWorkoutInstructionsTV;
@@ -63,14 +67,22 @@ public class WorkoutTodayFragment extends Fragment {
         // Initialize fields and variables
         View root = inflater.inflate(R.layout.fragment_workout_today, container, false);
         mCompletedExerciseRV = root.findViewById(R.id.today_completed_exercise_rv);
-        mToolbar = root.findViewById(R.id.workout_today_tb);
+        MaterialToolbar toolbar = root.findViewById(R.id.workout_today_tb);
         mWorkoutInstructionsIV = root.findViewById(R.id.today_workout_instruction_iv);
         mWorkoutInstructionsTV = root.findViewById(R.id.today_workout_instruction_tv);
 
         // Setup app tool bar
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
+        if (getActivity() != null) {
+            ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayShowTitleEnabled(false);
+            } else {
+                Log.e(TAG, "onCreateView: Could not get reference to support action bar");
+            }
+        } else {
+            Log.e(TAG, "onCreateView: Could not get reference to activity");
+        }
         return root;
     }
 
@@ -105,7 +117,8 @@ public class WorkoutTodayFragment extends Fragment {
                     String dateInfo = TypeConverters.dateToString(LocalDate.now());
                     bundle.putString(MainActivity.DATE_INFO, dateInfo);
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout_today) {
+                    NavDestination currentDestination = Navigation.findNavController(view).getCurrentDestination();
+                    if (currentDestination != null && currentDestination.getId() == R.id.navigation_to_workout_today) {
                         Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                     }
                 }
@@ -114,10 +127,19 @@ public class WorkoutTodayFragment extends Fragment {
             @Override
             public boolean onLongClick(View view, int position) {
                 if (mActionMode == null) {
-                    mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
-                    mDeleteUsed = false;
-                    ((MainActivity)getActivity()).hideFloatingActionButton();
-                    ((MainActivity)getActivity()).hideBottomNavigationView();
+                    if (getActivity() != null) {
+                        mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
+                        mDeleteUsed = false;
+
+                        // Adjust recycler view padding
+                        mCompletedExerciseRV.setPadding(0,0,0, 0);
+
+                        // Hide views in delete action modes
+                        ((MainActivity)getActivity()).hideFloatingActionButton();
+                        ((MainActivity)getActivity()).hideBottomNavigationView();
+                    } else {
+                        Log.e(TAG, "onLongClick: Could not get reference to activity");
+                    }
                 }
                 CompletedExerciseItem currentExercise = mAdapter.getExerciseItem(position);
                 List<CompletedExerciseItem> newList = new ArrayList<>();
@@ -136,19 +158,17 @@ public class WorkoutTodayFragment extends Fragment {
         mCompletedExerciseRV.setAdapter(mAdapter);
 
         // Observe live data
-        mViewModel = ViewModelProviders.of(getActivity()).get(WorkoutViewModel.class);
-        mViewModel.getAllCompletedExercisesByDate(LocalDate.now()).observe(getViewLifecycleOwner(), new Observer<List<CompletedExerciseItem>>() {
-            @Override
-            public void onChanged(List<CompletedExerciseItem> completedExerciseItems) {
-                if (completedExerciseItems.size() != 0) {
-                    mWorkoutInstructionsIV.setVisibility(View.GONE);
-                    mWorkoutInstructionsTV.setVisibility(View.GONE);
-                } else {
-                    mWorkoutInstructionsIV.setVisibility(View.VISIBLE);
-                    mWorkoutInstructionsTV.setVisibility(View.VISIBLE);
-                }
-                mAdapter.submitList(completedExerciseItems);
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mViewModel.getAllCompletedExercisesByDate(LocalDate.now()).observe(getViewLifecycleOwner(), (List<CompletedExerciseItem> completedExerciseItems) -> {
+            if (completedExerciseItems.size() != 0) {
+                mWorkoutInstructionsIV.setVisibility(View.GONE);
+                mWorkoutInstructionsTV.setVisibility(View.GONE);
+            } else {
+                mWorkoutInstructionsIV.setVisibility(View.VISIBLE);
+                mWorkoutInstructionsTV.setVisibility(View.VISIBLE);
             }
+            mAdapter.submitList(completedExerciseItems);
+
         });
     }
 
@@ -197,8 +217,20 @@ public class WorkoutTodayFragment extends Fragment {
                 }
                 mAdapter.submitList(newList);
             }
-            ((MainActivity)getActivity()).showFloatingActionButton();
-            ((MainActivity)getActivity()).showBottomNavigationView();
+            if (getActivity() != null) {
+
+                // Readjust recycler view padding
+                Resources r = getResources();
+                int px = Math.round(TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 56,r.getDisplayMetrics()));
+                mCompletedExerciseRV.setPadding(0,0,0, px);
+
+                // Show hidden views when leaving delete action mode
+                ((MainActivity)getActivity()).showFloatingActionButton();
+                ((MainActivity)getActivity()).showBottomNavigationView();
+            } else {
+                Log.e(TAG, "onDestroyActionMode: Could not get reference to activity");
+            }
         }
     };
 }

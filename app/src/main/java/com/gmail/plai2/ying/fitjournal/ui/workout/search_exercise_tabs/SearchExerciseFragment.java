@@ -1,6 +1,7 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,16 +11,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
 import com.gmail.plai2.ying.fitjournal.room.ExerciseType;
 import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
-import com.gmail.plai2.ying.fitjournal.ui.workout.WorkoutViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 
@@ -29,33 +26,23 @@ import java.util.ArrayList;
 
 public class SearchExerciseFragment extends Fragment {
 
+    // Static fields
+    private static final String TAG = "SearchExerciseFragment";
+
     // Input fields
     private LocalDate mCurrentDateInput;
     private ExerciseType mExerciseTypeInput;
 
 
     // UI fields
-    private WorkoutViewModel mViewModel;
-    private MaterialToolbar mToolbar;
     private CustomViewPager mViewpager;
-    private TabLayout mTablayout;
+    private TabLayout mTabLayout;
 
     // Empty constructor
     public SearchExerciseFragment() {
         // To enable menu for this fragment
         setHasOptionsMenu(true);
     }
-
-   /* // New instance constructor
-    public static SearchExerciseFragment newInstance(ExerciseType exerciseTypeInput) {
-        SearchExerciseFragment fragment = new SearchExerciseFragment();
-        Bundle bundle = new Bundle();
-        ArrayList<String> exerciseInfo = new ArrayList<>();
-        exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(exerciseTypeInput)));
-        bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-        fragment.setArguments(bundle);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,32 +53,39 @@ public class SearchExerciseFragment extends Fragment {
         if (getArguments() != null) {
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
             mCurrentDateInput = TypeConverters.stringToDate(getArguments().getString(MainActivity.DATE_INFO));
-            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
+            if (exerciseInfo != null) mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Initialize fields and variables
-        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         View root = inflater.inflate(R.layout.fragment_search_exercise, container, false);
-        mToolbar = root.findViewById(R.id.search_exercise_tb);
+        MaterialToolbar toolbar = root.findViewById(R.id.search_exercise_tb);
         mViewpager = root.findViewById(R.id.search_exercise_vp);
-        mTablayout = root.findViewById(R.id.search_exercise_tabs);
+        mTabLayout = root.findViewById(R.id.search_exercise_tabs);
 
         // Setup app tool bar
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mExerciseTypeInput.getCategoryName());
+        if (getActivity() != null) {
+            ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(mExerciseTypeInput.getCategoryName());
+            } else {
+                Log.e(TAG, "onCreateView: Could not get reference to support action bar");
+            }
+        } else {
+            Log.e(TAG, "onCreateView: Could not get reference to activity");
+        }
 
         // Setup viewpager
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(FavoriteFragment.newInstance(mCurrentDateInput, mExerciseTypeInput), "Favorite");
         adapter.addFragment(CustomFragment.newInstance(mCurrentDateInput, mExerciseTypeInput), "Custom");
         adapter.addFragment(BrowseFragment.newInstance(mCurrentDateInput, mExerciseTypeInput), "Browse");
         mViewpager.setAdapter(adapter);
-        mTablayout.setupWithViewPager(mViewpager);
+        mTabLayout.setupWithViewPager(mViewpager);
         return root;
     }
 
@@ -106,17 +100,21 @@ public class SearchExerciseFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Navigation.findNavController(getView()).popBackStack();
+            if (getActivity() != null) {
+                ((MainActivity)getActivity()).getNavController().popBackStack();
+            } else {
+                Log.e(TAG, "onOptionsItemSelected: Could not get reference to activity");
+            }
         }
         return true;
     }
 
     // Other methods
-    public TabLayout getTabLayout() {
-        return mTablayout;
+    TabLayout getTabLayout() {
+        return mTabLayout;
     }
 
-    public CustomViewPager getViewPager() {
+    CustomViewPager getViewPager() {
         return mViewpager;
     }
 }

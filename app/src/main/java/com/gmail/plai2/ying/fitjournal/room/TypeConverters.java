@@ -28,8 +28,7 @@ public class TypeConverters {
     @TypeConverter
     public static String sessionListToString(List<Session> listOfSessions) {
         Gson gson = new Gson();
-        String json = gson.toJson(listOfSessions);
-        return json;
+        return gson.toJson(listOfSessions);
     }
 
     @TypeConverter
@@ -66,21 +65,5 @@ public class TypeConverters {
     @TypeConverter
     public static int exerciseTypeToInt(ExerciseType exerciseType) {
         return exerciseType.getCategory();
-    }
-
-    @TypeConverter
-    public static String statTypeToString(StatType statType) {
-        return statType.getCategoryName();
-    }
-
-    @TypeConverter
-    public static StatType stringToStatType(String statType) {
-        if (statType.equals(StatType.WEIGHT.getCategoryName())) {
-            return StatType.WEIGHT;
-        } else if (statType.equals(StatType.BODYFAT.getCategoryName())) {
-            return StatType.BODYFAT;
-        }else {
-            throw new IllegalArgumentException("Could not recognize this stat type");
-        }
     }
 }

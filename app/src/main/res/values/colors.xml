@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="navy_peony">#223A5E</color>
     <color name="sailor_blue">#2E4A62</color>
-    <color name="aspen_gold">#FFD662</color>
     <color name="evening_blue">#2A293E</color>
     <color name="reply_orange">#F9AA33</color>
     <color name="coconut_milk">#F0EDE5</color>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="ultra_violet">#6B5B95</color>
-    <color name="fruit_dove">#CE5B78</color>
-    <color name="sweet_lilac">#E8B5CE</color>
-    <color name="crocus_petal">#BE9EC9</color>
-    <color name="pink_lavender">#DBB1CD</color>
     <color name="dark_gray">#121212</color>
-    <color name="chili_pepper">#9B1B30</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">#808080</color>
     <color name="eclipse">#343148</color>
-    <color name="blue_stone">#577284</color>
-    <color name="airy_blue">#92B6D5</color>
 </resources>
 

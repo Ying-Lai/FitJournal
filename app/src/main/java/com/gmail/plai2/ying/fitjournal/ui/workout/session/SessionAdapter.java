@@ -26,10 +26,10 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
 
     // Conditional Fields
     private boolean mOnActivityCreated;
-    public boolean mOnNewSession;
+    boolean mOnNewSession;
 
     // Adapter constructor
-    public SessionAdapter(ExerciseType exerciseType, OnItemLongClickListener listener) {
+    SessionAdapter(ExerciseType exerciseType, OnItemLongClickListener listener) {
         super(DIFF_CALLBACK);
         mOnActivityCreated = true;
         mListener = listener;
@@ -62,7 +62,7 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
 
 
         // View holder constructor
-        public SessionHolder(View itemView, FirstEditTextListener firstEditTextListener, SecondEditTextListener secondEditTextListener) {
+        SessionHolder(View itemView, FirstEditTextListener firstEditTextListener, SecondEditTextListener secondEditTextListener) {
             super(itemView);
             // Initialize variables based on exercise type
             switch (mExerciseType) {
@@ -243,7 +243,7 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
 
         private int mPosition;
 
-        public void updatePosition(int position) {
+        private void updatePosition(int position) {
             mPosition = position;
         }
 
@@ -293,7 +293,7 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
 
         private int mPosition;
 
-        public void updatePosition(int position) {
+        private void updatePosition(int position) {
             mPosition = position;
         }
 
@@ -333,12 +333,12 @@ public class SessionAdapter extends ListAdapter<Session, SessionAdapter.SessionH
     }
 
     // Other adaptor methods
-    public Session getSessionItem(int position) {
+    Session getSessionItem(int position) {
         return getItem(position);
     }
 
     // On click interface
     public interface OnItemLongClickListener {
-        public boolean onLongClick(View view, int position);
+        boolean onLongClick(View view, int position);
     }
 }

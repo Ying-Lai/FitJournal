@@ -30,7 +30,7 @@ public interface AvailableExerciseDao {
 
 
     @Query("SELECT * FROM available_exercise_table WHERE  favorited = :favorited AND exercise_type = :exerciseType")
-    LiveData<List<AvailableExerciseItem>> getAllFavoritedAvailableExercise(boolean favorited, ExerciseType exerciseType);
+    LiveData<List<AvailableExerciseItem>> getAllFavoriteAvailableExercise(boolean favorited, ExerciseType exerciseType);
 
     @Query("SELECT * FROM available_exercise_table WHERE exercise_type = :exerciseType")
     LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(ExerciseType exerciseType);

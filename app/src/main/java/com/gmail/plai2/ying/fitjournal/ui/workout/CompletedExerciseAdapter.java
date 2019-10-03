@@ -47,8 +47,6 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
         }
     };
 
-
-
     class CompletedExerciseHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         // View holder fields
@@ -60,7 +58,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
         private View mCompletedExerciseDivider;
 
         // View holder constructor
-        public CompletedExerciseHolder(View itemView) {
+        CompletedExerciseHolder(View itemView) {
              super(itemView);
              mCompletedExerciseTypeIcon = itemView.findViewById(R.id.completed_exercise_type_icon_civ);
              mCompletedExerciseName = itemView.findViewById(R.id.completed_exercise_name_tv);
@@ -97,36 +95,40 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
     @Override
     public void onBindViewHolder(@NonNull CompletedExerciseHolder holder, int position) {
         CompletedExerciseItem currentCompletedExerciseItem = getItem(position);
-        String description = "";
+        StringBuilder description = new StringBuilder();
+        String currentInfo;
         List<Session> listOfSessions = currentCompletedExerciseItem.getMListOfSessions();
         if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.CARDIO) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_cardio_session);
             for (int i=0; i<listOfSessions.size(); i++) {
                 if (i == listOfSessions.size() -1) {
-                    description += listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity()+"%";
+                    currentInfo = listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity()+"%";
                 } else {
-                    description += listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity() + "%, ";
+                    currentInfo = listOfSessions.get(i).getDuration() + " min x " + listOfSessions.get(i).getIntensity() + "%, ";
                 }
+                description.append(currentInfo);
             }
         } else if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.STRENGTH) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_strength_session);
             for (int i=0; i<listOfSessions.size(); i++) {
                 String repOrReps = (listOfSessions.get(i).getReps() == 1) ? " rep x " : " reps x ";
                 if (i == listOfSessions.size() -1) {
-                    description += listOfSessions.get(i).getReps() + repOrReps + listOfSessions.get(i).getWeight()+" lbs.";
+                    currentInfo = listOfSessions.get(i).getReps() + repOrReps + listOfSessions.get(i).getWeight()+" lbs.";
                 } else {
-                    description += listOfSessions.get(i).getReps() + repOrReps + listOfSessions.get(i).getWeight() + " lbs, ";
+                    currentInfo = listOfSessions.get(i).getReps() + repOrReps + listOfSessions.get(i).getWeight() + " lbs, ";
                 }
+                description.append(currentInfo);
             }
         } else if (currentCompletedExerciseItem.getMExerciseType() == ExerciseType.CALISTHENICS) {
             holder.mCompletedExerciseTypeIcon.setImageResource(R.drawable.ic_calistenics_session);
             for (int i=0; i<listOfSessions.size(); i++) {
                 String repOrReps = (listOfSessions.get(i).getReps() == 1) ? " rep" : " reps";
                 if (i == listOfSessions.size() -1) {
-                    description += listOfSessions.get(i).getReps() + repOrReps;
+                    currentInfo = listOfSessions.get(i).getReps() + repOrReps;
                 } else {
-                    description += listOfSessions.get(i).getReps() + repOrReps + ", ";
+                    currentInfo = listOfSessions.get(i).getReps() + repOrReps + ", ";
                 }
+                description.append(currentInfo);
             }
         }
         if (currentCompletedExerciseItem.getMNote() != null && !currentCompletedExerciseItem.getMNote().equals("")) {
@@ -141,7 +143,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
         formattedNote.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.mCompletedExerciseHasNote.setText(formattedNote);
         holder.mCompletedExerciseName.setText(currentCompletedExerciseItem.getMExerciseName());
-        holder.mCompletedExerciseDescription.setText(description);
+        holder.mCompletedExerciseDescription.setText(description.toString());
         if (currentCompletedExerciseItem.isChecked()) {
             holder.mCompletedExerciseCardView.setChecked(true);
         } else {
@@ -161,7 +163,7 @@ public class CompletedExerciseAdapter extends ListAdapter<CompletedExerciseItem,
 
     // On click interface
     public interface OnItemClickListener {
-        public void onClick(View view, int position);
-        public boolean onLongClick(View view, int position);
+        void onClick(View view, int position);
+        boolean onLongClick(View view, int position);
     }
 }

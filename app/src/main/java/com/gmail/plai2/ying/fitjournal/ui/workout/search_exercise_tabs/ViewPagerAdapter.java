@@ -1,7 +1,6 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
-import android.content.Context;
-
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -16,11 +15,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
     // Constructor
-    public ViewPagerAdapter(Context context, FragmentManager manager) {
+    ViewPagerAdapter(FragmentManager manager) {
         super(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
     @Override
+    @NonNull
     public Fragment getItem(int position) {
         return mFragmentList.get(position);
     }
@@ -36,7 +36,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     // Other adaptor methods
-    public void addFragment(Fragment fragment, String title) {
+    void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
     }

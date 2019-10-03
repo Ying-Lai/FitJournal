@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/completed_exercise_cv"
     style="@style/journal_card_view"
     android:layout_width="match_parent"
@@ -25,10 +24,10 @@
                 android:id="@+id/completed_exercise_type_icon_civ"
                 android:layout_width="70dp"
                 android:layout_height="50dp"
+                android:contentDescription="@string/exercise_image_description"
                 android:layout_centerVertical="true"
                 android:paddingStart="8dp"
-                android:paddingEnd="16dp"
-                android:src="@drawable/ic_calistenics_session" />
+                android:paddingEnd="16dp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/completed_exercise_name_tv"
@@ -38,7 +37,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
                 android:paddingBottom="4dp"
-                android:text="@string/full_placeholder"
                 android:textAppearance="@style/open_sans_title" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -47,9 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/completed_exercise_name_tv"
                 android:layout_toEndOf="@id/completed_exercise_type_icon_civ"
-                android:text="@string/full_placeholder"
                 android:textAppearance="@style/open_sans_body2" />
-
 
         </RelativeLayout>
 
@@ -65,7 +61,6 @@
             android:paddingTop="4dp"
             android:paddingEnd="16dp"
             android:paddingBottom="4dp"
-            android:text="@string/full_placeholder"
             android:textAppearance="@style/open_sans_body2" />
 
     </LinearLayout>

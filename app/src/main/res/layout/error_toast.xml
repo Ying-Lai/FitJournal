@@ -14,4 +14,4 @@
     android:paddingBottom="8dp"
     android:text="@string/toast_error_message"
     android:textColor="@android:color/white"
-    android:textSize="16dp" />
+    android:textSize="16sp" />

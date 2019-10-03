@@ -5,17 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="10"
-        android:orientation="vertical">
+        android:layout_height="match_parent" >
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/stats_ab"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:fitsSystemWindows="true"
+            app:layout_constraintTop_toTopOf="parent"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -26,6 +25,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/logo_image_description"
                     android:src="@drawable/ic_fitjournal_outline" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -40,12 +40,14 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/today_stats_cv"
             style="@style/journal_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/card_view_margin"
             android:layout_marginStart="@dimen/card_view_margin"
             android:layout_marginEnd="@dimen/card_view_margin"
+            app:layout_constraintTop_toBottomOf="@id/stats_ab"
             android:layout_marginBottom="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="Weight"
+                    android:text="@string/body_weight"
                     android:textAppearance="@style/open_sans_body3"
                     app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_33percent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -100,7 +102,7 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Body Fat"
+                    android:text="@string/body_fat"
                     android:textAppearance="@style/open_sans_body3"
                     app:layout_constraintEnd_toStartOf="@id/vertical_guideline_66percent"
                     app:layout_constraintStart_toEndOf="@id/vertical_guideline_33percent"
@@ -147,89 +149,105 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/journal_card_view"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontal_guideline_56dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="56dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="4.4">
+            app:layout_constraintTop_toBottomOf="@id/today_stats_cv"
+            app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_56dp"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                style="@style/journal_card_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/body_weight_w_units"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="2dp"
-                    android:gravity="start"
-                    android:textAppearance="@style/open_sans_body2" />
-
-                <View
-                    style="@style/Divider" />
-
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/weight_chart"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp" />
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/body_weight_w_units"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="2dp"
+                        android:gravity="start"
+                        android:textAppearance="@style/open_sans_body2" />
 
-        </com.google.android.material.card.MaterialCardView>
+                    <View
+                        style="@style/Divider" />
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/journal_card_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="4.4">
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/weight_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp" />
 
-            <LinearLayout
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/journal_card_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="2dp"
-                    android:gravity="start"
-                    android:text="@string/body_fat_w_units"
-                    android:textAppearance="@style/open_sans_body2" />
-
-                <View
-                    style="@style/Divider" />
-
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/fat_chart"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp" />
-            </LinearLayout>
+                    android:orientation="vertical">
 
-        </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="2dp"
+                        android:gravity="start"
+                        android:text="@string/body_fat_w_units"
+                        android:textAppearance="@style/open_sans_body2" />
 
-    </LinearLayout>
+                    <View
+                        style="@style/Divider" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/fat_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

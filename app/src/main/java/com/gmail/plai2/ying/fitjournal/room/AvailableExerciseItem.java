@@ -16,7 +16,7 @@ public class AvailableExerciseItem {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "exercise_name")
-    private String mExerciseName;
+    private String mExerciseName = "";
 
     @ColumnInfo(name = "favorited")
     private boolean mFavorited;
@@ -32,10 +32,10 @@ public class AvailableExerciseItem {
     }
 
     // General constructor for available exercise item
-    public AvailableExerciseItem(ExerciseType type, String exerciseName, boolean favorite, boolean custom) {
+    public AvailableExerciseItem(ExerciseType type, @NonNull String exerciseName, boolean favorited, boolean custom) {
         mExerciseType = type;
         mExerciseName = exerciseName;
-        mFavorited = favorite;
+        mFavorited = favorited;
         mCustom = custom;
         mIsChecked = false;
     }
@@ -50,7 +50,7 @@ public class AvailableExerciseItem {
     }
 
     // Getters and setters for fields
-    public ExerciseType getMExerciseType() {
+    ExerciseType getMExerciseType() {
         return mExerciseType;
     }
 

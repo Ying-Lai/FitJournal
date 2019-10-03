@@ -1,9 +1,11 @@
 package com.gmail.plai2.ying.fitjournal.ui.calendar;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,11 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavArgument;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,12 +42,14 @@ import java.util.List;
 
 public class WorkoutAnotherDayFragment extends Fragment {
 
+    // Static fields
+    private static final String TAG = "WorkoutAnotherDayFragment";
+
     // Input fields
     private LocalDate mCurrentDateInput;
 
     // UI fields
     private RecyclerView mCompletedExerciseRV;
-    private MaterialToolbar mToolbar;
     private CompletedExerciseAdapter mAdapter;
     private ImageView mWorkoutInstructionsIV;
     private MaterialTextView mWorkoutInstructionsTV;
@@ -64,14 +67,21 @@ public class WorkoutAnotherDayFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // To enable menu for this fragment
-        setHasOptionsMenu(true);
         // Parse through bundle
         if (getArguments() != null) {
             mCurrentDateInput = TypeConverters.stringToDate(getArguments().getString(MainActivity.DATE_INFO));
         }
         NavArgument dateArgument = new NavArgument.Builder().setDefaultValue(TypeConverters.dateToString(mCurrentDateInput)).build();
-        ((MainActivity)getActivity()).getNavController().getCurrentDestination().addArgument(MainActivity.DATE_INFO, dateArgument); // Reconsider Navigation.findNavController(view)
+        if (getActivity() != null) {
+            NavDestination navDestination = ((MainActivity)getActivity()).getNavController().getCurrentDestination();
+            if (navDestination != null) {
+                navDestination.addArgument(MainActivity.DATE_INFO, dateArgument);
+            } else {
+                Log.e(TAG, "onCreate: Could not get reference to current destination");
+            }
+        } else {
+            Log.e(TAG, "onCreate: Could not get reference to activity");
+        }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -79,16 +89,24 @@ public class WorkoutAnotherDayFragment extends Fragment {
         // Initialize fields and variables
         View root = inflater.inflate(R.layout.fragment_workout_another_day, container, false);
         mCompletedExerciseRV = root.findViewById(R.id.another_day_completed_exercise_rv);
-        mToolbar = root.findViewById(R.id.workout_another_day_tb);
+        MaterialToolbar toolbar = root.findViewById(R.id.workout_another_day_tb);
         mWorkoutInstructionsIV = root.findViewById(R.id.another_day_workout_instruction_iv);
         mWorkoutInstructionsTV = root.findViewById(R.id.another_day_workout_instruction_tv);
 
         // Setup app tool bar
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        String formattedCurrentDate = mCurrentDateInput.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM.MEDIUM));
-        actionBar.setTitle(formattedCurrentDate);
+        if (getActivity() != null) {
+            ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                String formattedCurrentDate = mCurrentDateInput.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
+                actionBar.setTitle(formattedCurrentDate);
+            } else {
+                Log.e(TAG, "onCreateView: Could not get reference to support action bar");
+            }
+        } else {
+            Log.e(TAG, "onCreateView: Could not get reference to activity");
+        }
         return root;
     }
 
@@ -123,7 +141,8 @@ public class WorkoutAnotherDayFragment extends Fragment {
                     exerciseInfo.add(TypeConverters.sessionListToString(currentCompletedExercise.getMListOfSessions()));
                     exerciseInfo.add(currentCompletedExercise.getMNote());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_workout_another_day) {
+                    NavDestination currentDestination = Navigation.findNavController(view).getCurrentDestination();
+                    if (currentDestination != null && currentDestination.getId() == R.id.navigation_to_workout_another_day) {
                         Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                     }
                 }
@@ -132,10 +151,19 @@ public class WorkoutAnotherDayFragment extends Fragment {
             @Override
             public boolean onLongClick(View view, int position) {
                 if (mActionMode == null) {
-                    mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
-                    mDeleteUsed = false;
-                    ((MainActivity)getActivity()).hideFloatingActionButton();
-                    ((MainActivity)getActivity()).hideBottomNavigationView();
+                    if (getActivity() != null) {
+                        mActionMode = ((MainActivity)getActivity()).startSupportActionMode(mActionModeCallBack);
+                        mDeleteUsed = false;
+
+                        // Adjust recycler view padding
+                        mCompletedExerciseRV.setPadding(0,0,0, 0);
+
+                        // Hide views in delete action modes
+                        ((MainActivity)getActivity()).hideFloatingActionButton();
+                        ((MainActivity)getActivity()).hideBottomNavigationView();
+                    } else {
+                        Log.e(TAG, "onLongClick: Could not get reference to activity");
+                    }
                 }
                 CompletedExerciseItem currentExercise = mAdapter.getExerciseItem(position);
                 List<CompletedExerciseItem> newList = new ArrayList<>();
@@ -154,24 +182,20 @@ public class WorkoutAnotherDayFragment extends Fragment {
         mCompletedExerciseRV.setAdapter(mAdapter);
 
         // Observe live data
-        mViewModel = ViewModelProviders.of(getActivity()).get(WorkoutViewModel.class);
-        mViewModel.getAllCompletedExercisesByDate(mCurrentDateInput).observe(getViewLifecycleOwner(), new Observer<List<CompletedExerciseItem>>() {
-            @Override
-            public void onChanged(List<CompletedExerciseItem> completedExerciseItems) {
-                if (completedExerciseItems.size() != 0) {
-                    mWorkoutInstructionsIV.setVisibility(View.GONE);
-                    mWorkoutInstructionsTV.setVisibility(View.GONE);
-                } else {
-                    mWorkoutInstructionsIV.setVisibility(View.VISIBLE);
-                    mWorkoutInstructionsTV.setVisibility(View.VISIBLE);
-                }
-                mAdapter.submitList(completedExerciseItems);
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mViewModel.getAllCompletedExercisesByDate(mCurrentDateInput).observe(getViewLifecycleOwner(), (List<CompletedExerciseItem> completedExerciseItems) -> {
+            if (completedExerciseItems.size() != 0) {
+                mWorkoutInstructionsIV.setVisibility(View.GONE);
+                mWorkoutInstructionsTV.setVisibility(View.GONE);
+            } else {
+                mWorkoutInstructionsIV.setVisibility(View.VISIBLE);
+                mWorkoutInstructionsTV.setVisibility(View.VISIBLE);
             }
+            mAdapter.submitList(completedExerciseItems);
         });
     }
 
     // Setup action mode
-
     private ActionMode.Callback mActionModeCallBack = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -215,23 +239,32 @@ public class WorkoutAnotherDayFragment extends Fragment {
                 }
                 mAdapter.submitList(newList);
             }
-            ((MainActivity)getActivity()).showFloatingActionButton();
-            ((MainActivity)getActivity()).showBottomNavigationView();
+            if (getActivity() != null) {
+
+                // Readjust recycler view padding
+                Resources r = getResources();
+                int px = Math.round(TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 56,r.getDisplayMetrics()));
+                mCompletedExerciseRV.setPadding(0,0,0, px);
+
+                // Show hidden views when leaving delete action mode
+                ((MainActivity)getActivity()).showFloatingActionButton();
+                ((MainActivity)getActivity()).showBottomNavigationView();
+            } else {
+                Log.e(TAG, "onDestroyActionMode: Could not get reference to activity");
+            }
         }
     };
 
-    // Setup menu options
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.workout_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
+    // Menu items selected listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            ((MainActivity)getActivity()).getNavController().popBackStack();
+            if (getActivity() != null) {
+                ((MainActivity)getActivity()).getNavController().popBackStack();
+            } else {
+                Log.e(TAG, "onOptionsItemSelected: Could not get reference to activity");
+            }
         }
         return true;
     }

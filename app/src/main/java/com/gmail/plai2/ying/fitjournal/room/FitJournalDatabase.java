@@ -2,7 +2,6 @@ package com.gmail.plai2.ying.fitjournal.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.MonthDisplayHelper;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -15,13 +14,9 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static java.util.Calendar.MONTH;
 
 @Database(entities = {CompletedExerciseItem.class, AvailableExerciseItem.class, Stat.class}, version = 1, exportSchema = false)
 @androidx.room.TypeConverters({TypeConverters.class})
@@ -67,18 +62,17 @@ public abstract class FitJournalDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
 
             // Add initial available exercise info
-            String cardio[] = {"Walking", "Jogging", "Cycling", "Swimming", "Rowing", "Dancing", "Tennis", "Kickboxing", "Stair Climbing", "Jump Rope", "Skating", "Basketball", "Football", "Soccer", "Rugby",
-                    "Squash", "Hockey", "Treadmill", "Jumping Jacks", "Ping Pong", "Racketball", "Frisbee", "Golf", "Mini-golf"};
-            String strength[] = {"Bench Press", "Weighted Squats", "Leg Press", "Deadlift", "Leg Extension", "Leg Curl", "Standing Calf Raises", "Seat Calf Raises", "Chest Fly", "Bent-over Row", "Upright Row",
+            String[] cardio = {"Walking", "Jogging", "Cycling", "Swimming", "Rowing", "Dancing", "Tennis", "Kickboxing", "Stair Climbing", "Jump Rope", "Skating", "Basketball", "Football", "Soccer", "Rugby",
+                    "Squash", "Hockey", "Treadmill", "Jumping Jacks", "Ping Pong", "Racquetball", "Frisbee", "Golf", "Mini-golf"};
+            String[] strength = {"Bench Press", "Weighted Squats", "Leg Press", "Deadlift", "Leg Extension", "Leg Curl", "Standing Calf Raises", "Seat Calf Raises", "Chest Fly", "Bent-over Row", "Upright Row",
                     "Shoulder Press", "Shoulder Fly", "Lateral Raise", "Shoulder Shrug", "Triceps Extension", "Biceps Curl", "Weighted Crunch", "Weighted Leg Raise", "Back Extension"};
-            String calisthenics[] = {"Muscle-ups", "Squat Jumps", "Front Lever", "Push-ups", "Pull-ups", "Chin-ups", "Squats", "Back Lever", "Handstand", "Dips", "Hyper-extensions", "Leg Raises", "Planks",
+            String[] calisthenics = {"Muscle-ups", "Squat Jumps", "Front Lever", "Push-ups", "Pull-ups", "Chin-ups", "Squats", "Back Lever", "Handstand", "Dips", "Hyper-extensions", "Leg Raises", "Planks",
                     "Burpees", "L-sits", "Lunge", "Crunch", "Russian Twist", "Mountain Climbers", "Bear Crawls"};
-            List<String> listOfCardio = Arrays.asList(cardio);
-            List<String> listOfStrength = Arrays.asList(strength);
-            List<String> listOfCalisthenics = Arrays.asList(calisthenics);
-            Set<String> setOfCardio = new TreeSet<String>(listOfCardio);
-            Set<String> setOfStrength = new TreeSet<String>(listOfStrength);
-            Set<String> setOfCalisthenics = new TreeSet<String>(listOfCalisthenics);
+
+            Set<String> setOfCardio = new TreeSet<>(Arrays.asList(cardio));
+            Set<String> setOfStrength = new TreeSet<>(Arrays.asList(strength));
+            Set<String> setOfCalisthenics = new TreeSet<>(Arrays.asList(calisthenics));
+
             for (String exerciseName: setOfCardio) {
                 mAvailableExerciseDao.insert(new AvailableExerciseItem(ExerciseType.CARDIO, exerciseName, false, false));
             }
@@ -115,15 +109,15 @@ public abstract class FitJournalDatabase extends RoomDatabase {
             org.threeten.bp.LocalDate date12 = org.threeten.bp.LocalDate.of(2019, Calendar.SEPTEMBER,23);
             mStatDao.insert(new Stat(date12, 111, 12));
 
-            List<Session> sess1 = new ArrayList<>();
-            sess1.add(new Session(ExerciseType.CARDIO, 10, 10));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date1, sess1, ""));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date2, sess1, ""));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date3, sess1, ""));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date4, sess1, ""));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date5, sess1, ""));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date6, sess1, ""));
-            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date7, sess1, ""));
+            List<Session> sessions = new ArrayList<>();
+            sessions.add(new Session(ExerciseType.CARDIO, 10, 10));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date1, sessions, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date2, sessions, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date3, sessions, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date4, sessions, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date5, sessions, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date6, sessions, ""));
+            mCompletedExerciseDao.insert(new CompletedExerciseItem(ExerciseType.CARDIO, "Running", date7, sessions, ""));
 
             return null;
         }

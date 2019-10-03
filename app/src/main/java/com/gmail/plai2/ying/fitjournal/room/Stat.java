@@ -3,7 +3,6 @@ package com.gmail.plai2.ying.fitjournal.room;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import org.threeten.bp.LocalDate;
@@ -15,7 +14,7 @@ public class Stat {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "stat_date")
-    private LocalDate mDate;
+    private LocalDate mDate = LocalDate.now();
 
     @ColumnInfo(name = "weight")
     private int mWeight;
@@ -23,15 +22,12 @@ public class Stat {
     @ColumnInfo(name = "body_fat")
     private int mBodyFat;
 
-    @Ignore
-    private final int EMPTY = -1;
-
     // Empty constructor
     public Stat() {
     }
 
     // General constructor
-    public Stat(org.threeten.bp.LocalDate date, int weight, int fat) {
+    public Stat(@NonNull LocalDate date, int weight, int fat) {
         mDate = date;
         mWeight = weight;
         mBodyFat = fat;
@@ -42,7 +38,7 @@ public class Stat {
         return mDate;
     }
 
-    public void setMDate(org.threeten.bp.LocalDate mStatDate) {
+    public void setMDate(LocalDate mStatDate) {
         this.mDate = mStatDate;
     }
 

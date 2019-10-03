@@ -11,7 +11,6 @@ import com.gmail.plai2.ying.fitjournal.room.Stat;
 
 import org.threeten.bp.LocalDate;
 
-import java.util.Date;
 import java.util.List;
 
 public class StatsViewModel extends AndroidViewModel {
@@ -48,11 +47,11 @@ public class StatsViewModel extends AndroidViewModel {
         mRepository.deleteAlStats();
     }
 
-    public LiveData<List<Stat>> getStatByDate(org.threeten.bp.LocalDate date) {
+    public LiveData<List<Stat>> getStatByDate(LocalDate date) {
         return mRepository.getStatByDate(date);
     }
 
-    public LiveData<List<Stat>> getAllStats() {
+    LiveData<List<Stat>> getAllStats() {
         return mAllStat;
     }
 }

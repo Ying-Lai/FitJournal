@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/available_exercise_cv"
     style="@style/journal_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
+    android:layout_marginStart="@dimen/card_view_margin"
+    android:layout_marginEnd="@dimen/card_view_margin"
     android:layout_marginBottom="2dp"
     android:layout_marginTop="2dp"
     android:checkable="true">
@@ -21,9 +20,10 @@
             android:id="@+id/available_exercise_favorited_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@id/available_exercise_name_tv"
             android:layout_alignTop="@id/available_exercise_name_tv"
+            android:layout_alignBottom="@id/available_exercise_name_tv"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/favorite_image_description"
             android:src="@drawable/ic_favorite_unpressed" />
 
         <TextView
@@ -36,7 +36,6 @@
             android:gravity="center_vertical"
             android:longClickable="true"
             android:paddingBottom="6dp"
-            android:text="@string/full_placeholder"
             android:textAppearance="@style/open_sans_body1" />
 
     </RelativeLayout>

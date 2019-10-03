@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
@@ -35,17 +35,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-
 public class CalendarFragment extends Fragment {
 
     // Input fields
-    private LocalDate mSelectedDate;
-    private Set<LocalDate> mWorkoutDates = new HashSet<LocalDate>();
+    private Set<LocalDate> mWorkoutDates = new HashSet<>();
 
     // UI fields
-    private WorkoutViewModel mViewModel;
     private CalendarView mCalendarView;
     private DateTimeFormatter mMonthFormatter;
     private TextView mCalendarMonthTV;
@@ -66,8 +61,8 @@ public class CalendarFragment extends Fragment {
 
         // Set boundaries for calendar
         YearMonth currentMonth = YearMonth.now();
-        YearMonth firstMonth = currentMonth.minusMonths(12);
-        YearMonth lastMonth = currentMonth.plusMonths(1);
+        YearMonth firstMonth = currentMonth.minusMonths(36);
+        YearMonth lastMonth = currentMonth.plusMonths(12);
         mCalendarView.setup(firstMonth, lastMonth, DayOfWeek.SUNDAY);
         mCalendarView.scrollToMonth(currentMonth);
         mCalendarView.setMaxRowCount(6);
@@ -80,31 +75,30 @@ public class CalendarFragment extends Fragment {
             private View mCalendarDotV;
             private FrameLayout mCalendarDayBackgroundFL;
 
-            public DayViewContainer(@NonNull View view) {
+            private DayViewContainer(@NonNull View view) {
                 super(view);
                 mCalendarDayBackgroundFL = view.findViewById(R.id.calendar_day_fl);
                 mCalendarDayTV = view.findViewById(R.id.calendar_day_tv);
                 mCalendarDotV = view.findViewById(R.id.calendar_dot_v);
-                mCalendarDayTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        String dateInfo = TypeConverters.dateToString(mCalendarDay.getDate());
-                        bundle.putString(MainActivity.DATE_INFO, dateInfo);
-                        if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_to_calendar) {
-                            if (mCalendarDay.getDate().equals(LocalDate.now())) {
-                                Navigation.findNavController(view).navigate(R.id.to_workout_today);
-                            } else {
-                                Navigation.findNavController(view).navigate(R.id.to_workout_another_day, bundle);
-                            }
+
+                // On click listener
+                mCalendarDayTV.setOnClickListener((View dayView) -> {
+                    Bundle bundle = new Bundle();
+                    String dateInfo = TypeConverters.dateToString(mCalendarDay.getDate());
+                    bundle.putString(MainActivity.DATE_INFO, dateInfo);
+                    NavDestination currentDestination = Navigation.findNavController(dayView).getCurrentDestination();
+                    if (currentDestination != null && currentDestination.getId() == R.id.navigation_to_calendar) {
+                        if (mCalendarDay.getDate().equals(LocalDate.now())) {
+                            Navigation.findNavController(dayView).navigate(R.id.to_workout_today);
+                        } else {
+                            Navigation.findNavController(dayView).navigate(R.id.to_workout_another_day, bundle);
                         }
                     }
                 });
             }
         }
 
-
-
+        // Day binder
         mCalendarView.setDayBinder(new DayBinder<DayViewContainer>() {
             @NonNull
             @Override
@@ -138,14 +132,13 @@ public class CalendarFragment extends Fragment {
                 }
             }
         });
-        mCalendarView.setMonthScrollListener(new Function1<CalendarMonth, Unit>() {
-            @Override
-            public Unit invoke(CalendarMonth calendarMonth) {
-                String year = calendarMonth.getYearMonth().getYear() + "";
-                mCalendarYearTV.setText(year);
-                mCalendarMonthTV.setText(mMonthFormatter.format(calendarMonth.getYearMonth()));
-                return null;
-            }
+
+        // Month scroll listener
+        mCalendarView.setMonthScrollListener((CalendarMonth calendarMonth) -> {
+            String year = calendarMonth.getYearMonth().getYear() + "";
+            mCalendarYearTV.setText(year);
+            mCalendarMonthTV.setText(mMonthFormatter.format(calendarMonth.getYearMonth()));
+            return null;
         });
         return root;
     }
@@ -154,15 +147,12 @@ public class CalendarFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Observe live data
-        mViewModel = ViewModelProviders.of(getActivity()).get(WorkoutViewModel.class);
-        mViewModel.getAllCompletedExercises().observe(getViewLifecycleOwner(), new Observer<List<CompletedExerciseItem>>() {
-            @Override
-            public void onChanged(List<CompletedExerciseItem> completedExerciseItems) {
-                for (CompletedExerciseItem completedExerciseItem : completedExerciseItems) {
-                    mWorkoutDates.add(completedExerciseItem.getMExerciseDate());
-                }
-                mCalendarView.notifyCalendarChanged();
+        WorkoutViewModel mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mViewModel.getAllCompletedExercises().observe(getViewLifecycleOwner(), (List<CompletedExerciseItem> completedExerciseItems) -> {
+            for (CompletedExerciseItem completedExerciseItem : completedExerciseItems) {
+                mWorkoutDates.add(completedExerciseItem.getMExerciseDate());
             }
+            mCalendarView.notifyCalendarChanged();
         });
     }
 

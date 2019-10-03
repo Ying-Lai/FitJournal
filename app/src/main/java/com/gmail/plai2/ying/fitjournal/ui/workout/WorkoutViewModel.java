@@ -50,7 +50,7 @@ public class WorkoutViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, ExerciseType exerciseType) {
-        return mRepository.getAllAvailableFavoritedExercise(favorited, exerciseType);
+        return mRepository.getAllAvailableFavoriteExercise(favorited, exerciseType);
     }
 
     public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(ExerciseType exerciseType) {

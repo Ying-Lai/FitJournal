@@ -9,14 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import android.view.LayoutInflater;
 import android.view.View;
-
-import android.widget.Button;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -25,12 +23,11 @@ import java.util.ArrayList;
 public class NoteDialogFragment extends AppCompatDialogFragment {
 
     // Input fields
+    private Context mContext;
     private String mNoteInput;
 
     // UI fields
     private TextInputEditText mExerciseNoteTIET;
-    private Button mSaveButton;
-    private Button mCancelButton;
 
     // Listener
     private NoteListener mListener;
@@ -55,16 +52,15 @@ public class NoteDialogFragment extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         // Initialize fields and variables
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_note_dialog,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = View.inflate(mContext, R.layout.fragment_note_dialog,null);
         if (getArguments() != null) {
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mNoteInput = exerciseInfo.get(0);
+            if (exerciseInfo != null) mNoteInput = exerciseInfo.get(0);
         }
         mExerciseNoteTIET = view.findViewById(R.id.add_note_tiet);
-        mSaveButton = view.findViewById(R.id.save_note_btn);
-        mCancelButton = view.findViewById(R.id.cancel_note_btn);
+        MaterialButton saveButton = view.findViewById(R.id.save_note_btn);
+        MaterialButton cancelButton = view.findViewById(R.id.cancel_note_btn);
 
         // Update note if there is already input
         if (mNoteInput != null) {
@@ -72,28 +68,23 @@ public class NoteDialogFragment extends AppCompatDialogFragment {
         }
 
         // On click listeners
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mNoteInput = mExerciseNoteTIET.getText().toString();
-                mListener.sendNote(mNoteInput);
-                dismiss();
-            }
+        saveButton.setOnClickListener((View saveButtonView) -> {
+            mNoteInput = mExerciseNoteTIET.getText().toString();
+            mListener.sendNote(mNoteInput);
+            dismiss();
         });
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        cancelButton.setOnClickListener((View cancelButtonView) -> dismiss());
+
+        // Create view
         builder.setView(view)
                 .setTitle(getResources().getString(R.string.add_note));
         return builder.create();
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext = context;
         try {
             mListener = (NoteListener) getTargetFragment();
         } catch (ClassCastException e) {

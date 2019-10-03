@@ -6,9 +6,6 @@ import com.gmail.plai2.ying.fitjournal.room.Stat;
 
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.List;
 
 public class CustomDateFormatter extends IndexAxisValueFormatter {
@@ -17,7 +14,7 @@ public class CustomDateFormatter extends IndexAxisValueFormatter {
     private List<Stat> mStatList;
 
     // Constructor
-    public CustomDateFormatter(List<Stat> statList) {
+    CustomDateFormatter(List<Stat> statList) {
         mStatList = statList;
     }
 

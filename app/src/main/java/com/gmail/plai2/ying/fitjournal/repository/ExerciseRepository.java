@@ -52,8 +52,8 @@ public class ExerciseRepository {
         return mAvailableExerciseDao.getAllCustomAvailableExercise(custom, exerciseType);
     }
 
-    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoritedExercise(boolean favorited, ExerciseType exerciseType) {
-        return mAvailableExerciseDao.getAllFavoritedAvailableExercise(favorited, exerciseType);
+    public LiveData<List<AvailableExerciseItem>> getAllAvailableFavoriteExercise(boolean favorite, ExerciseType exerciseType) {
+        return mAvailableExerciseDao.getAllFavoriteAvailableExercise(favorite, exerciseType);
     }
 
     public LiveData<List<AvailableExerciseItem>> getAllAvailableExercises(ExerciseType exerciseType) {

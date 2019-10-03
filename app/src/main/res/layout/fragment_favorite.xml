@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workout.search_exercise_tabs.BrowseFragment">
+    tools:context=".ui.workout.search_exercise_tabs.FavoriteFragment">
 
     <ImageView
         android:id="@+id/favorite_instructions_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:contentDescription="@string/favorite_instructions_image_description"
         android:src="@drawable/ic_favorite_instructions"
         app:layout_constraintBottom_toTopOf="@+id/favorite_instructions_tv"
         app:layout_constraintEnd_toEndOf="parent"

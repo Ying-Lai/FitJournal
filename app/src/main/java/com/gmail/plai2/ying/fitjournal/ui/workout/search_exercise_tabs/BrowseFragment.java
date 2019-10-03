@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +47,7 @@ public class BrowseFragment extends Fragment {
     }
 
     // New instance constructor
-    public static BrowseFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
+    static BrowseFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
         BrowseFragment fragment = new BrowseFragment();
         Bundle bundle = new Bundle();
         String dateInfo = TypeConverters.dateToString(currentDateInput);
@@ -69,7 +69,8 @@ public class BrowseFragment extends Fragment {
             String dateInfo = getArguments().getString(MainActivity.DATE_INFO);
             mCurrentDateInput = TypeConverters.stringToDate(dateInfo);
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
+            if (exerciseInfo != null)
+                mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
 
@@ -77,7 +78,6 @@ public class BrowseFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         // Initialize fields and variables
         View root = inflater.inflate(R.layout.fragment_browse, container, false);
-        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         mAvailableExerciseRV = root.findViewById(R.id.browse_exercise_list_rv);
         return root;
     }
@@ -100,7 +100,8 @@ public class BrowseFragment extends Fragment {
                     exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(mExerciseTypeInput)));
                     exerciseInfo.add(currentAvailableExercise.getMExerciseName());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_search_exercise) {
+                    NavDestination currentDestination = Navigation.findNavController(view).getCurrentDestination();
+                    if (currentDestination != null && currentDestination.getId() == R.id.navigation_search_exercise) {
                         Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                     }
                 } else if (view.getId() == R.id.available_exercise_favorited_iv) {
@@ -122,12 +123,10 @@ public class BrowseFragment extends Fragment {
         mAvailableExerciseRV.setAdapter(mAdapter);
 
         // Observe live data
-        mViewModel.getAllAvailableExercises(mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
-            @Override
-            public void onChanged(List<AvailableExerciseItem> availableExerciseItems) {
-                mAdapter.setFullList(availableExerciseItems);
-                mAdapter.submitList(availableExerciseItems);
-            }
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mViewModel.getAllAvailableExercises(mExerciseTypeInput).observe(getViewLifecycleOwner(), (List<AvailableExerciseItem> availableExerciseItems) -> {
+            mAdapter.setFullList(availableExerciseItems);
+            mAdapter.submitList(availableExerciseItems);
         });
     }
 
@@ -137,7 +136,7 @@ public class BrowseFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.search_exercise_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search_menu_item);
-        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
+        SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

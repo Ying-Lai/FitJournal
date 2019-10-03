@@ -3,9 +3,7 @@ package com.gmail.plai2.ying.fitjournal.ui.stats;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +12,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.gmail.plai2.ying.fitjournal.MainActivity;
 import com.gmail.plai2.ying.fitjournal.R;
-import com.gmail.plai2.ying.fitjournal.room.StatType;
-import com.gmail.plai2.ying.fitjournal.room.TypeConverters;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -23,14 +20,13 @@ import java.util.ArrayList;
 public class AddStatDialogFragment extends AppCompatDialogFragment {
 
     // Input fields
+    private Context mContext;
     private String mWeightInput;
     private String mFatInput;
 
     // UI fields
     private TextInputEditText mWeightTIET;
-    private TextInputEditText mFatTiet;
-    private Button mSaveButton;
-    private Button mCancelButton;
+    private TextInputEditText mFatTIET;
 
     // Listener
     private StatListener mListener;
@@ -40,7 +36,7 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
     }
 
     // New instance constructor
-    public static AddStatDialogFragment newInstance(int weight, int fat) {
+    static AddStatDialogFragment newInstance(int weight, int fat) {
         AddStatDialogFragment fragment = new AddStatDialogFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> statInfo = new ArrayList<>();
@@ -64,60 +60,57 @@ public class AddStatDialogFragment extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         // Initialize fields and variables
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_add_stat_dialog,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = View.inflate(mContext, R.layout.fragment_add_stat_dialog,null);
         if (getArguments() != null) {
             ArrayList<String> statInfo = getArguments().getStringArrayList(MainActivity.STAT_INFO);
-            mWeightInput = statInfo.get(0);
-            mFatInput = statInfo.get(1);
+            if (statInfo != null) {
+                mWeightInput = statInfo.get(0);
+                mFatInput = statInfo.get(1);
+            }
         }
         mWeightTIET = view.findViewById(R.id.weight_input_tiet);
-        mFatTiet = view.findViewById(R.id.fat_input_tiet);
-        mSaveButton = view.findViewById(R.id.stat_save_btn);
-        mCancelButton = view.findViewById(R.id.stat_cancel_btn);
+        mFatTIET = view.findViewById(R.id.fat_input_tiet);
+        MaterialButton saveButton = view.findViewById(R.id.stat_save_btn);
+        MaterialButton cancelButton = view.findViewById(R.id.stat_cancel_btn);
 
         // Update note if there is already input
         if (!mWeightInput.equals("")) {
             mWeightTIET.setText(mWeightInput);
         }
         if (!mFatInput.equals("")) {
-            mFatTiet.setText((mFatInput));
+            mFatTIET.setText((mFatInput));
         }
 
+        
         // On click listeners
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int weight, fat;
-                if (mWeightTIET.getText().toString().equals("")) {
-                    weight = MainActivity.EMPTY;
-                } else {
-                    weight = Integer.parseInt(mWeightTIET.getText().toString());
-                }
-                if (mFatTiet.getText().toString().equals("")) {
-                    fat = MainActivity.EMPTY;
-                } else {
-                    fat = Integer.parseInt(mFatTiet.getText().toString());
-                }
-                mListener.sendStat(weight, fat);
-                dismiss();
+        saveButton.setOnClickListener((View saveButtonView) -> {
+            int weight, fat;
+            if (mWeightTIET.getText().toString().equals("")) {
+                weight = MainActivity.EMPTY;
+            } else {
+                weight = Integer.parseInt(mWeightTIET.getText().toString());
             }
-        });
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
+            if (mFatTIET.getText().toString().equals("")) {
+                fat = MainActivity.EMPTY;
+            } else {
+                fat = Integer.parseInt(mFatTIET.getText().toString());
             }
+            mListener.sendStat(weight, fat);
+            dismiss();
         });
+        cancelButton.setOnClickListener((cancelButtonView) -> dismiss());
+
+        // Create view
         builder.setView(view)
                 .setTitle(getResources().getString(R.string.update_stat_title));
         return builder.create();
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext = context;
         try {
             mListener = (StatListener) getTargetFragment();
         } catch (ClassCastException e) {

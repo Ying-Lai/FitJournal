@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workout.search_exercise_tabs.BrowseFragment">
+    tools:context=".ui.workout.search_exercise_tabs.CustomFragment">
 
     <ImageView
         android:id="@+id/custom_instructions_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:contentDescription="@string/custom_instructions_image_description"
         android:src="@drawable/ic_custom_instructions"
         app:layout_constraintBottom_toTopOf="@+id/custom_instruction_tv"
         app:layout_constraintEnd_toEndOf="parent"

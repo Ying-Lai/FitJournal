@@ -1,6 +1,7 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.search_exercise_tabs;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomFragment extends Fragment {
+
+    // Static fields
+    private static final String TAG = "CustomFragment";
 
     // Input fields
     private LocalDate mCurrentDateInput;
@@ -61,10 +65,11 @@ public class CustomFragment extends Fragment {
     }
 
     // New instance constructor
-    public static CustomFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
+    static CustomFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
         CustomFragment fragment = new CustomFragment();
         Bundle bundle = new Bundle();
         String dateInfo = TypeConverters.dateToString(currentDateInput);
+        bundle.putString(MainActivity.DATE_INFO, dateInfo);
         ArrayList<String> exerciseInfo = new ArrayList<>();
         exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(exerciseTypeInput)));
         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
@@ -82,7 +87,7 @@ public class CustomFragment extends Fragment {
             String dateInfo = getArguments().getString(MainActivity.DATE_INFO);
             mCurrentDateInput = TypeConverters.stringToDate(dateInfo);
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
+            if (exerciseInfo != null) mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
 
@@ -90,18 +95,18 @@ public class CustomFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         // Initialize fields and variables
         View root = inflater.inflate(R.layout.fragment_custom, container, false);
-        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
         mAvailableExerciseRV = root.findViewById(R.id.custom_exercise_list_rv);
         mCustomInstructionsTV = root.findViewById(R.id.custom_instruction_tv);
         mCustomInstructionsIV = root.findViewById(R.id.custom_instructions_iv);
         mAddCustomFAB = root.findViewById(R.id.add_custom_fab);
 
         // On click listeners
-        mAddCustomFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddCustomDialogFragment addCustomFragment = AddCustomDialogFragment.newInstance(mExerciseTypeInput);
+        mAddCustomFAB.setOnClickListener((View view) -> {
+            AddCustomDialogFragment addCustomFragment = AddCustomDialogFragment.newInstance(mExerciseTypeInput);
+            if (getFragmentManager() != null) {
                 addCustomFragment.show(getFragmentManager(), "add_custom");
+            } else {
+                Log.e(TAG, "startDialogFragment: Could not get reference to fragment manager");
             }
         });
         return root;
@@ -126,7 +131,8 @@ public class CustomFragment extends Fragment {
                         exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(mExerciseTypeInput)));
                         exerciseInfo.add(currentAvailableExercise.getMExerciseName());
                         bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                        if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_search_exercise) {
+                        NavDestination currentDestination = Navigation.findNavController(view).getCurrentDestination();
+                        if (currentDestination != null && currentDestination.getId() == R.id.navigation_search_exercise) {
                             Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                         }
                     } else if (view.getId() == R.id.available_exercise_favorited_iv) {
@@ -145,8 +151,12 @@ public class CustomFragment extends Fragment {
             @Override
             public boolean onLongClick(View view, int position) {
                 if (mActionMode == null) {
-                    mActionMode = ((MainActivity) getActivity()).startSupportActionMode(mActionModeCallBack);
-                    mDeleteUsed = false;
+                    if (getActivity() != null) {
+                        mActionMode = ((MainActivity) getActivity()).startSupportActionMode(mActionModeCallBack);
+                        mDeleteUsed = false;
+                    } else {
+                        Log.e(TAG, "onLongClick: Could not get reference to activity");
+                    }
 
                     // Hide FAB in delete action mode
                     mAddCustomFAB.hide();
@@ -181,19 +191,17 @@ public class CustomFragment extends Fragment {
         mAvailableExerciseRV.setAdapter(mAdapter);
 
         // Observe live data
-        mViewModel.getAllCustomAvailableExercise(true, mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
-            @Override
-            public void onChanged(List<AvailableExerciseItem> availableCustomExerciseItems) {
-                mAdapter.setFullList(availableCustomExerciseItems);
-                mAdapter.submitList(availableCustomExerciseItems);
-                // Hide instructions if the list is not empty
-                if (availableCustomExerciseItems.size() != 0) {
-                    mCustomInstructionsIV.setVisibility(View.GONE);
-                    mCustomInstructionsTV.setVisibility(View.GONE);
-                } else {
-                    mCustomInstructionsIV.setVisibility(View.VISIBLE);
-                    mCustomInstructionsTV.setVisibility(View.VISIBLE);
-                }
+        mViewModel = ViewModelProviders.of(this).get(WorkoutViewModel.class);
+        mViewModel.getAllCustomAvailableExercise(true, mExerciseTypeInput).observe(getViewLifecycleOwner(), (List<AvailableExerciseItem> availableCustomExerciseItems) -> {
+            mAdapter.setFullList(availableCustomExerciseItems);
+            mAdapter.submitList(availableCustomExerciseItems);
+            // Hide instructions if the list is not empty
+            if (availableCustomExerciseItems.size() != 0) {
+                mCustomInstructionsIV.setVisibility(View.GONE);
+                mCustomInstructionsTV.setVisibility(View.GONE);
+            } else {
+                mCustomInstructionsIV.setVisibility(View.VISIBLE);
+                mCustomInstructionsTV.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -269,7 +277,7 @@ public class CustomFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.search_exercise_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search_menu_item);
-        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
+        SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

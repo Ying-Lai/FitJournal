@@ -1,11 +1,12 @@
 package com.gmail.plai2.ying.fitjournal.room;
 
+import com.gmail.plai2.ying.fitjournal.MainActivity;
+
 public class Session {
 
     // Static fields
-    private static int EMPTY = -1;
     private static int BODY_WEIGHT = -2;
-    static private int sId = 0;
+    private static int sId = 0;
 
     // Non-static fields
     private ExerciseType mType;
@@ -27,16 +28,16 @@ public class Session {
         mId = sId++;
         switch (mType) {
             case CALISTHENICS:
-                mReps = EMPTY;
+                mReps = MainActivity.EMPTY;
                 mWeight = BODY_WEIGHT;
                 break;
             case CARDIO:
-                mDuration = EMPTY;
-                mIntensity = EMPTY;
+                mDuration = MainActivity.EMPTY;
+                mIntensity = MainActivity.EMPTY;
                 break;
             case STRENGTH:
-                mReps = EMPTY;
-                mWeight = EMPTY;
+                mReps = MainActivity.EMPTY;
+                mWeight = MainActivity.EMPTY;
                 break;
         }
     }

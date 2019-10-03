@@ -5,7 +5,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 public class FloatToIntegerFormatter extends ValueFormatter {
 
     // Constructor
-    public FloatToIntegerFormatter() {
+    FloatToIntegerFormatter() {
     }
 
     @Override

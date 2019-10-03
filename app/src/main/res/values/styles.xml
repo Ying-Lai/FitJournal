@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/evening_blue</item>
         <item name="colorPrimaryVariant">@color/evening_blue</item>
         <item name="colorSecondary">@color/reply_orange</item>
-        <item name="colorSecondaryVariant">@color/aspen_gold</item>
+        <item name="colorSecondaryVariant">@color/reply_orange</item>
         <item name="android:colorBackground">@color/coconut_milk</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="windowActionModeOverlay">true</item>

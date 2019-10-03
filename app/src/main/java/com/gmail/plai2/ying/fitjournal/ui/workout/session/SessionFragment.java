@@ -1,7 +1,10 @@
 package com.gmail.plai2.ying.fitjournal.ui.workout.session;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,6 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SessionFragment extends Fragment implements NoteDialogFragment.NoteListener {
+
+    // Static fields
+    private static final String TAG = "SessionFragment";
 
     // Input fields
     private LocalDate mCurrentDateInput;
@@ -76,14 +81,16 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         if (getArguments() != null) {
             mCurrentDateInput = TypeConverters.stringToDate(getArguments().getString(MainActivity.DATE_INFO));
             List<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
-            mExerciseNameInput = exerciseInfo.get(1);
-            mExerciseNoteInput = "";
-            if (exerciseInfo.size() > 2) {
-                mExerciseIdInput = Integer.parseInt(exerciseInfo.get(2));
-                mExerciseSessionInput = TypeConverters.stringToSessionList(exerciseInfo.get(3));
-                mExerciseNoteInput = exerciseInfo.get(4);
-                mShouldUpdate = true;
+            if (exerciseInfo != null) {
+                mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
+                mExerciseNameInput = exerciseInfo.get(1);
+                mExerciseNoteInput = "";
+                if (exerciseInfo.size() > 2) {
+                    mExerciseIdInput = Integer.parseInt(exerciseInfo.get(2));
+                    mExerciseSessionInput = TypeConverters.stringToSessionList(exerciseInfo.get(3));
+                    mExerciseNoteInput = exerciseInfo.get(4);
+                    mShouldUpdate = true;
+                }
             }
         }
     }
@@ -126,10 +133,18 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         }
 
         // Setup app tool bar
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(mExerciseNameInput);
+        if (getActivity() != null) {
+            ((MainActivity)getActivity()).setSupportActionBar(mToolbar);
+            ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(mExerciseNameInput);
+            } else {
+                Log.e(TAG, "onCreateView: Could not get reference to support action bar");
+            }
+        } else {
+            Log.e(TAG, "onCreateView: Could not get reference to activity");
+        }
         return root;
     }
 
@@ -139,36 +154,41 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         // Setup adaptor
         mSessionRV.setLayoutManager(new LinearLayoutManager(getContext()));
         mSessionRV.setHasFixedSize(true);
-        mAdapter = new SessionAdapter(mExerciseTypeInput, new SessionAdapter.OnItemLongClickListener() {
+        mAdapter = new SessionAdapter(mExerciseTypeInput, (View view, int position) -> {
 
             // Checkable cards ui
-            @Override
-            public boolean onLongClick(View view, int position) {
-                if (mActionMode == null) {
+            if (mActionMode == null) {
+                if (getActivity() != null) {
                     mActionMode = ((MainActivity) getActivity()).startSupportActionMode(mActionModeCallBack);
                     mDeleteUsed = false;
                     mNewSessionButton.setVisibility(View.GONE);
                     mSaveButton.setVisibility(View.GONE);
 
+                    // Adjust recycler view padding
+                    mSessionRV.setPadding(0,0,0,0);
+
                     // Close keyboard when entering delete mode
                     ((MainActivity) getActivity()).closeKeyboard();
-                }
-                // Pass list of checked items to list adapter
-                Session currentSession = mAdapter.getSessionItem(position);
-                List<Session> checkedSessionList = new ArrayList<>();
-                for (Session session : mAdapter.getCurrentList()) {
-                    Session newSession = new Session(session);
-                    newSession.setReadOnly(true);
-                    checkedSessionList.add(newSession);
-                }
-                if (currentSession.isChecked()) {
-                    checkedSessionList.get(position).setChecked(false);
                 } else {
-                    checkedSessionList.get(position).setChecked(true);
+                    Log.e(TAG, "onLongClick: Could not get reference to activity");
                 }
-                mAdapter.submitList(checkedSessionList);
-                return true;
             }
+
+            // Pass list of checked items to list adapter
+            Session currentSession = mAdapter.getSessionItem(position);
+            List<Session> checkedSessionList = new ArrayList<>();
+            for (Session session : mAdapter.getCurrentList()) {
+                Session newSession = new Session(session);
+                newSession.setReadOnly(true);
+                checkedSessionList.add(newSession);
+            }
+            if (currentSession.isChecked()) {
+                checkedSessionList.get(position).setChecked(false);
+            } else {
+                checkedSessionList.get(position).setChecked(true);
+            }
+            mAdapter.submitList(checkedSessionList);
+            return true;
         });
         mSessionRV.setAdapter(mAdapter);
 
@@ -192,96 +212,90 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         }
 
         // Always show keyboard when opening an exercise
-        ((MainActivity) getActivity()).showKeyboard();
+        if (getActivity() != null) ((MainActivity) getActivity()).showKeyboard();
 
         // On click listeners
-        mNewSessionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAdapter.mOnNewSession = true;
-                List<Session> newSessionList = new ArrayList<>();
-                for (Session session : mAdapter.getCurrentList()) {
-                    newSessionList.add(new Session(session));
-                }
-                switch (mExerciseTypeInput) {
-                    case CALISTHENICS:
-                        newSessionList.add(new Session(ExerciseType.CALISTHENICS));
-                        break;
-                    case CARDIO:
-                        newSessionList.add(new Session(ExerciseType.CARDIO));
-                        break;
-                    case STRENGTH:
-                        newSessionList.add(new Session(ExerciseType.STRENGTH));
-                        break;
-                }
-                mAdapter.submitList(newSessionList);
-                // Open keyboard and focus on new set
-                ((MainActivity) getActivity()).showKeyboard();
+        mNewSessionButton.setOnClickListener((View view) -> {
+            mAdapter.mOnNewSession = true;
+            List<Session> newSessionList = new ArrayList<>();
+            for (Session session : mAdapter.getCurrentList()) {
+                newSessionList.add(new Session(session));
             }
+            switch (mExerciseTypeInput) {
+                case CALISTHENICS:
+                    newSessionList.add(new Session(ExerciseType.CALISTHENICS));
+                    break;
+                case CARDIO:
+                    newSessionList.add(new Session(ExerciseType.CARDIO));
+                    break;
+                case STRENGTH:
+                    newSessionList.add(new Session(ExerciseType.STRENGTH));
+                    break;
+            }
+            mAdapter.submitList(newSessionList);
+            // Open keyboard and focus on new set
+            ((MainActivity) getActivity()).showKeyboard();
         });
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<Session> currentListOfSessions = mAdapter.getCurrentList();
-                boolean showError = false;
-                switch (mExerciseTypeInput) {
-                    case CALISTHENICS:
-                        for (Session session: currentListOfSessions) {
-                            if (session.getReps() < 1) {
-                                showError = true;
-                                break;
-                            }
+        mSaveButton.setOnClickListener((View view) -> {
+            List<Session> currentListOfSessions = mAdapter.getCurrentList();
+            boolean showError = false;
+            switch (mExerciseTypeInput) {
+                case CALISTHENICS:
+                    for (Session session : currentListOfSessions) {
+                        if (session.getReps() < 1) {
+                            showError = true;
+                            break;
                         }
-                        break;
-                    case CARDIO:
-                        for (Session session: currentListOfSessions) {
-                            if (session.getDuration() < 1 || session.getIntensity() < 1) {
-                                showError = true;
-                                break;
-                            }
+                    }
+                    break;
+                case CARDIO:
+                    for (Session session : currentListOfSessions) {
+                        if (session.getDuration() < 1 || session.getIntensity() < 1) {
+                            showError = true;
+                            break;
                         }
-                        break;
-                    case STRENGTH:
-                        for (Session session: currentListOfSessions) {
-                            if (session.getReps() < 1 || session.getWeight() < 1) {
-                                showError = true;
-                                break;
-                            }
+                    }
+                    break;
+                case STRENGTH:
+                    for (Session session : currentListOfSessions) {
+                        if (session.getReps() < 1 || session.getWeight() < 1) {
+                            showError = true;
+                            break;
                         }
-                        break;
-                }
-                if (showError) {
-
-                    // Create and display error toast
-                    Toast errorToast = new Toast(getContext());
-                    View errorToastView = getLayoutInflater().inflate(R.layout.error_toast, null);
-                    errorToast.setView(errorToastView);
-                    errorToast.setDuration(Toast.LENGTH_SHORT);
-                    DisplayMetrics displayMetrics = new DisplayMetrics();
-                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                    int screenHeight = displayMetrics.heightPixels;
-                    errorToast.setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL, 0, screenHeight - mSaveButton.getTop() - mSaveButton.getPaddingTop());
-                    errorToast.show();
-                    return;
-                }
-                if (mShouldUpdate) {
-                    CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, mCurrentDateInput, currentListOfSessions, mExerciseNoteInput);
-                    updatedItem.setMId(mExerciseIdInput);
-                    mViewModel.update(updatedItem);
-                } else {
-                    CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, mCurrentDateInput, currentListOfSessions, mExerciseNoteInput);
-                    mViewModel.insert(newItem);
-                }
-
-                // Close keyboard when leaving fragment
-                ((MainActivity) getActivity()).closeKeyboard();
-                if (mCurrentDateInput.equals(LocalDate.now())) {
-                    Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout_today, false);
-                } else {
-                    Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout_another_day, false);
-                }
-
+                    }
+                    break;
             }
+            if (showError) {
+
+                // Create and display error toast
+                Toast errorToast = new Toast(getContext());
+                View errorToastView = View.inflate(getContext(), R.layout.error_toast, null);
+                errorToast.setView(errorToastView);
+                errorToast.setDuration(Toast.LENGTH_SHORT);
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int screenHeight = displayMetrics.heightPixels;
+                errorToast.setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL, 0, screenHeight - mSaveButton.getTop() - mSaveButton.getPaddingTop());
+                errorToast.show();
+                return;
+            }
+            if (mShouldUpdate) {
+                CompletedExerciseItem updatedItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, mCurrentDateInput, currentListOfSessions, mExerciseNoteInput);
+                updatedItem.setMId(mExerciseIdInput);
+                mViewModel.update(updatedItem);
+            } else {
+                CompletedExerciseItem newItem = new CompletedExerciseItem(mExerciseTypeInput, mExerciseNameInput, mCurrentDateInput, currentListOfSessions, mExerciseNoteInput);
+                mViewModel.insert(newItem);
+            }
+
+            // Close keyboard when leaving fragment
+            ((MainActivity) getActivity()).closeKeyboard();
+            if (mCurrentDateInput.equals(LocalDate.now())) {
+                Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout_today, false);
+            } else {
+                Navigation.findNavController(view).popBackStack(R.id.navigation_to_workout_another_day, false);
+            }
+
         });
     }
 
@@ -351,7 +365,13 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
                 mAdapter.submitList(uncheckedSessionList);
             }
 
-            // Hide other buttons in delete action mode
+            // Readjust recycler view padding
+            Resources r = getResources();
+            int px = Math.round(TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 62,r.getDisplayMetrics()));
+            mSessionRV.setPadding(0,0,0, px);
+
+            // Show other buttons when leaving delete action mode
             mNewSessionButton.setVisibility(View.VISIBLE);
             mSaveButton.setVisibility(View.VISIBLE);
         }
@@ -370,13 +390,23 @@ public class SessionFragment extends Fragment implements NoteDialogFragment.Note
         if (item.getItemId() == android.R.id.home) {
 
             // Close keyboard when leaving fragment
-            Navigation.findNavController(getView()).popBackStack();
-            ((MainActivity) getActivity()).closeKeyboard();
+            if (item.getItemId() == android.R.id.home) {
+                if (getActivity() != null) {
+                    ((MainActivity) getActivity()).getNavController().popBackStack();
+                    ((MainActivity) getActivity()).closeKeyboard();
+                } else {
+                    Log.e(TAG, "onOptionsItemSelected: Could not get reference to activity");
+                }
+            }
         }
         if (item.getItemId() == R.id.note_menu_item) {
             NoteDialogFragment noteDialogFragment = NoteDialogFragment.newInstance(mExerciseNoteInput);
             noteDialogFragment.setTargetFragment(this, 1);
-            noteDialogFragment.show(getFragmentManager(), "note");
+            if (getFragmentManager() != null) {
+                noteDialogFragment.show(getFragmentManager(), "Update Note");
+            } else {
+                Log.e(TAG, "onOptionsItemSelected: Could not get reference to fragment manager");
+            }
         }
         return true;
     }

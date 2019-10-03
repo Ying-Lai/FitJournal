@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,7 +52,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     // New instance constructor
-    public static FavoriteFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
+    static FavoriteFragment newInstance(LocalDate currentDateInput, ExerciseType exerciseTypeInput) {
         FavoriteFragment fragment = new FavoriteFragment();
         Bundle bundle = new Bundle();
         String dateInfo = TypeConverters.dateToString(currentDateInput);
@@ -74,7 +74,8 @@ public class FavoriteFragment extends Fragment {
             String dateInfo = getArguments().getString(MainActivity.DATE_INFO);
             mCurrentDateInput = TypeConverters.stringToDate(dateInfo);
             ArrayList<String> exerciseInfo = getArguments().getStringArrayList(MainActivity.EXERCISE_INFO);
-            mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
+            if (exerciseInfo != null)
+                mExerciseTypeInput = TypeConverters.intToExerciseType(Integer.parseInt(exerciseInfo.get(0)));
         }
     }
 
@@ -107,7 +108,8 @@ public class FavoriteFragment extends Fragment {
                     exerciseInfo.add(Integer.toString(TypeConverters.exerciseTypeToInt(mExerciseTypeInput)));
                     exerciseInfo.add(currentAvailableExercise.getMExerciseName());
                     bundle.putStringArrayList(MainActivity.EXERCISE_INFO, exerciseInfo);
-                    if (Navigation.findNavController(view).getCurrentDestination().getId() == R.id.navigation_search_exercise) {
+                    NavDestination currentDestination = Navigation.findNavController(view).getCurrentDestination();
+                    if (currentDestination != null && currentDestination.getId() == R.id.navigation_search_exercise) {
                         Navigation.findNavController(view).navigate(R.id.to_session, bundle);
                     }
                 } else if (view.getId() == R.id.available_exercise_favorited_iv) {
@@ -129,19 +131,16 @@ public class FavoriteFragment extends Fragment {
         mAvailableExerciseRV.setAdapter(mAdapter);
 
         // Observe live data
-        mViewModel.getAllAvailableFavoritedExercise(true, mExerciseTypeInput).observe(getViewLifecycleOwner(), new Observer<List<AvailableExerciseItem>>() {
-            @Override
-            public void onChanged(List<AvailableExerciseItem> availableFavoritedExercises) {
-                mAdapter.setFullList(availableFavoritedExercises);
-                mAdapter.submitList(availableFavoritedExercises);
-                // Hide instructions if the list is not empty
-                if (availableFavoritedExercises.size() != 0) {
-                    mFavoriteInstructionsIV.setVisibility(View.GONE);
-                    mFavoriteInstructionsTV.setVisibility(View.GONE);
-                } else {
-                    mFavoriteInstructionsIV.setVisibility(View.VISIBLE);
-                    mFavoriteInstructionsTV.setVisibility(View.VISIBLE);
-                }
+        mViewModel.getAllAvailableFavoritedExercise(true, mExerciseTypeInput).observe(getViewLifecycleOwner(), (List<AvailableExerciseItem> availableFavoritedExercises) -> {
+            mAdapter.setFullList(availableFavoritedExercises);
+            mAdapter.submitList(availableFavoritedExercises);
+            // Hide instructions if the list is not empty
+            if (availableFavoritedExercises.size() != 0) {
+                mFavoriteInstructionsIV.setVisibility(View.GONE);
+                mFavoriteInstructionsTV.setVisibility(View.GONE);
+            } else {
+                mFavoriteInstructionsIV.setVisibility(View.VISIBLE);
+                mFavoriteInstructionsTV.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -152,7 +151,7 @@ public class FavoriteFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.search_exercise_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search_menu_item);
-        androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) searchItem.getActionView();
+        SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
