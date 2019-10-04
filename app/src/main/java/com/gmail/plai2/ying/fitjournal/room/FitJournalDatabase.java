@@ -9,10 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import org.threeten.bp.LocalDate;
-
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Set;
 import java.util.TreeSet;
 
