@@ -11,7 +11,7 @@
 * [License](#license)
 
 ## General info
-The motivation behind this project is to create an application with the sleek appearance and simplicity of a physical fitness journal transferred on to a digital platform. Users can log different types of exercises on a day by day basis, view and edit their past or future logs, and observe changes within their body statistics. 
+The goal of this project is to create an application that contains the sleek appearance and simplicity of a physical fitness journal, yet maintains the usability of a software application. Users can quickly log different types of exercises for the current day, view and modify any past or future logs, and track their body weight and fat. This project was motivated by the desire to dig deeper into Android development as well as to create a meaningful application to support my personal fitness goals.
 
 ## Technologies
 * Java
@@ -30,25 +30,25 @@ Import the project to Android Studio. Sync gradle and then run the application.
 
 ## Features
 #### Log your exercises for the current day:
-* Choose from 3 different types of exercises (calisthenics, cardio, strength).
-* Create/delete custom exercises or select from the existing available exercise list.
+* Choose from 3 different types of exercises (calisthenics, cardio, and strength).
+* Create custom exercises or select from the existing exercise list to log.
 * Favorite exercises for quick access.
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/DiffTypesOfExercises.gif" height="435" width="260">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/CustomBrowse.gif" height="435" width="260">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Favorite.gif" height="435" width="260">
 
 * Search through each list to find specific exercises.
-* Optionally add a note for each exercise log to include extra information.
-* Edit or remove sets and exercises through a checked interface and delete action mode.
+* Add a note for each exercise log to include extra information.
+* Edit and remove sessions, logged exercises, or custom exercises through a checked interface and a delete action mode.
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Search.gif" height="435" width="260">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Note.gif" height="435" width="260">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/EditAndDelete.gif" height="435" width="260">
 
 #### Track your body stats:
-* Update body weight and body fat percentage for the current day.
-* Track trends in both stats in the following line graphs.
+* Update body weight and body fat percentage on a day by day basis.
+* Visually track changes in both stats over time. 
 
 #### View and edit your past and future logs through a calendar view:
 * Previously logged workout days are marked on the calendar.
-* View, edit, or add additional exercises to any calendar day.
+* View, edit, add, or remove exercises on any calendar day.
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/UpdateStats.gif" height="435" width="260">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Calendar.gif" height="435" width="260">
 
@@ -68,19 +68,24 @@ Copyright (c) 2019 Kizito Nwose <br />
 
 #### Various Icons from [www.flaticon.com](www.flaticon.com)
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Smashicons/creativity.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Smashicons/garbage.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Smashicons/journal.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Smashicons/like.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Smashicons/workout.png" height="32" width="32">
-* Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons)
+
+Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons)
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Freepik/calisthenics.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Freepik/cardio.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Freepik/dumbbell.png" height="32" width="32">&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Freepik/strength.png" height="32" width="32">
-* Icons made by [Freepik](https://www.flaticon.com/authors/freepik)
+
+Icons made by [Freepik](https://www.flaticon.com/authors/freepik)
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Icongeek26/notes.png" height="32" width="32">&nbsp;&nbsp;&nbsp;
-* Icon made by [Icongeek26](https://www.flaticon.com/authors/icongeek26)
+
+Icon made by [Icongeek26](https://www.flaticon.com/authors/icongeek26)
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/smalllikeart/hearts.png" height="32" width="32">&nbsp;&nbsp;&nbsp;
-* Icon made by [smalllikeart](https://www.flaticon.com/authors/smalllikeart)
+
+Icon made by [smalllikeart](https://www.flaticon.com/authors/smalllikeart)
 
 <img src="https://raw.githubusercontent.com/Ying-Lai/FitJournal/master/images/Vectors%20Market/warning.png" height="32" width="32">&nbsp;&nbsp;&nbsp;
-* Icon made by [Vectors Market](https://www.flaticon.com/authors/vectors-market)
+
+Icon made by [Vectors Market](https://www.flaticon.com/authors/vectors-market)
 
 ## License
 
