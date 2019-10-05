@@ -46,7 +46,7 @@ Import the project to Android Studio. Sync gradle and then run the application.
 * Update body weight and body fat percentage on a day by day basis.
 * Visually track changes in both stats over time. 
 
-#### View and edit your past and future logs through a calendar view:
+#### View your workout history through a calendar view:
 * Previously logged workout days are marked on the calendar.
 * View, edit, add, or remove exercises on any calendar day.
 
